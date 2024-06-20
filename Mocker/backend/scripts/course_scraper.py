@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
 import time
 from pathlib import Path
 import sys
@@ -20,6 +21,7 @@ def scrape_page(driver: WebDriver):
         info[i].click()
         time.sleep(2)
         driver.find_elements(By.XPATH, '//div[@class="modal-header"]/button[@class="close"]')[2].click() # there are 9 buttons that fit this XPATH on the page, index 2 is hard-coded
+        driver.execute_script( 'window.scrollBy( 0, 75 )' )
     
 if __name__ == '__main__':
     PATH = r"C:\Program Files (x86)\chromedriver.exe"
