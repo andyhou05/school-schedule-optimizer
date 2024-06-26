@@ -10,16 +10,18 @@ from pathlib import Path
 import sys
 path_root = Path(__file__).parents[2]
 sys.path.append(str(path_root))
-from backend.models.course import Course
+from libs.models.course import Course
+import re
 
 courses = []
-def split_info(info: str):
+def split_info(input_string: str):
     """
     Custom string splitter to split scraped information about a course into an array
+    
     Example info:   00001 101-101-VA Anatomy and Physiology I Only for 180* 15
     
-    Format:       00001      101-101-VA      Anatomy and Physiology I          Only for 180*            15
-                 [section]       [id]                 [name]                [program restriction]     [seats]
+    Format:       00001      101-101-VA      Anatomy and Physiology I          Only for 180*                  15
+                 [section]       [id]                 [name]                [program restriction]     [optional: seats]
                  
     The format of the array follows the same format as the input string (see above)
     
@@ -31,43 +33,35 @@ def split_info(info: str):
         formatted_info (list[str, str, str, int]): The information split into pieces, formatted as follows: section number, course id, course name, number of seats
     """
     
-    i = 0
-    l = len(info) - 1
-    formatted_info = []
-    seats = 0
+    # Define regex patterns to match the different parts of the input string
+    section_number_pattern = r"^\d+"
+    course_id_pattern = r"\d{3}-(\d|[A-Z]){3}-(\d|[A-Z]){2}"
+    course_name_pattern = r"\d{3}-(?:\d|[A-Z]){3}-(?:\d|[A-Z]){2} (.+?)(?:\s+Only for|\s+\d*$|$)"
+    seats_available_pattern = r"(\d+)$"
     
-    # Find the number of seats available
-    while info[l] != ' ':
-        l-= 1
-    seats = int(info[l:len(info)])
-        
-    # Remove info about program restriction and seat available from info string
-    program_restriction_position = info.find("Only for")
-    info = info[0:program_restriction_position] if program_restriction_position != -1 else info[0:info.rfind(seats) - 1]
-        
-    # Find the course section, id, and name (to finish)
-    while i < len(info):
-        # Length 2 means that it has the section and course id, we just need the name of the course, which is from i to the end of the string
-        if len(formatted_info) == 2:
-            formatted_info.append(info[i:-1])
-            break
-        
-        # Loop through the characters until we find a space, append the information
-        j = i
-        while info[j] != ' ':
-            j += 1
-        formatted_info.append(info[i:j])
-        i = j + 1
-        
-    # Append seats available
-    formatted_info.append(seats)
-        
-    return formatted_info
+    # Extract the section number
+    section_number_match = re.search(section_number_pattern, input_string)
+    section_number = section_number_match.group() if section_number_match else ""
+    
+    # Extract the course id
+    course_id_match = re.search(course_id_pattern, input_string)
+    course_id = course_id_match.group() if course_id_match else ""
+    
+    # Extract the course name
+    course_name_match = re.search(course_name_pattern, input_string)
+    course_name = course_name_match.group(1).strip() if course_name_match else ""
+    
+    # Extract the seats available
+    seats_available_match = re.search(seats_available_pattern, input_string)
+    seats_available = int(seats_available_match.group()) if seats_available_match else 0
+    
+    return [section_number, course_id, course_name, seats_available]
     
 def scrape_page(driver: WebDriver):
     """
     Scrapes a page for course information, this scraper only works for the 
     Vanier course schedule on Chrome as of August 21 2024 and is subject to change
+    Currently only saves the information locally, TODO: save the information to a database
 
     Args:
         driver (WebDriver): Selenium WebDriver, it must follow the link the the Vanier course schedule
@@ -90,11 +84,14 @@ def scrape_page(driver: WebDriver):
         
         # Save the scraped information
         current_course_info = split_info(course_list[i].text)
-        print(course_list[i].text)
-        courses.append()
+        print(current_course_info)
+        #courses.append()
         
         # Scroll down
         driver.execute_script( f"window.scrollTo( 0, {(i + 1) * 75} )" )
+        
+    # TODO: create a function that crawls through every page on the course schedule
+    # TODO: print statements and exception handling for saving the information
     
 if __name__ == '__main__':
     PATH = r"C:\Program Files (x86)\chromedriver.exe"
