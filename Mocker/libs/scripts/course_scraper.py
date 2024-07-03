@@ -10,13 +10,12 @@ from pathlib import Path
 import sys
 path_root = Path(__file__).parents[2]
 sys.path.append(str(path_root))
-from libs.models.course import Course
 import re
 
 courses = []
 def split_info(input_string: str):
     """
-    Custom string splitter to split scraped information about a course into an array
+    Custom string splitter to split scraped information about a course into an array using regex patterns
     
     Example info:   00001 101-101-VA Anatomy and Physiology I Only for 180* 15
     
