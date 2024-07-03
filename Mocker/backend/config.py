@@ -8,7 +8,7 @@ app = Flask(__name__)
 CORS(app)
 
 password = os.environ.get("MYSQL_PASSWORD")
-app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+mysqlconnector://root:{password}@localhost/courses"
-app.config['SQLALCHEMY-TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://root:{password}@localhost/courses"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
