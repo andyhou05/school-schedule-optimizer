@@ -14,8 +14,8 @@ class Teacher(db.Model):
             "firstName":self.first_name,
             "lastName":self.last_name,
             "rating":self.rating,
-            "courses":self.courses,
-            "link":self.courses
+            "courses":list(map(lambda x: x.to_json(), self.courses)),
+            "link":self.link
         }
     
 class Course(db.Model):
@@ -24,7 +24,7 @@ class Course(db.Model):
     course_id = db.Column(db.String(10), unique=False, nullable=False)
     name = db.Column(db.String(100), unique=False, nullable=False)
     seats = db.Column(db.Integer, unique=False, nullable=False)
-    teacher_id = db.Column(db.Integer, db.ForeignKey("teacher.id"))
+    teacher_id = db.Column(db.Integer, db.ForeignKey("teacher.id"), nullable=True)
     time = db.Column(db.String(150), unique=False, nullable=False)
     
     def to_json(self):

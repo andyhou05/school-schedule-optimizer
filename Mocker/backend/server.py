@@ -14,10 +14,11 @@ def create_teacher():
     first_name = request.json.get("firstName")
     last_name = request.json.get("lastName")
     rating = request.json.get("rating")
+    link = request.json.get("link")
     
-    if not first_name or last_name:
+    if not first_name or not last_name:
         return jsonify({"message":"You must enter a first name and a last name"}), 400
-    new_teacher = Teacher(first_name=first_name, last_name=last_name, rating=rating)
+    new_teacher = Teacher(first_name=first_name, last_name=last_name, rating=rating, link=link)
     try:
         db.session.add(new_teacher)
         db.session.commit()
@@ -62,11 +63,13 @@ def create_course():
     course_id = request.json.get("courseId")
     name = request.json.get("name")
     seats = request.json.get("seats")
+    teacher_id = request.json.get("teacherId")
+    time = request.json.get("time")
     
-    if not section or not course_id or not name or not seats:
-        return (jsonify({"message":"You must enter a section, course id, name, and number of seats"}), 400)
+    if not section or not course_id or not name or not seats or not time:
+        return (jsonify({"message":"You must enter a section, course id, name, time slot, and number of seats"}), 400)
     
-    new_course = Course(section=section, course_id=course_id, name=name, seats=seats)
+    new_course = Course(section=section, course_id=course_id, name=name, seats=seats, teacher_id=teacher_id, time=time)
     try:
         db.session.add(new_course)
         db.session.commit()
