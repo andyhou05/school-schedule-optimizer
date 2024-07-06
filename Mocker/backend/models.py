@@ -5,7 +5,7 @@ class Course(db.Model):
     section = db.Column(db.String(5), unique=False, nullable=False)
     course_id = db.Column(db.String(10), unique=False, nullable=False)
     name = db.Column(db.String(100), unique=False, nullable=False)
-    seats = db.Column(db.Integer)
+    seats = db.Column(db.Integer, unique=False, nullable=False)
     
     def to_json(self):
         return {
