@@ -55,6 +55,19 @@ def split_general_info(input_string: str):
     
     return [section_number, course_id, course_name, seats_available]
 
+def name_reformat(name: str):
+    """
+    Reformats a name from LastName, FirstName to FirstName LastName
+
+    Args:
+        name (str): The name to be reformated
+
+    Returns:
+        str: The reformated name
+    """
+    last_first_names = name.split(',')
+    return f"{last_first_names[1]} {last_first_names[0]}"
+
 def scrape_page(driver: WebDriver):
     """
     Scrapes a page for course information, this scraper only works for the 
@@ -97,7 +110,7 @@ def scrape_page(driver: WebDriver):
             
             # Save scraped information into different period blocks
             for j in range(len(periods)):
-                teacher = periods[0].find_elements(By.XPATH, '//td[@data-attribute="vit_teacher"]')[j].text
+                teacher = name_reformat(periods[0].find_elements(By.XPATH, '//td[@data-attribute="vit_teacher"]')[j].text)
                 day = periods[0].find_elements(By.XPATH, '//td[@data-attribute="vit_day"]')[j].text
                 time_slot = periods[0].find_elements(By.XPATH, '//td[@data-attribute="vit_time"]')[j].text
                 current_period = general_info + [teacher, day, time_slot]
@@ -116,6 +129,7 @@ def scrape_page(driver: WebDriver):
     # TODO: print statements and exception handling for saving the information
     
 if __name__ == '__main__':
+    
     PATH = r"C:\Program Files (x86)\chromedriver.exe"
     service = Service(executable_path=PATH)
     driver = webdriver.Chrome(service=service)
