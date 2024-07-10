@@ -13,9 +13,9 @@ sys.path.append(str(path_root))
 import re
 
 courses = []
-def split_info(input_string: str):
+def split_general_info(input_string: str):
     """
-    Custom string splitter to split scraped information about a course into an array using regex patterns
+    Custom string splitter to split scraped general information about a course into a list using regex patterns
     
     Example info:   00001 101-101-VA Anatomy and Physiology I Only for 180* 15
     
@@ -26,10 +26,10 @@ def split_info(input_string: str):
     
     
     Args:
-        info (str): The course information to be split
+        info (str): The general course information to be split
     
     Returns:
-        formatted_info (list[str, str, str, int]): The information split into pieces, formatted as follows: section number, course id, course name, number of seats
+        The information split into pieces, formatted as follows: section number, course id, course name, number of seats
     """
     
     # Define regex patterns to match the different parts of the input string
@@ -55,7 +55,7 @@ def split_info(input_string: str):
     seats_available = int(seats_available_match.group()) if seats_available_match else 0
     
     return [section_number, course_id, course_name, seats_available]
-    
+
 def scrape_page(driver: WebDriver):
     """
     Scrapes a page for course information, this scraper only works for the 
@@ -66,24 +66,40 @@ def scrape_page(driver: WebDriver):
         driver (WebDriver): Selenium WebDriver, it must follow the link the the Vanier course schedule
     """
     
-    # Find list of courses
+    # Find list of courses and its general information (section, course ID, title, and seats)
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "view-grid.table-responsive.has-pagination")))
-    course_list = driver.find_elements(By.XPATH, '//tr[@data-entity="vit_courseinfo"]') # Holds section, course ID, title, and seats
+    general_course_list_info = driver.find_elements(By.XPATH, '//tr[@data-entity="vit_courseinfo"]')
     
     # Find buttons which open up course info
     info = driver.find_elements(By.XPATH, '//a[@class="details-link has-tooltip launch-modal"]')
     
     # Need to click class info to get teachers and time slots
     for i in range(len(info)):
+        general_info = split_general_info(general_course_list_info[i].text) # section, course ID, title, seats
+        current_course = []
         info[i].click()
         time.sleep(2)
         
+        # Switch to iframe to find course's specific information (teachers, time slots)
+        iframe = driver.find_elements(By.XPATH, '//iframe[@data-page="/_portal/modal-form-template-path/c7a13072-c94f-ed11-bba3-0022486daee2"]')[2] # there are 4 iframes that fit this XPATH on the page, index 2 is hard-coded
+        driver.switch_to.frame(iframe)
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//tr[@data-entity="vit_meetingtime"]')))
+        web_elements = driver.find_elements(By.XPATH, '//tr[@data-entity="vit_meetingtime"]')
+        time.sleep(1)
+        
+        # Save scraped information into different period blocks
+        for j in range(len(web_elements)):
+            teacher = web_elements[0].find_elements(By.XPATH, '//td[@data-attribute="vit_teacher"]')[j].text
+            day = web_elements[0].find_elements(By.XPATH, '//td[@data-attribute="vit_day"]')[j].text
+            time_slot = web_elements[0].find_elements(By.XPATH, '//td[@data-attribute="vit_time"]')[j].text
+            current_period = general_info + [teacher, day, time_slot]
+            current_course.append(current_period)
+        
         # Close modal window
+        driver.switch_to.default_content()
         driver.find_elements(By.XPATH, '//div[@class="modal-header"]/button[@class="close"]')[2].click() # there are 9 buttons that fit this XPATH on the page, index 2 is hard-coded
         
-        # Save the scraped information
-        current_course_info = split_info(course_list[i].text)
-        print(current_course_info)
+        print(f"{current_course}\n")
         #courses.append()
         
         # Scroll down

@@ -3,6 +3,8 @@ from config import app, db
 from models import Course
 from models import Teacher
 
+# CRUD operations for Teachers
+
 @app.route("/teachers", methods=["GET"])
 def get_teachers():
     teachers = Teacher.query.all()
@@ -51,6 +53,8 @@ def delete_teacher(id):
     db.session.commit()
     return jsonify({"message":"Teacher deleted"}), 200
     
+# CRUD operations for Courses
+
 @app.route("/courses", methods=["GET"])
 def get_courses():
     courses = Course.query.all()
