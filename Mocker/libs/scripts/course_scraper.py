@@ -12,7 +12,6 @@ path_root = Path(__file__).parents[2]
 sys.path.append(str(path_root))
 import re
 
-courses = []
 def split_general_info(input_string: str):
     """
     Custom string splitter to split scraped general information about a course into a list using regex patterns
@@ -66,44 +65,53 @@ def scrape_page(driver: WebDriver):
         driver (WebDriver): Selenium WebDriver, it must follow the link the the Vanier course schedule
     """
     
-    # Find list of courses and its general information (section, course ID, title, and seats)
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "view-grid.table-responsive.has-pagination")))
-    general_course_list_info = driver.find_elements(By.XPATH, '//tr[@data-entity="vit_courseinfo"]')
+    # Number of pages
+    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//ul[@class="pagination"]/li/a')))
+    pages = driver.find_elements(By.XPATH, '//ul[@class="pagination"]/li/a')
+    number_of_pages = int(pages[-2].text)
     
-    # Find buttons which open up course info
-    info = driver.find_elements(By.XPATH, '//a[@class="details-link has-tooltip launch-modal"]')
-    
-    # Need to click class info to get teachers and time slots
-    for i in range(len(info)):
-        general_info = split_general_info(general_course_list_info[i].text) # section, course ID, title, seats
-        current_course = []
-        info[i].click()
-        time.sleep(2)
+    # Go through every page
+    for page in range(number_of_pages):
+        # Find list of courses and its general information (section, course ID, title, and seats)
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "view-grid.table-responsive.has-pagination")))
+        general_course_list_info = driver.find_elements(By.XPATH, '//tr[@data-entity="vit_courseinfo"]')
         
-        # Switch to iframe to find course's specific information (teachers, time slots)
-        iframe = driver.find_elements(By.XPATH, '//iframe[@data-page="/_portal/modal-form-template-path/c7a13072-c94f-ed11-bba3-0022486daee2"]')[2] # there are 4 iframes that fit this XPATH on the page, index 2 is hard-coded
-        driver.switch_to.frame(iframe)
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//tr[@data-entity="vit_meetingtime"]')))
-        web_elements = driver.find_elements(By.XPATH, '//tr[@data-entity="vit_meetingtime"]')
-        time.sleep(1)
+        # Find buttons which open up course info
+        course_info_buttons = driver.find_elements(By.XPATH, '//a[@class="details-link has-tooltip launch-modal"]')
         
-        # Save scraped information into different period blocks
-        for j in range(len(web_elements)):
-            teacher = web_elements[0].find_elements(By.XPATH, '//td[@data-attribute="vit_teacher"]')[j].text
-            day = web_elements[0].find_elements(By.XPATH, '//td[@data-attribute="vit_day"]')[j].text
-            time_slot = web_elements[0].find_elements(By.XPATH, '//td[@data-attribute="vit_time"]')[j].text
-            current_period = general_info + [teacher, day, time_slot]
-            current_course.append(current_period)
-        
-        # Close modal window
-        driver.switch_to.default_content()
-        driver.find_elements(By.XPATH, '//div[@class="modal-header"]/button[@class="close"]')[2].click() # there are 9 buttons that fit this XPATH on the page, index 2 is hard-coded
-        
-        print(f"{current_course}\n")
-        #courses.append()
-        
-        # Scroll down
-        driver.execute_script( f"window.scrollTo( 0, {(i + 1) * 75} )" )
+        for i in range(len(course_info_buttons)):
+            general_info = split_general_info(general_course_list_info[i].text) # section, course ID, title, seats
+            current_course = []
+            
+            # Scroll down
+            driver.execute_script( f"window.scrollTo( 0, {(i + 1) * 75} )" )
+            
+            # Need to click class info to get teachers and time slots
+            course_info_buttons[i].click()
+            
+            # Switch to iframe to find course's specific information (teachers, time slots)
+            iframe = driver.find_elements(By.XPATH, '//iframe[@data-page="/_portal/modal-form-template-path/c7a13072-c94f-ed11-bba3-0022486daee2"]')[2] # there are 4 iframes that fit this XPATH on the page, index 2 is hard-coded
+            driver.switch_to.frame(iframe)
+            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//tr[@data-entity="vit_meetingtime"]')))
+            periods = driver.find_elements(By.XPATH, '//tr[@data-entity="vit_meetingtime"]')
+            
+            # Save scraped information into different period blocks
+            for j in range(len(periods)):
+                teacher = periods[0].find_elements(By.XPATH, '//td[@data-attribute="vit_teacher"]')[j].text
+                day = periods[0].find_elements(By.XPATH, '//td[@data-attribute="vit_day"]')[j].text
+                time_slot = periods[0].find_elements(By.XPATH, '//td[@data-attribute="vit_time"]')[j].text
+                current_period = general_info + [teacher, day, time_slot]
+                current_course.append(current_period)
+            
+            # Close modal window
+            driver.switch_to.default_content()
+            driver.find_elements(By.XPATH, '//div[@class="modal-header"]/button[@class="close"]')[2].click() # there are 9 buttons that fit this XPATH on the page, index 2 is hard-coded
+            
+            print(f"{current_course}\n")
+            
+        # Refind the pagination to avoid StaleElementException
+        pages = driver.find_elements(By.XPATH, '//ul[@class="pagination"]/li/a')
+        pages[-1].click()
         
     # TODO: create a function that crawls through every page on the course schedule
     # TODO: print statements and exception handling for saving the information
