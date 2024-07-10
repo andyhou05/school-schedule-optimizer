@@ -2,17 +2,14 @@ from config import db
 
 class Teacher(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(50), unique=False, nullable=True)
-    last_name = db.Column(db.String(50), unique=False, nullable=True)
+    name = db.Column(db.String(150), unique=True, nullable=True)
     rating = db.Column(db.Float, unique=False, nullable=True)
     courses = db.relationship("Course", backref="teacher", lazy=True)
     link = db.Column(db.String(150), unique=True, nullable=True)
     
     def to_json(self):
         return{
-            "id":self.id,
-            "firstName":self.first_name,
-            "lastName":self.last_name,
+            "name":self.name,
             "rating":self.rating,
             "courses":list(map(lambda x: x.to_json(), self.courses)),
             "link":self.link
@@ -25,7 +22,8 @@ class Course(db.Model):
     name = db.Column(db.String(100), unique=False, nullable=False)
     seats = db.Column(db.Integer, unique=False, nullable=False)
     teacher_id = db.Column(db.Integer, db.ForeignKey("teacher.id"), nullable=True)
-    time = db.Column(db.String(150), unique=False, nullable=False)
+    day = db.Column(db.String(15), unique=False, nullable=False)
+    time = db.Column(db.String, unique=False, nullable=False)
     
     def to_json(self):
         return {
@@ -35,5 +33,6 @@ class Course(db.Model):
             "name":self.name,
             "seats":self.seats,
             "teacherId":self.teacher_id,
+            "day":self.day,
             "time":self.time
         }

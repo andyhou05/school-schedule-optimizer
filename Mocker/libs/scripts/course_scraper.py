@@ -113,7 +113,6 @@ def scrape_page(driver: WebDriver):
         pages = driver.find_elements(By.XPATH, '//ul[@class="pagination"]/li/a')
         pages[-1].click()
         
-    # TODO: create a function that crawls through every page on the course schedule
     # TODO: print statements and exception handling for saving the information
     
 if __name__ == '__main__':
