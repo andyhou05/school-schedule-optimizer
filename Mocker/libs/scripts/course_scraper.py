@@ -4,12 +4,6 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.keys import Keys
-import time
-from pathlib import Path
-import sys
-path_root = Path(__file__).parents[2]
-sys.path.append(str(path_root))
 import re
 
 def split_general_info(input_string: str):
@@ -68,14 +62,14 @@ def name_reformat(name: str):
     last_first_names = name.split(',')
     return f"{last_first_names[1]} {last_first_names[0]}"
 
-def scrape_page(driver: WebDriver):
+def scrape_courses(driver: WebDriver):
     """
     Scrapes a page for course information, this scraper only works for the 
     Vanier course schedule on Chrome as of August 21 2024 and is subject to change
     Currently only saves the information locally, TODO: save the information to a database
 
     Args:
-        driver (WebDriver): Selenium WebDriver, it must follow the link the the Vanier course schedule
+        driver (WebDriver): Selenium WebDriver, it must follow the link to the Vanier course schedule
     """
     
     # Number of pages
@@ -135,5 +129,5 @@ if __name__ == '__main__':
     driver = webdriver.Chrome(service=service)
     driver.get("https://vanierlivecourseschedule.powerappsportals.com/")
     
-    scrape_page(driver)
+    scrape_courses(driver)
     
