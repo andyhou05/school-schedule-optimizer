@@ -23,7 +23,7 @@ class Course(db.Model):
     seats = db.Column(db.Integer, unique=False, nullable=False)
     teacher_id = db.Column(db.Integer, db.ForeignKey("teacher.id"), nullable=True)
     day = db.Column(db.String(15), unique=False, nullable=False)
-    time = db.Column(db.String, unique=False, nullable=False)
+    time = db.Column(db.String(50), unique=False, nullable=False)
     
     def to_json(self):
         return {

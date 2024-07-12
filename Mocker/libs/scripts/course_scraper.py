@@ -124,7 +124,9 @@ def scrape_courses(driver: WebDriver):
     
 if __name__ == '__main__':
     
-    PATH = r"C:\Program Files (x86)\chromedriver.exe"
+    #PATH = r"C:\Program Files (x86)\chromedriver.exe"
+    PATH = r"/Users/xinhou/Downloads/chromedriver-mac-arm64/chromedriver"
+    
     service = Service(executable_path=PATH)
     driver = webdriver.Chrome(service=service)
     driver.get("https://vanierlivecourseschedule.powerappsportals.com/")
