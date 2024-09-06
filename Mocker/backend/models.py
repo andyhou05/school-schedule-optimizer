@@ -9,6 +9,7 @@ class Teacher(db.Model):
             "id":self.id,
             "name":self.name
         }
+        
     def __repr__(self):
         return str(self.to_json())
     
@@ -27,6 +28,7 @@ class TeacherRatings(db.Model):
             "rating":self.rating,
             "link":self.link
         }
+        
     def __repr__(self):
         return str(self.to_json())
     

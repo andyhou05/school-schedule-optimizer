@@ -2,9 +2,57 @@ from flask import request, jsonify
 from config import app, db
 from models import Course
 from models import Teacher
+from models import TeacherRatings
 
-# CRUD operations for Teachers
+# CRUD operations for TeacherRatings
+@app.route("/teacher_ratings", methods=["GET"])
+def get_teachers():
+    teachers = TeacherRatings.query.all()
+    json_teachers = list(map(lambda x: x.to_json(), teachers))
+    return jsonify({"teachers":json_teachers}), 200
 
+@app.route("/create_teacher_rating", methods=["POST"])
+def create_teacher_rating():
+    name = request.json.get("name")
+    rating = request.json.get("rating")
+    link = request.json.get("link")
+    
+    if not name:
+        return jsonify({"message":"You must enter a name"}), 400
+    new_teacher_rating = TeacherRatings(name=name, rating=rating, link=link)
+    try:
+        db.session.add(new_teacher_rating)
+        db.session.commit()
+    except Exception as e:
+        return jsonify({"message":str(e)}), 400
+    return jsonify({"message":"Teacher Rating created"}), 201
+
+@app.route("/update_teacher_rating/<int:id>", methods=["PATCH"])
+def update_teacher_rating(id):
+    teacher = TeacherRatings.query.get(id)
+    
+    if not teacher:
+        return jsonify({"message":"Teacher Rating not found"}), 404
+    
+    data = request.json
+    teacher.name = data.get("name", teacher.name)
+    teacher.link = data.get("link", teacher.link)
+    teacher.rating = data.get("rating", teacher.rating)
+    db.session.commit()
+    return jsonify({"message":"Teacher Rating updated"}), 200
+
+@app.route("/delete_teacher_rating/<int:id>", methods=["DELETE"])
+def delete_teacher_rating(id):
+    teacher = TeacherRatings.query.get(id)
+    
+    if not teacher:
+        return jsonify({"message":"Teacher Rating not found"}), 404
+    
+    db.session.delete(teacher)
+    db.session.commit()
+    return jsonify({"message":"Teacher Rating deleted"}), 200
+
+# CRUD operations for Teacher
 @app.route("/teachers", methods=["GET"])
 def get_teachers():
     teachers = Teacher.query.all()
@@ -14,12 +62,10 @@ def get_teachers():
 @app.route("/create_teacher", methods=["POST"])
 def create_teacher():
     name = request.json.get("name")
-    rating = request.json.get("rating")
-    link = request.json.get("link")
     
     if not name:
         return jsonify({"message":"You must enter a name"}), 400
-    new_teacher = Teacher(name=name, rating=rating, link=link)
+    new_teacher = Teacher(name=name)
     try:
         db.session.add(new_teacher)
         db.session.commit()
@@ -36,8 +82,6 @@ def update_teacher(id):
     
     data = request.json
     teacher.name = data.get("name", teacher.name)
-    teacher.link = data.get("link", teacher.link)
-    teacher.rating = data.get("rating", teacher.rating)
     db.session.commit()
     return jsonify({"message":"Teacher updated"}), 200
 
@@ -53,7 +97,6 @@ def delete_teacher(id):
     return jsonify({"message":"Teacher deleted"}), 200
     
 # CRUD operations for Courses
-
 @app.route("/courses", methods=["GET"])
 def get_courses():
     courses = Course.query.all()
