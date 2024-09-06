@@ -1,4 +1,4 @@
-from config import db
+from backend.config import db
 
 class Teacher(db.Model):
     id = db.Column(db.Integer, primary_key=True)

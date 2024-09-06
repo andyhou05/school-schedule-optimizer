@@ -1,19 +1,15 @@
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-import math
-import sys
-sys.path.append("e:\\school\\prog\\Mocker\\Mocker\\backend")
-from models import Teacher
-from models import TeacherRatings
+from backend.models import Teacher
+from backend.models import TeacherRatings
 from flask_sqlalchemy.model import Model
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import Session
-import os
 from thefuzz import process
-from seleniumbase import Driver
+import math
+import os
 
 
 def connect_db() -> Session:
@@ -250,14 +246,3 @@ def scrape_teachers(driver: WebDriver) -> None:
         
         After that, we will create new entries in Teacher table with the new null values in teacher_id
         """
-
-if __name__ == '__main__':
-    print(get_links(583))
-    """
-    # We will use seleniumbase to avoid bot detection
-    driver = Driver(uc=True)
-    
-    driver.get("https://ratemyteachers.com/ca/quebec/montreal/vanier-college")
-
-    scrape_teachers(driver)
-    """
