@@ -13,14 +13,13 @@ def get_teachers():
 
 @app.route("/create_teacher", methods=["POST"])
 def create_teacher():
-    first_name = request.json.get("firstName")
-    last_name = request.json.get("lastName")
+    name = request.json.get("name")
     rating = request.json.get("rating")
     link = request.json.get("link")
     
-    if not first_name or not last_name:
-        return jsonify({"message":"You must enter a first name and a last name"}), 400
-    new_teacher = Teacher(first_name=first_name, last_name=last_name, rating=rating, link=link)
+    if not name:
+        return jsonify({"message":"You must enter a name"}), 400
+    new_teacher = Teacher(name=name, rating=rating, link=link)
     try:
         db.session.add(new_teacher)
         db.session.commit()
@@ -36,8 +35,8 @@ def update_teacher(id):
         return jsonify({"message":"Teacher not found"}), 404
     
     data = request.json
-    teacher.first_name = data.get("firstName", teacher.first_name)
-    teacher.last_name = data.get("lastName", teacher.last_name)
+    teacher.name = data.get("name", teacher.name)
+    teacher.link = data.get("link", teacher.link)
     teacher.rating = data.get("rating", teacher.rating)
     db.session.commit()
     return jsonify({"message":"Teacher updated"}), 200

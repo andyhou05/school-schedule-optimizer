@@ -3,17 +3,32 @@ from config import db
 class Teacher(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), unique=True, nullable=True)
+    
+    def to_json(self):
+        return{
+            "id":self.id,
+            "name":self.name
+        }
+    def __repr__(self):
+        return str(self.to_json())
+    
+class TeacherRatings(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    teacher_id = db.Column(db.Integer, db.ForeignKey("teacher.id"), nullable=True)
+    name = db.Column(db.String(150), unique=True, nullable=True)
     rating = db.Column(db.Float, unique=False, nullable=True)
-    courses = db.relationship("Course", backref="teacher", lazy=True)
     link = db.Column(db.String(150), unique=True, nullable=True)
     
     def to_json(self):
         return{
+            "id":self.id,
+            "teacherId":self.teacher_id,
             "name":self.name,
             "rating":self.rating,
-            "courses":list(map(lambda x: x.to_json(), self.courses)),
             "link":self.link
         }
+    def __repr__(self):
+        return str(self.to_json())
     
 class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
