@@ -53,3 +53,6 @@ class Course(db.Model):
             "day":self.day,
             "time":self.time
         }
+        
+    def __repr__(self):
+        return str(self.to_json())

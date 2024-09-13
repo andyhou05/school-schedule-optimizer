@@ -3,48 +3,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from backend.models import Teacher
 from backend.models import TeacherRatings
-from flask_sqlalchemy.model import Model
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import Session
+from backend.scripts.helper import connect_db
+from backend.scripts.helper import add_entry
 from thefuzz import process
 import math
-import os
 
-
-def connect_db() -> Session:
-    """
-    Connects to the Mocker database.
-
-    Returns:
-        Session: Session object that can be used to query database.
-    """
-    # Environment variables
-    password = os.environ["MYSQL_PASSWORD"]
-    host = os.environ["MOCKER_HOST"]
-    user = os.environ["MOCKER_USER"]
-    db_name = os.environ["MOCKER_DB_NAME"]
-    
-    engine = create_engine(f"mysql+pymysql://{user}:{password}@{host}/{db_name}")
-    Session = sessionmaker(bind=engine)
-    session = Session()
-    return session
-
-def add_entry(session: Session, entry: Model) -> None:
-    """
-    Adds an entry to the specific table that is linked to the Model.
-
-    Args:
-        session (Session): Session object that has connection to the database.
-        entry (Model): Entry that we want to add to the Model object's table.
-    """
-    try:
-        session.add(entry)
-        session.commit()
-        print(f"Added {entry}\n") # Log message to console
-    except Exception as e:
-        print(f"Unable to add to table: {e}\n")
-        session.rollback()
         
 def average(nums: list[float]) -> float:
     """
@@ -146,20 +109,22 @@ def scrape_name_rating(driver: WebDriver) -> tuple:
         
     return (name, rating)
 
-def match_teacher_id(teacher_to_match: TeacherRatings, names: list[str]) -> None:
+def match_teacher_id(teacher_to_match: TeacherRatings, names: list[str], threshold: int) -> None:
     """
     Matches the teacher_id of teacher_to_match (which is a foreign key) to the id in Teacher table.
 
     Args:
         teacher_to_match (TeacherRatings): The TeacherRatings instance whose teacher_id we need to match.
         names (list[str]): A list of all the teacher names in Teacher table.
+        threshold (int): The accepted threshold for name ressemblance, from 0 - 100
+        save_new_teacher (bool): True if we want to save a Teacher into database that is below the threshold
     """
     
     teacher_name = teacher_to_match.name
     session = connect_db()
     
     match = process.extractOne(teacher_name, names)
-    if match is None or float(match[1]) < 85:
+    if match is None or float(match[1]) < threshold:
         
         # If there is no match or does not pass the threshold, add a new teacher to Teacher table
         new_teacher = Teacher(name=teacher_name)
@@ -213,7 +178,7 @@ def scrape_teachers(driver: WebDriver) -> None:
             saved_teachers_names = [teacher.to_json()["name"] for teacher in saved_teachers]
             
             # We need to match the teacher_id (foreign key) in TeacherRatings to the appropriate id in Teacher
-            match_teacher_id(new_teacher_rating, saved_teachers_names)
+            match_teacher_id(new_teacher_rating, saved_teachers_names, threshold=85)
                 
         """
         IMPORTANT: We need to manually change the teacher_id in the teacher_ratings table for some entries since thefuzz doesn't always score correctly
