@@ -140,6 +140,19 @@ def match_teacher_id(teacher_to_match: TeacherRatings, names: list[str], thresho
         session.commit()
         print(f"Saved {teacher_name} to match {match[0]} with a score of {match[1]}")
     
+def match_all_teacher_id():
+    session = connect_db()
+    teacher_ratings = session.query(TeacherRatings).all()
+    teacher_names = [teacher.to_json()['name'] for teacher in session.query(Teacher).all()]
+    for teacher_rating in teacher_ratings:
+        match = process.extractOne(teacher_rating.to_json()['name'], teacher_names)
+        if float(match[1]) > 85:
+            teacher_rating.teacher_id = session.query(Teacher).filter(Teacher.name == match[0])[0].to_json()['id']
+            teacher_rating.teacher_id_accuracy = match[1]
+            session.commit()
+            print(f"Saved {teacher_rating.to_json()['name']} to match {match[0]} with a score of {match[1]}")
+            
+    
 def scrape_teachers(driver: WebDriver) -> None:
     """
     Scrapes a ratemyteacher.com school page for every teacher and their corresponding rating, if a teacher doesnt have a rating it will be None

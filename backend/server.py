@@ -151,6 +151,20 @@ def delete_course(id):
     
     return jsonify({"message":"Course deleted"}), 200
 
+# Routes to generate schedule
+@app.route("/generate_schedule", methods=["POST"])
+def generate_schedule():
+    data = request.get_json()
+    selected_courses = data.get("courses")
+    preferences = data.get("preferences")
+    
+    if not selected_courses:
+        return jsonify({"message":"You must enter a course."})
+    
+    possible_schedules = []
+    
+    
+
 @app.route("/")
 def hello():
     return "Hello"
