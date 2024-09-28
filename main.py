@@ -6,7 +6,7 @@ import os
 
 if __name__ == "__main__":
     courses = ["603-101-MA", "345-102-MQ", "109-101-MQ", "201-NYA-05", "203-NYA-05", "202-NYA-05"]
-    preferences = {}
+    preferences = {"day off": "Mon."}
     schedule_generator.generate_schedule(courses, preferences)
     
     
