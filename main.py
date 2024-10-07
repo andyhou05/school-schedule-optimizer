@@ -1,13 +1,14 @@
 from backend.scripts.scrapers import teacher_scraper
 from backend.scripts.scrapers import course_scraper
-from backend.scripts import schedule_generator
+from backend.scripts.schedule import generator
+from backend.scripts.schedule import scorer
 from seleniumbase import Driver
 import os
 
 if __name__ == "__main__":
     courses = ["603-101-MA", "345-102-MQ", "109-101-MQ", "201-NYA-05", "203-NYA-05", "202-NYA-05"]
-    preferences = {"day off": "Mon."}
-    schedule_generator.generate_schedule(courses, preferences)
+    #preferences = {"day off": "Mon."}
+    #generator.generate_schedule(courses, preferences)
     
     
     #teacher_scraper.match_all_teacher_id()

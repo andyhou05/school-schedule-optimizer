@@ -1,14 +1,6 @@
 from backend.models import Course
 from backend.scripts.helper import connect_db
-
-def group_periods(periods: list[Course]) -> dict:
-    grouped_periods = {}
-    for period in periods:
-        key = (period.course_id, period.section)
-        if key not in grouped_periods:
-            grouped_periods[key] = []
-        grouped_periods[key].append(period)
-    return grouped_periods
+from backend.scripts.schedule.group import group_periods
 
 def filter_day_off(courses: list[list[Course]], day_off: str):
     filtered = []
@@ -23,10 +15,10 @@ def filter_day_off(courses: list[list[Course]], day_off: str):
     return filtered
     
 
-def generate_schedule(grouped_periods: list[str], preferences: dict):
+def generate_schedule(requested_classes: list[str], preferences: dict):
     # breaks, time, day off
     session = connect_db()
-    periods = session.query(Course).filter(Course.course_id.in_(grouped_periods)).all()
+    periods = session.query(Course).filter(Course.course_id.in_(requested_classes)).all()
     possible_courses = list(group_periods(periods).values())
     filtered_courses = filter_day_off(possible_courses, preferences["day off"])
     
