@@ -1,5 +1,6 @@
 import math
 from backend.models import Course
+from backend.scripts.schedule import group
 
 def time_to_int(time: str) -> int:
     """
@@ -34,10 +35,29 @@ def get_latest_course_time(courses: list[Course]) -> int:
         latest = time_block if time_block > latest else latest
     return latest
     
-def score_morning_schedule(schedule: list[Course]):
+def score_morning_schedule(schedule: list[Course]) -> float:
     
     #sort courses by day - course finishing latest - convert time to int - calculate score
-    i=0
+    
+    # Earliest class finishes at 9:30 (4), latest at 18:00 (21)
+    earliest_finish, latest_finish = 4, 21
+    
+    # When scoring, we need to bring the scale to the numbers between the two times to find a percentage
+    max_difference = latest_finish - earliest_finish
+    
+    weekly_schedule = group.group_days(schedule)
+    weekly_morning_score = []
+    for courses_in_day in weekly_schedule:
+        # If there are no classes in the day, score is 100
+        if len(courses_in_day) == 0:
+            weekly_morning_score.append(100)
+            continue
+        
+        latest = get_latest_course_time(courses_in_day)
+        daily_score = ((max_difference - (latest - earliest_finish))/max_difference) * 100
+        weekly_morning_score.append(daily_score)
+    
+    return weekly_morning_score
 
 def score_evening_schedule(schedule: list[Course]):
     i=0

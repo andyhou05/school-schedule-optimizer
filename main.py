@@ -2,11 +2,19 @@ from backend.scripts.scrapers import teacher_scraper
 from backend.scripts.scrapers import course_scraper
 from backend.scripts.schedule import generator
 from backend.scripts.schedule import scorer
+from backend.scripts.helper import connect_db
+from backend.models import Course
 from seleniumbase import Driver
 import os
 
 if __name__ == "__main__":
-    courses = ["603-101-MA", "345-102-MQ", "109-101-MQ", "201-NYA-05", "203-NYA-05", "202-NYA-05"]
+    session = connect_db()
+    ids = [1800, 3134, 3135, 2832, 2518, 329]
+    schedule = session.query(Course).filter(Course.id.in_(ids)).all()
+    print(scorer.score_morning_schedule(schedule))
+    
+    
+    #courses = ["603-101-MA", "345-102-MQ", "109-101-MQ", "201-NYA-05", "203-NYA-05", "202-NYA-05"]
     #preferences = {"day off": "Mon."}
     #generator.generate_schedule(courses, preferences)
     
