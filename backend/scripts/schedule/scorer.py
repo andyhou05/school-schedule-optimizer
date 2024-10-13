@@ -54,6 +54,21 @@ def get_earliest_course_time(courses: list[Course]) -> int:
         time_block = time_to_int(start_time)
         earliest = time_block if time_block < earliest else earliest
     return earliest
+
+def get_course_length(course: Course) -> int:
+    """ Returns the length of a given course in its 30 minute block equivalent.
+    Example: if a course lasts 2 hours, returns 4.
+
+    Args:
+        course (Course): Course whose length we want to find
+
+    Returns:
+        int: 30 minute block equivalent of the course time length.
+    """
+    
+    start = get_earliest_course_time([course])
+    end = get_latest_course_time([course])
+    return end - start
     
 def score_morning_schedule(schedule: list[Course]) -> float:
     """ Returns a score between 0 and 100 to rate a schedule based on how early the courses are. 
@@ -116,6 +131,28 @@ def score_evening_schedule(schedule: list[Course]) -> float:
         weekly_morning_score.append(daily_score)
     
     return weekly_morning_score
+
+def score_short_breaks(schedule: list[Course]):
+    weekly_schedule = group.group_days(schedule)
+    for courses_in_day in weekly_schedule:
+        if len(courses_in_day) == 0:
+            continue
+        earliest = get_earliest_course_time(courses_in_day)
+        latest = get_latest_course_time(courses_in_day)
+        
+        # Find the time in school
+        school_hours = latest - earliest
+        
+        # Find the time in class
+        class_hours = sum([get_course_length(course) for course in courses_in_day])
+        
+        # Find the time in breaks
+        break_hours = school_hours - class_hours
+        
+        # Calculate score as a percentage
+        score = 100 - (break_hours/school_hours)
+        print(score)
+        
     
 def score_time(courses: list[Course], preference: str):
     return score_morning_schedule(courses) if preference == "morning" else score_evening_schedule(courses)
