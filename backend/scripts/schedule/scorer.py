@@ -29,6 +29,7 @@ def get_latest_course_time(courses: list[Course]) -> int:
     Returns:
         int: Time block representing the time of the class that finishes latest
     """
+    
     latest = 0
     for course in courses:
         finish_time = course.time.split("-")[-1] # Grab the time class finishes
@@ -46,6 +47,7 @@ def get_earliest_course_time(courses: list[Course]) -> int:
     Returns:
         int: Tune block representing the time of the class that starts the earliest
     """
+    
     earliest = float("inf")
     for course in courses:
         start_time = course.time.split("-")[0] # Grab the time class starts
@@ -54,8 +56,15 @@ def get_earliest_course_time(courses: list[Course]) -> int:
     return earliest
     
 def score_morning_schedule(schedule: list[Course]) -> float:
-    
-    #sort courses by day - course finishing latest - convert time to int - calculate score
+    """ Returns a score between 0 and 100 to rate a schedule based on how early the courses are. 
+    The earlier the courses are the better the schedule will score.
+
+    Args:
+        schedule (list[Course]): List of courses we want to rate.
+
+    Returns:
+        float: Score between 0 and 100
+    """
     
     # Earliest class finishes at 9:30 (4), latest at 18:00 (21)
     earliest_finish, latest_finish = 4, 21
@@ -77,7 +86,17 @@ def score_morning_schedule(schedule: list[Course]) -> float:
     
     return weekly_morning_score
 
-def score_evening_schedule(schedule: list[Course]):
+def score_evening_schedule(schedule: list[Course]) -> float:
+    """ Returns a score between 0 and 100 to rate a schedule based on how late the courses are.
+    The later the courses are the better the schedule will score.
+
+    Args:
+        schedule (list[Course]): List of courses we want to rate.
+
+    Returns:
+        float: Score between 0 and 100
+    """
+    
     # Latest class starts at 16:30 (18), earliest at 8:00 (1)
     latest_start, earliest_start = 18, 1
     
