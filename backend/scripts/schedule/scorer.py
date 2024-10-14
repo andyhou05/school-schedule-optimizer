@@ -132,8 +132,19 @@ def score_evening_schedule(schedule: list[Course]) -> float:
     
     return weekly_morning_score
 
-def score_short_breaks(schedule: list[Course]):
+def score_short_breaks(schedule: list[Course]) -> float:
+    """ Returns a score between 0 and 100 to rate a schedule based on how little breaks there are.
+    The less amount of breaks there are the better the schedule will score
+    
+    Args:
+        schedule (list[Course]): List of courses we want to rate.
+
+    Returns:
+        float: Score between 0 and 100.
+    """
+    
     weekly_schedule = group.group_days(schedule)
+    scores = []
     for courses_in_day in weekly_schedule:
         if len(courses_in_day) == 0:
             continue
@@ -150,8 +161,43 @@ def score_short_breaks(schedule: list[Course]):
         break_hours = school_hours - class_hours
         
         # Calculate score as a percentage
-        score = 100 - (break_hours/school_hours)
-        print(score)
+        current_score = 100 - (break_hours/school_hours)
+        scores.append(current_score)
+    return sum(scores)/len(scores)
+
+def score_regular_breaks(schedule: list[Course]):
+    """ Returns a score between 0 and 100 to rate a schedule based on how many breaks there are.
+    The schedule will score better when there is an adequate amount of breaks/class-time (15 min/hour).
+    Example: a day with 4 hours of class and 1 hour break will score better than a day with 4 hours of class and 4 hours break.
+    
+    Args:
+        schedule (list[Course]): List of courses we want to rate.
+
+    Returns:
+        float: Score between 0 and 100.
+    """
+    break_to_course_ratio = 0.25
+    weekly_schedule = group.group_days(schedule)
+    scores = []
+    for courses_in_day in weekly_schedule:
+        if len(courses_in_day) == 0:
+            continue
+        earliest = get_earliest_course_time(courses_in_day)
+        latest = get_latest_course_time(courses_in_day)
+        
+        # Find the time in school
+        school_hours = latest - earliest
+        
+        # Find the time in class
+        class_hours = sum([get_course_length(course) for course in courses_in_day])
+        
+        # Find the time in breaks
+        break_hours = school_hours - class_hours
+        
+        # Calculate score as a percentage
+        current_score = break_hours/school_hours
+        scores.append(current_score)
+    return sum(scores)/len(scores)
         
     
 def score_time(courses: list[Course], preference: str):
