@@ -165,7 +165,7 @@ def score_short_breaks(schedule: list[Course]) -> float:
         scores.append(current_score)
     return sum(scores)/len(scores)
 
-def score_regular_breaks(schedule: list[Course]):
+def score_regular_breaks(schedule: list[Course]) -> float:
     """ Returns a score between 0 and 100 to rate a schedule based on how many breaks there are.
     The schedule will score better when there is an adequate amount of breaks/class-time (15 min/hour).
     Example: a day with 4 hours of class and 1 hour break will score better than a day with 4 hours of class and 4 hours break.
@@ -176,11 +176,11 @@ def score_regular_breaks(schedule: list[Course]):
     Returns:
         float: Score between 0 and 100.
     """
-    break_to_course_ratio = 0.25
+    ideal_break_to_course_ratio = 0.5
     weekly_schedule = group.group_days(schedule)
     scores = []
     for courses_in_day in weekly_schedule:
-        if len(courses_in_day) == 0:
+        if len(courses_in_day) < 2:
             continue
         earliest = get_earliest_course_time(courses_in_day)
         latest = get_latest_course_time(courses_in_day)
@@ -194,9 +194,10 @@ def score_regular_breaks(schedule: list[Course]):
         # Find the time in breaks
         break_hours = school_hours - class_hours
         
-        # Calculate score as a percentage
-        current_score = break_hours/school_hours
-        scores.append(current_score)
+        # Calculate score
+        current_break_to_course_ratio = break_hours/class_hours
+        score = 100 - abs((ideal_break_to_course_ratio - current_break_to_course_ratio)/ideal_break_to_course_ratio) * 100
+        scores.append(score)
     return sum(scores)/len(scores)
         
     
