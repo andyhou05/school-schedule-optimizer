@@ -1,6 +1,8 @@
 import math
 from backend.models import Course
+from backend.models import TeacherRatings
 from backend.scripts.schedule import group
+from backend.scripts.helper import connect_db
 
 def time_to_int(time: str) -> int:
     """
@@ -69,6 +71,20 @@ def get_course_length(course: Course) -> int:
     start = get_earliest_course_time([course])
     end = get_latest_course_time([course])
     return end - start
+
+def get_avg_teacher_rating(id: int) -> float | None:
+    """ Returns the avrage rating (0-5) of a teacher based on all reviews from RateMyTeacher.
+
+    Args:
+        id (int): ID of the teacher
+
+    Returns:
+        float | None: Score between 0-5 of the teacher, returns None if id has no reviews.
+    """
+    
+    session = connect_db()
+    ratings = [teacher_rating.rating for teacher_rating in session.query(TeacherRatings).filter(TeacherRatings.teacher_id == id).all()]
+    return sum(ratings)/len(ratings) if (len(ratings) != 0 and None not in ratings) else None
     
 def score_morning_schedule(schedule: list[Course]) -> float:
     """ Returns a score between 0 and 100 to rate a schedule based on how early the courses are. 
@@ -176,6 +192,7 @@ def score_regular_breaks(schedule: list[Course]) -> float:
     Returns:
         float: Score between 0 and 100.
     """
+    
     ideal_break_to_course_ratio = 0.5
     weekly_schedule = group.group_days(schedule)
     scores = []
@@ -200,6 +217,37 @@ def score_regular_breaks(schedule: list[Course]) -> float:
         scores.append(score)
     return sum(scores)/len(scores)
         
+def score_schedule_teachers(schedule: list[Course]) -> float:
+    """ Returns a score between 0 and 100 to rate a schedule based on how good the teachers are.
+    The schedule will score better when the teacher ratings are higher.
+    
+    Args:
+        schedule (list[Course]): List of courses we want to rate.
+
+    Returns:
+        float: Score between 0 and 100.
+    """
+    
+    session = connect_db()
+    total_class_time = 0
+    score = 0
+    
+    # Find the total class time for teachers with a rating
+    for course in schedule:
+        teacher_rating = session.query(TeacherRatings).filter(TeacherRatings.teacher_id == course.teacher_id).first().rating
+        total_class_time += get_course_length(course) if teacher_rating is not None else 0 
+    
+    # Calculate the score of each class based on the teacher ratings
+    for course in schedule:
+        course_length = get_course_length(course)
+        teacher_rating = get_avg_teacher_rating(course.teacher_id)
+        if teacher_rating is None:
+            continue
+        
+        # Calculate its weight proportional to the class length
+        teacher_score = teacher_rating/5 * 100
+        score += teacher_score * (course_length/total_class_time)
+    return score
     
 def score_time(courses: list[Course], preference: str):
     return score_morning_schedule(courses) if preference == "morning" else score_evening_schedule(courses)
