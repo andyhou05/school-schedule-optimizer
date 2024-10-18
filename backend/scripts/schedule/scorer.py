@@ -83,8 +83,8 @@ def get_avg_teacher_rating(id: int) -> float | None:
     """
     
     session = connect_db()
-    ratings = [teacher_rating.rating for teacher_rating in session.query(TeacherRatings).filter(TeacherRatings.teacher_id == id).all()]
-    return sum(ratings)/len(ratings) if (len(ratings) != 0 and None not in ratings) else None
+    ratings = [teacher_rating.rating for teacher_rating in session.query(TeacherRatings).filter(TeacherRatings.teacher_id == id).all() if teacher_rating.rating is not None]
+    return sum(ratings)/len(ratings) if (len(ratings) != 0) else None
     
 def score_morning_schedule(schedule: list[Course]) -> float:
     """ Returns a score between 0 and 100 to rate a schedule based on how early the courses are. 
@@ -234,13 +234,14 @@ def score_schedule_teachers(schedule: list[Course]) -> float:
     
     # Find the total class time for teachers with a rating
     for course in schedule:
-        teacher_rating = session.query(TeacherRatings).filter(TeacherRatings.teacher_id == course.teacher_id).first().rating
+        teacher_rating = get_avg_teacher_rating(course.teacher_id)
         total_class_time += get_course_length(course) if teacher_rating is not None else 0 
     
     # Calculate the score of each class based on the teacher ratings
     for course in schedule:
         course_length = get_course_length(course)
         teacher_rating = get_avg_teacher_rating(course.teacher_id)
+        name = session.query(TeacherRatings).filter(TeacherRatings.teacher_id == course.teacher_id).first().name
         if teacher_rating is None:
             continue
         
