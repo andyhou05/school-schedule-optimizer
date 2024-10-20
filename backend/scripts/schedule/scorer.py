@@ -181,7 +181,6 @@ def score_schedule_teachers(schedule: list[Course]) -> float:
         float: Score between 0 and 100.
     """
     
-    session = connect_db()
     total_class_time = 0
     score = 0
     
@@ -194,7 +193,6 @@ def score_schedule_teachers(schedule: list[Course]) -> float:
     for course in schedule:
         course_length = get_course_length(course)
         teacher_rating = get_avg_teacher_rating(course.teacher_id)
-        name = session.query(TeacherRatings).filter(TeacherRatings.teacher_id == course.teacher_id).first().name
         if teacher_rating is None:
             continue
         
@@ -264,7 +262,7 @@ def score_schedule_preferences(schedule: list[Course], preferences: dict) -> flo
     time_score = score_schedule_time(schedule, preferences.get('time'))
     
     if breaks_score == -1 and time_score == -1:
-        return -1
+        return 100100
     elif breaks_score == -1:
         return time_score
     elif time_score == -1:
@@ -272,5 +270,27 @@ def score_schedule_preferences(schedule: list[Course], preferences: dict) -> flo
     else:
         return 0.5 * (breaks_score + time_score)
 
-def score_schedule(schedule: list[Course], preferences: dict):
-    i = 0
+def score_schedule(schedule: list[Course], preferences: dict, teacher_weight:float = 1/3, preferences_weight:float = 2/3) -> float:
+    """ Returns a score between 0 and 100 to rate a schedule based on the user's preferences for courses as well as the teachers' ratings.
+
+    Args:
+        schedule (list[Course]): List of courses we want to rate.
+        preferences (dict): User preferences for schedule, if it is empty, no weight will be given to preferences.
+        teacher_weight (float, optional): Weight attributed to the teachers' scores. Defaults to 1/3. teacher_weight and preferences_weight must sum to 1.00.
+        preferences_weight (float, optional): Weight attributed to user schedule preferences. Defaults to 2/3. teacher_weight and preferences_weight must sum to 1.00.
+
+    Returns:
+        float: A score between 0-100.
+    """
+   
+    # If there are no preferences, give all the weight to the teachers_score
+    if len(preferences.keys()) == 0:
+        teacher_weight, preferences_weight = 1, 0
+        
+    # The sum of teacher_weight and preferences_weight must be 1.00
+    if teacher_weight + preferences_weight != 1.00:
+        raise Exception(f"The sum of teacher_weight and preferences_weight must be 1.00. The current sum is {teacher_weight + preferences_weight}")
+    
+    preferences_score = preferences_weight * score_schedule_preferences(schedule, preferences) if preferences_weight != 0 else 0
+    teachers_score = teacher_weight * score_schedule_teachers(schedule)
+    return preferences_score + teachers_score
