@@ -85,68 +85,6 @@ def get_avg_teacher_rating(id: int) -> float | None:
     session = connect_db()
     ratings = [teacher_rating.rating for teacher_rating in session.query(TeacherRatings).filter(TeacherRatings.teacher_id == id).all() if teacher_rating.rating is not None]
     return sum(ratings)/len(ratings) if (len(ratings) != 0) else None
-    
-def score_morning_schedule(schedule: list[Course]) -> float:
-    """ Returns a score between 0 and 100 to rate a schedule based on how early the courses are. 
-    The earlier the courses are the better the schedule will score.
-
-    Args:
-        schedule (list[Course]): List of courses we want to rate.
-
-    Returns:
-        float: Score between 0 and 100
-    """
-    
-    # Earliest class finishes at 9:30 (4), latest at 18:00 (21)
-    earliest_finish, latest_finish = 4, 21
-    
-    # When scoring, we need to scale to the numbers between the difference
-    max_difference = latest_finish - earliest_finish
-    
-    weekly_schedule = group.group_days(schedule)
-    weekly_morning_score = []
-    for courses_in_day in weekly_schedule:
-        # If there are no classes in the day, score is 100
-        if len(courses_in_day) == 0:
-            weekly_morning_score.append(100)
-            continue
-        
-        latest = get_latest_course_time(courses_in_day)
-        daily_score = ((max_difference - (latest - earliest_finish))/max_difference) * 100
-        weekly_morning_score.append(daily_score)
-    
-    return weekly_morning_score
-
-def score_evening_schedule(schedule: list[Course]) -> float:
-    """ Returns a score between 0 and 100 to rate a schedule based on how late the courses are.
-    The later the courses are the better the schedule will score.
-
-    Args:
-        schedule (list[Course]): List of courses we want to rate.
-
-    Returns:
-        float: Score between 0 and 100
-    """
-    
-    # Latest class starts at 16:30 (18), earliest at 8:00 (1)
-    latest_start, earliest_start = 18, 1
-    
-    # When scoring, we need to scale to the numbers between the difference
-    max_difference = latest_start - earliest_start
-    
-    weekly_schedule = group.group_days(schedule)
-    weekly_morning_score = []
-    for courses_in_day in weekly_schedule:
-        # If there are no classes in the day, score is 100
-        if len(courses_in_day) == 0:
-            weekly_morning_score.append(100)
-            continue
-        
-        earliest = get_earliest_course_time(courses_in_day)
-        daily_score = ((max_difference - (latest_start - earliest))/max_difference) * 100
-        weekly_morning_score.append(daily_score)
-    
-    return weekly_morning_score
 
 def score_short_breaks(schedule: list[Course]) -> float:
     """ Returns a score between 0 and 100 to rate a schedule based on how little breaks there are.
@@ -250,5 +188,35 @@ def score_schedule_teachers(schedule: list[Course]) -> float:
         score += teacher_score * (course_length/total_class_time)
     return score
     
-def score_time(courses: list[Course], preference: str):
-    return score_morning_schedule(courses) if preference == "morning" else score_evening_schedule(courses)
+def score_schedule_time(schedule: list[Course], preference: str):
+    # Latest class starts at 16:30 (18), earliest at 8:00 (1)
+    latest_start, earliest_start = 18, 1
+    
+    # Earliest class finishes at 9:30 (4), latest at 18:00 (21)
+    earliest_finish, latest_finish = 4, 21
+    
+    # When scoring, we need to scale to the numbers between the difference
+    max_difference = latest_start - earliest_start
+    
+    weekly_schedule = group.group_days(schedule)
+    weekly_morning_score = []
+    for courses_in_day in weekly_schedule:
+        # If there are no classes in the day, score is 100
+        if len(courses_in_day) == 0:
+            weekly_morning_score.append(100)
+            continue
+        
+        if preference == 'evening':
+            earliest = get_earliest_course_time(courses_in_day)
+            daily_score = ((max_difference - (latest_start - earliest))/max_difference) * 100
+            weekly_morning_score.append(daily_score)
+            
+        elif preference == "morning":
+            latest = get_latest_course_time(courses_in_day)
+            daily_score = ((max_difference - (latest - earliest_finish))/max_difference) * 100
+            weekly_morning_score.append(daily_score)
+    
+    return weekly_morning_score
+
+def score_schedule(courses: list[Course], preferences: dict):
+    i = 0
