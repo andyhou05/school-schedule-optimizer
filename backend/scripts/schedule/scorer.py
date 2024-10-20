@@ -154,6 +154,21 @@ def score_regular_breaks(schedule: list[Course]) -> float:
         score = 100 - abs((ideal_break_to_course_ratio - current_break_to_course_ratio)/ideal_break_to_course_ratio) * 100
         scores.append(score)
     return sum(scores)/len(scores)
+
+def score_schedule_breaks(schedule: list[Course], preference: str) -> float:
+    """ Returns a score between 0 and 100 to rate a schedule based on the user's break preference (regular or short).
+
+    Args:
+        schedule (list[Course]): List of courses we want to rate
+        preference (str): User's break preference, 'regular' or 'short'
+
+    Returns:
+        float: Score between 0-100, -1 if there are no preferences.
+    """
+    
+    if preference != "regular" and preference != "short":
+        return -1
+    return score_regular_breaks(schedule) if preference == "regular" else score_short_breaks(schedule)
         
 def score_schedule_teachers(schedule: list[Course]) -> float:
     """ Returns a score between 0 and 100 to rate a schedule based on how good the teachers are.
@@ -188,7 +203,17 @@ def score_schedule_teachers(schedule: list[Course]) -> float:
         score += teacher_score * (course_length/total_class_time)
     return score
     
-def score_schedule_time(schedule: list[Course], preference: str):
+def score_schedule_time(schedule: list[Course], preference: str) -> float:
+    """ Returns a score between 0 and 100 to rate a schedule based on the user's time preference for courses (evening or morning)
+
+    Args:
+        schedule (list[Course]): List of courses we want to rate.
+        preference (str): User preference of course times, 'morning' or 'evening'.
+
+    Returns:
+        float: Score between 0 and 100, -1 if there are no preferences
+    """
+    
     # Latest class starts at 16:30 (18), earliest at 8:00 (1)
     latest_start, earliest_start = 18, 1
     
@@ -215,8 +240,37 @@ def score_schedule_time(schedule: list[Course], preference: str):
             latest = get_latest_course_time(courses_in_day)
             daily_score = ((max_difference - (latest - earliest_finish))/max_difference) * 100
             weekly_morning_score.append(daily_score)
+        
+        else:
+            return -1
     
-    return weekly_morning_score
+    return sum(weekly_morning_score)/len(weekly_morning_score)
 
-def score_schedule(courses: list[Course], preferences: dict):
+def score_schedule_preferences(schedule: list[Course], preferences: dict) -> float:
+    """ Returns a score between 0 and 100 to rate a schedule based on the user's preferences for courses.
+
+    Args:
+        schedule (list[Course]): schedule (list[Course]): List of courses we want to rate.
+        preferences (dict): User preferences for schedule.
+
+    Returns:
+        float: Score between 0 and 100.
+    """
+    
+    # Find the score for the break preferences, if any
+    breaks_score = score_schedule_breaks(schedule, preferences.get("breaks"))
+    
+    # Find the score for the class time preferences, if any
+    time_score = score_schedule_time(schedule, preferences.get('time'))
+    
+    if breaks_score == -1 and time_score == -1:
+        return -1
+    elif breaks_score == -1:
+        return time_score
+    elif time_score == -1:
+        return breaks_score
+    else:
+        return 0.5 * (breaks_score + time_score)
+
+def score_schedule(schedule: list[Course], preferences: dict):
     i = 0
