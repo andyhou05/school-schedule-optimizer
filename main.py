@@ -8,6 +8,16 @@ from seleniumbase import Driver
 import os
 
 if __name__ == "__main__":
+    """
+    nums = [23, 7, 15, 42, 8, 19]
+    for i in range(len(nums) - 1):
+        for j in range(i + 1, len(nums)):
+            if nums[i] > nums[j]:
+                #swap
+                nums[i], nums[j] = nums[j], nums[i]
+    print(nums)
+    """
+    
     session = connect_db()
     ids = [1800, 3134, 3135, 2832, 2518, 329]
     schedule = session.query(Course).filter(Course.id.in_(ids)).all()
@@ -30,3 +40,4 @@ if __name__ == "__main__":
     #driver.get("https://vanierlivecourseschedule.powerappsportals.com/")
     #course_scraper.scrape_all_teacher_names(driver)
     #course_scraper.scrape_courses(driver)
+    
