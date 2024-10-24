@@ -26,7 +26,6 @@ def filter_day_off(courses: list[list[Course]], day_off: str | None) -> list[lis
         if not period_on_day_off:
             filtered.append(course)
     return filtered
-    
 
 def generate_schedule(requested_classes: list[str], preferences: dict):
     # breaks, time
@@ -36,10 +35,10 @@ def generate_schedule(requested_classes: list[str], preferences: dict):
     # Filter courses by user day off preference
     possible_courses = list(group.group_periods(periods).values())
     filtered_day_off_courses = filter_day_off(possible_courses, preferences.get("day off"))
-    grouped_courses = group.group_courses(filtered_day_off_courses)
-    course_occurences = group.find_occurences(grouped_courses)
     
-    print(course_occurences)
+    # Group courses by their course ids and find the occurences to optimize for beam search
+    grouped_courses, occurences = group.group_courses(filtered_day_off_courses)
     
     # Beam Search
+    course_order = sorted(occurences, key = occurences.get)
     

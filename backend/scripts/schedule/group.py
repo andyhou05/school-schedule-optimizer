@@ -38,18 +38,24 @@ def group_days(periods: list[Course]) -> list:
         weekly_schedule[day_index].append(period)
     return weekly_schedule
 
-def group_courses(courses: list[list[Course]]) -> dict:
+def group_courses(courses: list[list[Course]]) -> tuple:
+    """ Groups courses by their course id as well as their occurences.
+
+    Args:
+        courses (list[list[Course]]): list of courses, each course contains a list[Course] which represent a list of periods.
+
+    Returns:
+        tuple: Tuple of length 2, first item is a dict {course_id (int): courses (list[list[Course]])}, second item is a dict {coufse_id (int): course_occurences (int)}
+    """
     
     grouped_courses = {}
+    occurences = {}
     for course in courses:
         id = course[0].course_id
         if id not in grouped_courses:
             grouped_courses[id] = []
         grouped_courses[id].append(course)
-    return grouped_courses
-
-def find_occurences(courses_dict: dict):
-    occurences = {}
-    for course_id, course in courses_dict.items():
+        
+    for course_id, course in grouped_courses.items():
         occurences[course_id] = len(course)
-    return occurences
+    return (grouped_courses, occurences)
