@@ -10,24 +10,27 @@ import os
 if __name__ == "__main__":
     """
     nums = [23, 7, 15, 42, 8, 19]
-    for i in range(len(nums) - 1):
-        for j in range(i + 1, len(nums)):
-            if nums[i] > nums[j]:
-                #swap
-                nums[i], nums[j] = nums[j], nums[i]
+    for i in range(1, len(nums)):
+        current = nums[i]
+        j = i - 1
+        while j >= 0 and nums[j] > current:
+            nums[j + 1] = nums[j]
+            j -= 1
+        nums[j + 1] = current
+        
     print(nums)
     """
     
     session = connect_db()
-    ids = [1800, 3134, 3135, 2832, 2518, 329]
-    schedule = session.query(Course).filter(Course.id.in_(ids)).all()
-    preferences = {"breaks":"short"}
-    print(scorer.score_schedule(schedule, preferences))
+    #ids = [1800, 3134, 3135, 2832, 2518, 329]
+    #schedule = session.query(Course).filter(Course.id.in_(ids)).all()
+    #preferences = {"breaks":"short"}
+    #print(scorer.score_schedule(schedule, preferences))
     
     
-    #courses = ["603-101-MA", "345-102-MQ", "109-101-MQ", "201-NYA-05", "203-NYA-05", "202-NYA-05"]
-    #preferences = {"day off": "Mon."}
-    #generator.generate_schedule(courses, preferences)
+    courses = ["603-101-MA", "345-102-MQ", "109-101-MQ", "201-NYA-05", "203-NYA-05", "202-NYA-05"]
+    preferences = {}
+    generator.generate_schedule(courses, preferences)
     
     
     #teacher_scraper.match_all_teacher_id()

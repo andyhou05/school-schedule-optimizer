@@ -270,11 +270,12 @@ def score_schedule_preferences(schedule: list[Course], preferences: dict) -> flo
     else:
         return 0.5 * (breaks_score + time_score)
 
-def score_schedule(schedule: list[Course], preferences: dict, teacher_weight:float = 1/3, preferences_weight:float = 2/3) -> float:
+def score_schedule(schedule: list[Course], requested_course_quantity: int, preferences: dict, teacher_weight:float = 1/3, preferences_weight:float = 2/3) -> float:
     """ Returns a score between 0 and 100 to rate a schedule based on the user's preferences for courses as well as the teachers' ratings.
 
     Args:
-        schedule (list[Course]): List of courses we want to rate.
+        schedule (list[Course]): List of courses we want to rate, represents the current state of a schedule (partial or complete).
+        requested_course_quantity (int): How many courses the user has requested.
         preferences (dict): User preferences for schedule, if it is empty, no weight will be given to preferences.
         teacher_weight (float, optional): Weight attributed to the teachers' scores. Defaults to 1/3. teacher_weight and preferences_weight must sum to 1.00.
         preferences_weight (float, optional): Weight attributed to user schedule preferences. Defaults to 2/3. teacher_weight and preferences_weight must sum to 1.00.
@@ -293,4 +294,6 @@ def score_schedule(schedule: list[Course], preferences: dict, teacher_weight:flo
     
     preferences_score = preferences_weight * score_schedule_preferences(schedule, preferences) if preferences_weight != 0 else 0
     teachers_score = teacher_weight * score_schedule_teachers(schedule)
-    return preferences_score + teachers_score
+    course_completion_ratio = len(schedule)/requested_course_quantity
+    
+    return (preferences_score + teachers_score) * course_completion_ratio

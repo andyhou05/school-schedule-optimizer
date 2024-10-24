@@ -37,3 +37,19 @@ def group_days(periods: list[Course]) -> list:
         day_index = days[period.day]
         weekly_schedule[day_index].append(period)
     return weekly_schedule
+
+def group_courses(courses: list[list[Course]]) -> dict:
+    
+    grouped_courses = {}
+    for course in courses:
+        id = course[0].course_id
+        if id not in grouped_courses:
+            grouped_courses[id] = []
+        grouped_courses[id].append(course)
+    return grouped_courses
+
+def find_occurences(courses_dict: dict):
+    occurences = {}
+    for course_id, course in courses_dict.items():
+        occurences[course_id] = len(course)
+    return occurences
