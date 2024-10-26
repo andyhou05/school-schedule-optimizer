@@ -1,5 +1,5 @@
 import math
-from backend.models import Course
+from backend.models import Period
 from backend.models import TeacherRatings
 from backend.scripts.schedule import group
 from backend.scripts.helper import connect_db
@@ -21,12 +21,12 @@ def time_to_int(time: str) -> int:
     time_block = time_block + 1 if minutes == "30" else time_block
     return time_block
     
-def get_latest_course_time(courses: list[Course]) -> int:
+def get_latest_course_time(courses: list[Period]) -> int:
     """
     Returns the time block of the class which finishes the latest
 
     Args:
-        courses (list[Course]): List of courses
+        courses (list[Period]): List of periods
 
     Returns:
         int: Time block representing the time of the class that finishes latest
@@ -39,12 +39,12 @@ def get_latest_course_time(courses: list[Course]) -> int:
         latest = time_block if time_block > latest else latest
     return latest
 
-def get_earliest_course_time(courses: list[Course]) -> int:
+def get_earliest_course_time(courses: list[Period]) -> int:
     """
     Returns the time block of the class which starts the earliest
 
     Args:
-        courses (list[Course]): List of courses
+        courses (list[Period]): List of courses
 
     Returns:
         int: Tune block representing the time of the class that starts the earliest
@@ -57,19 +57,19 @@ def get_earliest_course_time(courses: list[Course]) -> int:
         earliest = time_block if time_block < earliest else earliest
     return earliest
 
-def get_course_length(course: Course) -> int:
+def get_period_length(period: Period) -> int:
     """ Returns the length of a given course in its 30 minute block equivalent.
     Example: if a course lasts 2 hours, returns 4.
 
     Args:
-        course (Course): Course whose length we want to find
+        course (Period): Course whose length we want to find
 
     Returns:
         int: 30 minute block equivalent of the course time length.
     """
     
-    start = get_earliest_course_time([course])
-    end = get_latest_course_time([course])
+    start = get_earliest_course_time([period])
+    end = get_latest_course_time([period])
     return end - start
 
 def get_avg_teacher_rating(id: int) -> float | None:
@@ -86,12 +86,12 @@ def get_avg_teacher_rating(id: int) -> float | None:
     ratings = [teacher_rating.rating for teacher_rating in session.query(TeacherRatings).filter(TeacherRatings.teacher_id == id).all() if teacher_rating.rating is not None]
     return sum(ratings)/len(ratings) if (len(ratings) != 0) else None
 
-def score_short_breaks(schedule: list[Course]) -> float:
+def score_short_breaks(schedule: list[Period]) -> float:
     """ Returns a score between 0 and 100 to rate a schedule based on how little breaks there are.
     The less amount of breaks there are the better the schedule will score
     
     Args:
-        schedule (list[Course]): List of courses we want to rate.
+        schedule (list[Period]): List of periods (courses) we want to rate.
 
     Returns:
         float: Score between 0 and 100.
@@ -109,7 +109,7 @@ def score_short_breaks(schedule: list[Course]) -> float:
         school_hours = latest - earliest
         
         # Find the time in class
-        class_hours = sum([get_course_length(course) for course in courses_in_day])
+        class_hours = sum([get_period_length(course) for course in courses_in_day])
         
         # Find the time in breaks
         break_hours = school_hours - class_hours
@@ -119,13 +119,13 @@ def score_short_breaks(schedule: list[Course]) -> float:
         scores.append(current_score)
     return sum(scores)/len(scores)
 
-def score_regular_breaks(schedule: list[Course]) -> float:
+def score_regular_breaks(schedule: list[Period]) -> float:
     """ Returns a score between 0 and 100 to rate a schedule based on how many breaks there are.
     The schedule will score better when there is an adequate amount of breaks/class-time (15 min/hour).
     Example: a day with 4 hours of class and 1 hour break will score better than a day with 4 hours of class and 4 hours break.
     
     Args:
-        schedule (list[Course]): List of courses we want to rate.
+        schedule (list[Period]): List of periods (courses) we want to rate.
 
     Returns:
         float: Score between 0 and 100.
@@ -144,7 +144,7 @@ def score_regular_breaks(schedule: list[Course]) -> float:
         school_hours = latest - earliest
         
         # Find the time in class
-        class_hours = sum([get_course_length(course) for course in courses_in_day])
+        class_hours = sum([get_period_length(course) for course in courses_in_day])
         
         # Find the time in breaks
         break_hours = school_hours - class_hours
@@ -155,11 +155,11 @@ def score_regular_breaks(schedule: list[Course]) -> float:
         scores.append(score)
     return sum(scores)/len(scores)
 
-def score_schedule_breaks(schedule: list[Course], preference: str) -> float:
+def score_schedule_breaks(schedule: list[Period], preference: str) -> float:
     """ Returns a score between 0 and 100 to rate a schedule based on the user's break preference (regular or short).
 
     Args:
-        schedule (list[Course]): List of courses we want to rate
+        schedule (list[Period]): List of periods (courses) we want to rate
         preference (str): User's break preference, 'regular' or 'short'
 
     Returns:
@@ -170,12 +170,12 @@ def score_schedule_breaks(schedule: list[Course], preference: str) -> float:
         return -1
     return score_regular_breaks(schedule) if preference == "regular" else score_short_breaks(schedule)
         
-def score_schedule_teachers(schedule: list[Course]) -> float:
+def score_schedule_teachers(schedule: list[Period]) -> float:
     """ Returns a score between 0 and 100 to rate a schedule based on how good the teachers are.
     The schedule will score better when the teacher ratings are higher.
     
     Args:
-        schedule (list[Course]): List of courses we want to rate.
+        schedule (list[Period]): List of periods (courses) we want to rate.
 
     Returns:
         float: Score between 0 and 100.
@@ -187,11 +187,11 @@ def score_schedule_teachers(schedule: list[Course]) -> float:
     # Find the total class time for teachers with a rating
     for course in schedule:
         teacher_rating = get_avg_teacher_rating(course.teacher_id)
-        total_class_time += get_course_length(course) if teacher_rating is not None else 0 
+        total_class_time += get_period_length(course) if teacher_rating is not None else 0 
     
     # Calculate the score of each class based on the teacher ratings
     for course in schedule:
-        course_length = get_course_length(course)
+        course_length = get_period_length(course)
         teacher_rating = get_avg_teacher_rating(course.teacher_id)
         if teacher_rating is None:
             continue
@@ -201,11 +201,11 @@ def score_schedule_teachers(schedule: list[Course]) -> float:
         score += teacher_score * (course_length/total_class_time)
     return score
     
-def score_schedule_time(schedule: list[Course], preference: str) -> float:
+def score_schedule_time(schedule: list[Period], preference: str) -> float:
     """ Returns a score between 0 and 100 to rate a schedule based on the user's time preference for courses (evening or morning)
 
     Args:
-        schedule (list[Course]): List of courses we want to rate.
+        schedule (list[Period]): List of periods (courses) we want to rate.
         preference (str): User preference of course times, 'morning' or 'evening'.
 
     Returns:
@@ -244,11 +244,11 @@ def score_schedule_time(schedule: list[Course], preference: str) -> float:
     
     return sum(weekly_morning_score)/len(weekly_morning_score)
 
-def score_schedule_preferences(schedule: list[Course], preferences: dict) -> float:
+def score_schedule_preferences(schedule: list[Period], preferences: dict) -> float:
     """ Returns a score between 0 and 100 to rate a schedule based on the user's preferences for courses.
 
     Args:
-        schedule (list[Course]): schedule (list[Course]): List of courses we want to rate.
+        schedule (list[Period]): List of periods (courses) we want to rate.
         preferences (dict): User preferences for schedule.
 
     Returns:
@@ -270,11 +270,11 @@ def score_schedule_preferences(schedule: list[Course], preferences: dict) -> flo
     else:
         return 0.5 * (breaks_score + time_score)
 
-def score_schedule(schedule: list[Course], requested_course_quantity: int, preferences: dict, teacher_weight:float = 1/3, preferences_weight:float = 2/3) -> float:
+def score_schedule(schedule: list[Period], requested_course_quantity: int, preferences: dict, teacher_weight:float = 1/3, preferences_weight:float = 2/3) -> float:
     """ Returns a score between 0 and 100 to rate a schedule based on the user's preferences for courses as well as the teachers' ratings.
 
     Args:
-        schedule (list[Course]): List of courses we want to rate, represents the current state of a schedule (partial or complete).
+        schedule (list[Period]): List of periods (courses) we want to rate, represents the current state of a schedule (partial or complete).
         requested_course_quantity (int): How many courses the user has requested.
         preferences (dict): User preferences for schedule, if it is empty, no weight will be given to preferences.
         teacher_weight (float, optional): Weight attributed to the teachers' scores. Defaults to 1/3. teacher_weight and preferences_weight must sum to 1.00.

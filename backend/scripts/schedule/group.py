@@ -1,12 +1,12 @@
-from backend.models import Course
+from backend.models import Period
 
-def group_periods(periods: list[Course]) -> dict:
+def group_periods(periods: list[Period]) -> dict:
     """
     Returns the group of period blocks which represent the classes.
     Courses are grouped when they have the same course id and are of the same section.
 
     Args:
-        periods (list[Course]): List of Courses (periods) we want to group by class
+        periods (list[Period]): List of Period we want to group by course
 
     Returns:
         dict: The groups of classes
@@ -20,12 +20,12 @@ def group_periods(periods: list[Course]) -> dict:
         grouped_periods[key].append(period)
     return grouped_periods
 
-def group_days(periods: list[Course]) -> list:
+def group_days(periods: list[Period]) -> list:
     """
-    Returns a list of courses where the index represents the day of the week.
+    Returns a list of periods where the index represents the day of the week.
 
     Args:
-        periods (list[Course]): The list of courses we want to group.
+        periods (list[Period]): The list of periods we want to group.
 
     Returns:
         list: The weekly schedule of courses.
@@ -38,14 +38,13 @@ def group_days(periods: list[Course]) -> list:
         weekly_schedule[day_index].append(period)
     return weekly_schedule
 
-def group_courses(courses: list[list[Course]]) -> tuple:
+def group_courses(courses: list[list[Period]]) -> tuple:
     """ Groups courses by their course id as well as their occurences.
 
     Args:
-        courses (list[list[Course]]): list of courses, each course contains a list[Course] which represent a list of periods.
-
+        courses (list[list[Period]]): list of courses, each course contains a list[Period]
     Returns:
-        tuple: Tuple of length 2, first item is a dict {course_id (int): courses (list[list[Course]])}, second item is a dict {coufse_id (int): course_occurences (int)}
+        tuple: Tuple of length 2, first item is a dict {course_id (int): courses (list[list[Period]])}, second item is a dict {coufse_id (int): course_occurences (int)}
     """
     
     grouped_courses = {}

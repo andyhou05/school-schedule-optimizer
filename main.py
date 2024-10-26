@@ -3,7 +3,7 @@ from backend.scripts.scrapers import course_scraper
 from backend.scripts.schedule import generator
 from backend.scripts.schedule import scorer
 from backend.scripts.helper import connect_db
-from backend.models import Course
+from backend.models import Period
 from seleniumbase import Driver
 import os
             

@@ -34,7 +34,7 @@ class TeacherRatings(db.Model):
     def __repr__(self):
         return str(self.to_json())
     
-class Course(db.Model):
+class Period(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     section = db.Column(db.String(5), unique=False, nullable=False)
     course_id = db.Column(db.String(10), unique=False, nullable=False)

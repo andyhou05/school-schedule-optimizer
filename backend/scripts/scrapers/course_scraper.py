@@ -4,11 +4,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from backend.scripts.helper import connect_db
 from backend.scripts.helper import add_entry
-from backend.models import Course
+from backend.models import Period
 from backend.models import Teacher
 from thefuzz import process
 from backend.config import db
-from backend.models import Course
+from backend.models import Period
 from sqlalchemy.orm import Session
 import re
 import time
@@ -84,7 +84,7 @@ def scrape_no_pages(driver: WebDriver) -> int:
     pages = driver.find_elements(By.XPATH, '//ul[@class="pagination"]/li/a')
     return int(pages[-2].text)
 
-def match_teacher_id(teacher_name: str, course: Course, names: list[str], session: Session) -> None:
+def match_teacher_id(teacher_name: str, course: Period, names: list[str], session: Session) -> None:
     """
     Matches the teacher_id of teacher_to_match (which is a foreign key) to the id in Teacher table.
 
@@ -187,7 +187,7 @@ def scrape_courses(driver: WebDriver, start_page: int = 1):
                 else:
                     teacher_id = teacher_query[0].to_json()['id']
                     
-                course = Course(section=general_info[0], course_id=general_info[1], name=general_info[2], seats=general_info[3], day=day, time=time_slot, teacher_id = teacher_id)
+                course = Period(section=general_info[0], course_id=general_info[1], name=general_info[2], seats=general_info[3], day=day, time=time_slot, teacher_id = teacher_id)
                 add_entry(session, course)
             
             # Close modal window

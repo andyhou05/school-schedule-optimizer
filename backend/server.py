@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from config import app, db
-from models import Course
+from models import Period
 from models import Teacher
 from models import TeacherRatings
 
@@ -99,7 +99,7 @@ def delete_teacher(id):
 # CRUD operations for Courses
 @app.route("/courses", methods=["GET"])
 def get_courses():
-    courses = Course.query.all()
+    courses = Period.query.all()
     json_courses = list(map(lambda x : x.to_json(), courses))
     return jsonify({"courses": json_courses}), 200
 
@@ -115,7 +115,7 @@ def create_course():
     if not section or not course_id or not name or not seats or not time:
         return (jsonify({"message":"You must enter a section, course id, name, time slot, and number of seats"}), 400)
     
-    new_course = Course(section=section, course_id=course_id, name=name, seats=seats, teacher_id=teacher_id, time=time)
+    new_course = Period(section=section, course_id=course_id, name=name, seats=seats, teacher_id=teacher_id, time=time)
     try:
         db.session.add(new_course)
         db.session.commit()
@@ -126,7 +126,7 @@ def create_course():
 
 @app.route("/update_course/<int:id>", methods = ["PATCH"])
 def update_course(id):
-    course = Course.query.get(id)
+    course = Period.query.get(id)
     
     if not course:
         return jsonify({"message": "Course not found"}), 404
@@ -142,7 +142,7 @@ def update_course(id):
 
 @app.route("/delete_course/<int:id>", methods=["DELETE"])
 def delete_course(id):
-    course = Course.query.get(id)
+    course = Period.query.get(id)
     
     if not course:
         return jsonify({"message":"Course not found"}), 404
