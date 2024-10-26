@@ -1,6 +1,7 @@
 from backend.models import Course
 from backend.scripts.helper import connect_db
 from backend.scripts.schedule import group
+from backend.scripts.schedule import scorer
 
 def filter_day_off(courses: list[list[Course]], day_off: str | None) -> list[list[Course]]:
     """ Filters courses based on a preference of a day off.
@@ -27,6 +28,26 @@ def filter_day_off(courses: list[list[Course]], day_off: str | None) -> list[lis
             filtered.append(course)
     return filtered
 
+def is_time_conflict(schedule: list[Course], period_to_check: Course) -> bool:
+    """ Returns whether or not there is a time conflict between a schedule and a period.
+
+    Args:
+        schedule (list[Course]): Partial schedule whose courses we want to look for a conflict.
+        course (Course): The period we want to check for a conflict.
+
+    Returns:
+        bool: Returns True if there is a time conflict, else False.
+    """
+    
+    start, end = scorer.get_earliest_course_time(period_to_check), scorer.get_latest_course_time(period_to_check)
+    for period in schedule:
+        if period.day == period_to_check.day:
+            current_start, current_end = scorer.get_earliest_course_time([period]), scorer.get_latest_course_time([period])
+            if start < current_end and end > current_start:
+                return True
+    return False 
+        
+
 def generate_schedule(requested_classes: list[str], preferences: dict):
     # breaks, time
     session = connect_db()
@@ -40,5 +61,6 @@ def generate_schedule(requested_classes: list[str], preferences: dict):
     grouped_courses, occurences = group.group_courses(filtered_day_off_courses)
     
     # Beam Search
-    course_order = sorted(occurences, key = occurences.get)
+    course_order = sorted(occurences, key = occurences.get) # Start filling the schedule with the course with the least amount of occurences
+    
     
