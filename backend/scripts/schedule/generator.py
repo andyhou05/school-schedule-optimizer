@@ -2,6 +2,7 @@ from backend.models import Period
 from backend.scripts.helper import connect_db
 from backend.scripts.schedule import group
 from backend.scripts.schedule import scorer
+from sqlalchemy.orm import Session
 
 def filter_day_off(courses: list[list[Period]], day_off: str | None) -> list[list[Period]]:
     """ Filters courses based on a preference of a day off.
@@ -39,20 +40,17 @@ def is_time_conflict(schedule: list[Period], period_to_check: Period) -> bool:
         bool: Returns True if there is a time conflict, else False.
     """
     
-    start, end = scorer.get_earliest_course_time(period_to_check), scorer.get_latest_course_time(period_to_check)
+    start, end = scorer.get_earliest_course_time([period_to_check]), scorer.get_latest_course_time([period_to_check])
     for period in schedule:
         if period.day == period_to_check.day:
             current_start, current_end = scorer.get_earliest_course_time([period]), scorer.get_latest_course_time([period])
             if start < current_end and end > current_start:
                 return True
     return False 
-
-#TODO refactor Course into Period
         
 
-def generate_schedule(requested_classes: list[str], preferences: dict):
-    # breaks, time
-    session = connect_db()
+def generate_schedule(requested_classes: list[str], preferences: dict, session: Session, n_results: int = 5):
+    schedules = [([], 0) for n in range(n_results)]
     periods = session.query(Period).filter(Period.course_id.in_(requested_classes)).all()
     
     # Filter courses by user day off preference
@@ -62,7 +60,19 @@ def generate_schedule(requested_classes: list[str], preferences: dict):
     # Group courses by their course ids and find the occurences to optimize for beam search
     grouped_courses, occurences = group.group_courses(filtered_day_off_courses)
     
-    # Beam Search
-    course_order = sorted(occurences, key = occurences.get) # Start filling the schedule with the course with the least amount of occurences
-    
-    
+    # Beam Search:
+    # - Start filling the schedule with the course with the least amount of occurences
+    course_order = sorted(occurences, key = occurences.get)
+    for course_id in course_order:
+        course_options = grouped_courses.get(course_id)
+        for schedule, score in schedules:
+            temp_schedules = []
+            for course_option in course_options:
+                for period in course_option:
+                    if not is_time_conflict(schedule, period):
+                        current_schedule = schedule.copy()
+                        current_schedule.append(period)
+                        current_score = scorer.score_schedule(current_schedule, len(requested_classes), preferences, session)
+                        temp_schedules.append((current_schedule, current_score))
+                    temp_schedules = sorted(temp_schedules, key = lambda x: x[-1])
+                    print(temp_schedules) # too many connections

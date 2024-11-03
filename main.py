@@ -8,33 +8,28 @@ from seleniumbase import Driver
 import os
             
 """
-def merge(nums1: list, nums2: list):
-    nums = []
-    while len(nums1) > 0 and len(nums2) > 0:
-        if nums1[0] < nums2[0]:
-            nums.append(nums1[0])
-            nums1.pop(0)
-        else:
-            nums.append(nums2[0])
-            nums2.pop(0)
-    
-    while len(nums1) > 0:
-        nums.append(nums1.pop(0))
-    while len(nums2) > 0:
-        nums.append(nums2.pop(0))
-    return nums
-    
-def merge_sort(nums: list):
-    if len(nums) == 1:
-        return nums
-    middle_index = len(nums) // 2
-    nums1, nums2 = nums[:middle_index], nums[middle_index:]
-    nums1, nums2 = merge_sort(nums1), merge_sort(nums2)
-    return merge(nums1, nums2)
-"""
+def partition(nums: list, low: int, high: int):
+    i = low
+    pivot = nums[high]
+    for j in range(low, high):
+        if nums[j] <= pivot:
+            nums[i], nums[j] = nums[j], nums[i]
+            i += 1
+    nums[high], nums[i] = nums[i], nums[high]    
+    return i
+
+def quicksort(nums: list, low: int, high: int):
+    if low < high:
+        partition_index = partition(nums, low, high)
+        quicksort(nums, low, partition_index - 1)
+        quicksort(nums, partition_index + 1, high)
+    """
+
 if __name__ == "__main__":
     
     #nums = [23, 7, 15, 42, 8, 19]
+    #quicksort(nums, 0, len(nums) - 1)
+    #print(nums)
     
     session = connect_db()
     #ids = [1800, 3134, 3135, 2832, 2518, 329]
@@ -43,8 +38,9 @@ if __name__ == "__main__":
     #print(scorer.score_schedule(schedule, preferences))
     
     courses = ["603-101-MA", "345-102-MQ", "109-101-MQ", "201-NYA-05", "203-NYA-05", "202-NYA-05"]
+    courses = ["603-101-MA", "345-102-MQ"]
     preferences = {}
-    generator.generate_schedule(courses, preferences)
+    generator.generate_schedule(courses, preferences, session)
     
     
     #teacher_scraper.match_all_teacher_id()
