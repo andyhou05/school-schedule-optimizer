@@ -2,7 +2,6 @@ from backend.models import Period
 from backend.scripts.helper import connect_db
 from backend.scripts.schedule import group
 from backend.scripts.schedule import scorer
-from sqlalchemy.orm import Session
 import helper
         
 

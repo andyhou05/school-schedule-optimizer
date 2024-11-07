@@ -2,8 +2,10 @@ import math
 from backend.models import Period
 from backend.models import TeacherRatings
 from sqlalchemy.orm import Session
+from functools import lru_cache
 import scorer
 
+@lru_cache()
 def time_to_int(time: str) -> int:
     """
     Converts a time to an integer corresponding to its 30 minute block equivalent on a school schedule.
@@ -32,12 +34,8 @@ def get_latest_course_time(courses: list[Period]) -> int:
         int: Time block representing the time of the class that finishes latest
     """
     
-    latest = 0
-    for course in courses:
-        finish_time = course.time.split("-")[-1] # Grab the time class finishes
-        time_block = time_to_int(finish_time)
-        latest = time_block if time_block > latest else latest
-    return latest
+    return max(time_to_int(course.time.split("-")[-1]) for course in courses)
+
 
 def get_earliest_course_time(courses: list[Period]) -> int:
     """
@@ -47,15 +45,10 @@ def get_earliest_course_time(courses: list[Period]) -> int:
         courses (list[Period]): List of courses
 
     Returns:
-        int: Tune block representing the time of the class that starts the earliest
+        int: Time block representing the time of the class that starts the earliest
     """
     
-    earliest = float("inf")
-    for course in courses:
-        start_time = course.time.split("-")[0] # Grab the time class starts
-        time_block = time_to_int(start_time)
-        earliest = time_block if time_block < earliest else earliest
-    return earliest
+    return min(time_to_int(course.time.split("-")[0]) for course in courses)
 
 def get_period_length(period: Period) -> int:
     """ Returns the length of a given course in its 30 minute block equivalent.
@@ -100,16 +93,10 @@ def filter_day_off(courses: list[list[Period]], day_off: str | None) -> list[lis
     if day_off is None:
         return courses
     
-    filtered = []
-    for course in courses:
-        period_on_day_off = False
-        for period in course:
-            if period.day == day_off:
-                period_on_day_off = True
-                break
-        if not period_on_day_off:
-            filtered.append(course)
-    return filtered
+    return [
+        course for course in courses
+        if not any(period.day == day_off for period in course)
+    ]
 
 def is_time_conflict(schedule: list[Period], period_to_check: Period) -> bool:
     """ Returns whether or not there is a time conflict between a schedule and a period.
@@ -122,10 +109,10 @@ def is_time_conflict(schedule: list[Period], period_to_check: Period) -> bool:
         bool: Returns True if there is a time conflict, else False.
     """
     
-    start, end = scorer.get_earliest_course_time([period_to_check]), scorer.get_latest_course_time([period_to_check])
+    start, end = get_earliest_course_time([period_to_check]), get_latest_course_time([period_to_check])
     for period in schedule:
         if period.day == period_to_check.day:
-            current_start, current_end = scorer.get_earliest_course_time([period]), scorer.get_latest_course_time([period])
+            current_start, current_end = get_earliest_course_time([period]), get_latest_course_time([period])
             if start < current_end and end > current_start:
                 return True
     return False 
