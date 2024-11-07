@@ -49,19 +49,18 @@ def is_time_conflict(schedule: list[Period], period_to_check: Period) -> bool:
     return False 
         
 
-def generate_schedule(requested_course_ids: list[str], preferences: dict, session: Session, n_results: int = 5) -> list[dict]:
+def generate_schedule(requested_course_ids: list[str], preferences: dict, n_results: int = 5) -> list[dict]:
     """ Generates n_result schedules based on a beam search algorithm using user preferences to return close optimal results.
 
     Args:
         requested_classes (list[str]): List of course ids the user wants to have.
         preferences (dict): User preferences for schedule generation, can include dayOff, time, and breaks. If the user has no preferences, an empty dict can be used as input.
-        session (Session): Session object used to connect to the database.
         n_results (int, optional): Number of schedules generated. Defaults to 5.
 
     Returns:
         list[dict]: List of dictionaries containing the schedules (key: "periods") and their scores (key: "scores)
     """
-    
+    session = connect_db()
     schedules = [{"periods": [], "score": 0}]
     periods = session.query(Period).filter(Period.course_id.in_(requested_course_ids)).all()
     

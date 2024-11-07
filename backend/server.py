@@ -3,8 +3,10 @@ from config import app, db
 from models import Period
 from models import Teacher
 from models import TeacherRatings
+from scripts.schedule.generator import generate_schedule
 
 # CRUD operations for TeacherRatings
+
 @app.route("/teacher_ratings", methods=["GET"])
 def get_teachers():
     teachers = TeacherRatings.query.all()
@@ -53,6 +55,7 @@ def delete_teacher_rating(id):
     return jsonify({"message":"Teacher Rating deleted"}), 200
 
 # CRUD operations for Teacher
+
 @app.route("/teachers", methods=["GET"])
 def get_teachers():
     teachers = Teacher.query.all()
@@ -97,6 +100,7 @@ def delete_teacher(id):
     return jsonify({"message":"Teacher deleted"}), 200
     
 # CRUD operations for Courses
+
 @app.route("/courses", methods=["GET"])
 def get_courses():
     courses = Period.query.all()
@@ -151,18 +155,18 @@ def delete_course(id):
     
     return jsonify({"message":"Course deleted"}), 200
 
-# Routes to generate schedule
+# Route to generate schedule
 @app.route("/generate_schedule", methods=["POST"])
-def generate_schedule():
+def generate_schedules():
     data = request.get_json()
     selected_courses = data.get("courses")
-    preferences = data.get("preferences")
+    preferences = data.get("preferences", {})
     
     if not selected_courses:
-        return jsonify({"message":"You must enter a course."})
+        return jsonify({"message":"Invalid request, you must enter a course."}), 400
     
-    possible_schedules = []
-    
+    schedules = generate_schedule(requested_course_ids=selected_courses, preferences=preferences)
+    return jsonify(schedules), 200
     
 
 @app.route("/")

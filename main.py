@@ -46,7 +46,7 @@ if __name__ == "__main__":
     courses = ["603-101-MA", "109-101-MQ"]
     preferences = {"day off": "Mon.", "breaks":" regular", "time": "morning"}
     preferences = {}
-    generator.generate_schedule(courses, preferences, session)
+    print(generator.generate_schedule(courses, preferences))
     
     
     
