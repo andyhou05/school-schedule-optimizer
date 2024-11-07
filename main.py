@@ -37,8 +37,9 @@ if __name__ == "__main__":
     #preferences = {"breaks":"short"}
     #print(scorer.score_schedule(schedule, preferences))
     
-    courses = ["603-101-MA", "345-102-MQ", "109-101-MQ", "201-NYA-05", "203-NYA-05", "202-NYA-05"]
-    courses = ["603-101-MA", "345-102-MQ"]
+    courses = ["603-101-MA", "345-102-MQ", "109-101-MQ", "201-NYB-05", "203-SN1-RE", "202-SN1-RE"]
+    courses = ["603-101-MA", "109-101-MQ"]
+    preferences = {"day off": "Mon.", "breaks":" regular", "time": "morning"}
     preferences = {}
     generator.generate_schedule(courses, preferences, session)
     
