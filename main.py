@@ -5,34 +5,11 @@ from backend.scripts.schedule import scorer
 from backend.scripts.db_helper import connect_db
 from backend.models import Period
 from seleniumbase import Driver
-import os
             
-"""
-def partition(nums: list, low: int, high: int):
-    i = low
-    pivot = nums[high]
-    for j in range(low, high):
-        if nums[j] <= pivot:
-            nums[i], nums[j] = nums[j], nums[i]
-            i += 1
-    nums[high], nums[i] = nums[i], nums[high]    
-    return i
-
-def quicksort(nums: list, low: int, high: int):
-    if low < high:
-        partition_index = partition(nums, low, high)
-        quicksort(nums, low, partition_index - 1)
-        quicksort(nums, partition_index + 1, high)
-    """
 
 if __name__ == "__main__":
-    print("hi")
     
-    #nums = [23, 7, 15, 42, 8, 19]
-    #quicksort(nums, 0, len(nums) - 1)
-    #print(nums)
-    
-    #session = connect_db()
+    session = connect_db()
     
     # SCORER TESTS
     #ids = [1800, 3134, 3135, 2832, 2518, 329]
