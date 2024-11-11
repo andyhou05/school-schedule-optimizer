@@ -2,7 +2,7 @@ from backend.scripts.scrapers import teacher_scraper
 from backend.scripts.scrapers import course_scraper
 from backend.scripts.schedule import generator
 from backend.scripts.schedule import scorer
-from backend.scripts.helper import connect_db
+from backend.scripts.db_helper import connect_db
 from backend.models import Period
 from seleniumbase import Driver
 import os
@@ -26,12 +26,13 @@ def quicksort(nums: list, low: int, high: int):
     """
 
 if __name__ == "__main__":
+    print("hi")
     
     #nums = [23, 7, 15, 42, 8, 19]
     #quicksort(nums, 0, len(nums) - 1)
     #print(nums)
     
-    session = connect_db()
+    #session = connect_db()
     
     # SCORER TESTS
     #ids = [1800, 3134, 3135, 2832, 2518, 329]
@@ -42,11 +43,11 @@ if __name__ == "__main__":
     
     
     # SCHEDULE GENERATION TESTS
-    courses = ["603-101-MA", "345-102-MQ", "109-101-MQ", "201-NYB-05", "203-SN1-RE", "202-SN1-RE"]
-    courses = ["603-101-MA", "109-101-MQ"]
-    preferences = {"day off": "Mon.", "breaks":" regular", "time": "morning"}
-    preferences = {}
-    print(generator.generate_schedule(courses, preferences))
+    #courses = ["603-101-MA", "345-102-MQ", "109-101-MQ", "201-NYB-05", "203-SN1-RE", "202-SN1-RE"]
+    #courses = ["603-101-MA", "109-101-MQ"]
+    #preferences = {"day off": "Mon.", "breaks":" regular", "time": "morning"}
+    #preferences = {}
+    #print(generator.generate_schedule(courses, preferences))
     
     
     
@@ -65,7 +66,6 @@ if __name__ == "__main__":
     
     # COURSE SCRAPER
     #driver = Driver(uc=True)
-    #driver.get("https://vanierlivecourseschedule.powerappsportals.com/")
-    #course_scraper.scrape_all_teacher_names(driver)
-    #course_scraper.scrape_courses(driver)
+    #driver.get("https://vanierlivecourseschedule.powerappsportals.com/") # MAKE THE WINDOW LONG TO AVOID UNCLICKABLE ELEMENT
+    #course_scraper.scrape_courses(driver, start_page=35)
     

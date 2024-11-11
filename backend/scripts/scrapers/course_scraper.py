@@ -2,8 +2,8 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from backend.scripts.helper import connect_db
-from backend.scripts.helper import add_entry
+from backend.scripts.db_helper import connect_db
+from backend.scripts.db_helper import add_entry
 from backend.models import Period
 from backend.models import Teacher
 from thefuzz import process
@@ -165,6 +165,7 @@ def scrape_courses(driver: WebDriver, start_page: int = 1):
             iframe = driver.find_elements(By.XPATH, '//iframe[@data-page="/_portal/modal-form-template-path/c7a13072-c94f-ed11-bba3-0022486daee2"]')[2] # there are 4 iframes that fit this XPATH on the page, index 2 is hard-coded
             driver.switch_to.frame(iframe)
             WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '//tr[@data-entity="vit_meetingtime"]')))
+            time.sleep(0.5)
             periods = driver.find_elements(By.XPATH, '//tr[@data-entity="vit_meetingtime"]')
             
             # Save scraped information into different period blocks

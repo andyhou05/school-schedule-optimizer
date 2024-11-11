@@ -1,8 +1,8 @@
 from backend.models import Period
-from backend.scripts.helper import connect_db
+from backend.scripts.db_helper import connect_db
 from backend.scripts.schedule import group
 from backend.scripts.schedule import scorer
-import helper
+from backend.scripts.schedule import schedule_helper
         
 
 def generate_schedule(requested_course_ids: list[str], preferences: dict, n_results: int = 5) -> list[dict]:
@@ -25,7 +25,7 @@ def generate_schedule(requested_course_ids: list[str], preferences: dict, n_resu
     
     # Filter courses by user day off preference
     possible_courses = list(group.group_periods(periods).values())
-    filtered_day_off_courses = helper.filter_day_off(possible_courses, preferences.get("day off"))
+    filtered_day_off_courses = schedule_helper.filter_day_off(possible_courses, preferences.get("day off"))
     
     # Group courses by their course ids and find the occurences to optimize for beam search
     grouped_courses, course_frequencies = group.group_courses(filtered_day_off_courses)
@@ -46,7 +46,7 @@ def generate_schedule(requested_course_ids: list[str], preferences: dict, n_resu
                 # - We try to add every course_option of a given course to every schedule that has been cached previously
                 current_periods = schedule["periods"].copy()
                 for new_period in course_option:
-                    if helper.is_time_conflict(current_periods, new_period):
+                    if schedule_helper.is_time_conflict(current_periods, new_period):
                         current_periods = None
                         break
                     current_periods.append(new_period)

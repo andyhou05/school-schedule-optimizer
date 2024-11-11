@@ -3,8 +3,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from backend.models import Teacher
 from backend.models import TeacherRatings
-from backend.scripts.helper import connect_db
-from backend.scripts.helper import add_entry
+from backend.scripts.db_helper import connect_db
+from backend.scripts.db_helper import add_entry
 from thefuzz import process
 import math
 

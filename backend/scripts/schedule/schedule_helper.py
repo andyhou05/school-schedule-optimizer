@@ -3,7 +3,6 @@ from backend.models import Period
 from backend.models import TeacherRatings
 from sqlalchemy.orm import Session
 from functools import lru_cache
-import scorer
 
 @lru_cache()
 def time_to_int(time: str) -> int:

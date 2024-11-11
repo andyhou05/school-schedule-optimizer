@@ -1,7 +1,7 @@
 from backend.models import Period
 from backend.scripts.schedule import group
 from sqlalchemy.orm import Session
-import helper
+from backend.scripts.schedule import schedule_helper
 
 def score_short_breaks(schedule: list[Period]) -> float:
     """ Returns a score between 0 and 100 to rate a schedule based on how little breaks there are.
@@ -19,14 +19,14 @@ def score_short_breaks(schedule: list[Period]) -> float:
     for courses_in_day in weekly_schedule:
         if len(courses_in_day) == 0:
             continue
-        earliest = helper.get_earliest_course_time(courses_in_day)
-        latest = helper.get_latest_course_time(courses_in_day)
+        earliest = schedule_helper.get_earliest_course_time(courses_in_day)
+        latest = schedule_helper.get_latest_course_time(courses_in_day)
         
         # Find the time in school
         school_hours = latest - earliest
         
         # Find the time in class
-        class_hours = sum([helper.get_period_length(course) for course in courses_in_day])
+        class_hours = sum([schedule_helper.get_period_length(course) for course in courses_in_day])
         
         # Find the time in breaks
         break_hours = school_hours - class_hours
@@ -54,14 +54,14 @@ def score_regular_breaks(schedule: list[Period]) -> float:
     for courses_in_day in weekly_schedule:
         if len(courses_in_day) < 2:
             continue
-        earliest = helper.get_earliest_course_time(courses_in_day)
-        latest = helper.get_latest_course_time(courses_in_day)
+        earliest = schedule_helper.get_earliest_course_time(courses_in_day)
+        latest = schedule_helper.get_latest_course_time(courses_in_day)
         
         # Find the time in school
         school_hours = latest - earliest
         
         # Find the time in class
-        class_hours = sum([helper.get_period_length(course) for course in courses_in_day])
+        class_hours = sum([schedule_helper.get_period_length(course) for course in courses_in_day])
         
         # Find the time in breaks
         break_hours = school_hours - class_hours
@@ -104,13 +104,13 @@ def score_schedule_teachers(schedule: list[Period], session: Session) -> float:
     
     # Find the total class time for teachers with a rating
     for course in schedule:
-        teacher_rating = helper.get_avg_teacher_rating(course.teacher_id, session)
-        total_class_time += helper.get_period_length(course) if teacher_rating is not None else 0 
+        teacher_rating = schedule_helper.get_avg_teacher_rating(course.teacher_id, session)
+        total_class_time += schedule_helper.get_period_length(course) if teacher_rating is not None else 0 
     
     # Calculate the score of each class based on the teacher ratings
     for course in schedule:
-        course_length = helper.get_period_length(course)
-        teacher_rating = helper.get_avg_teacher_rating(course.teacher_id, session)
+        course_length = schedule_helper.get_period_length(course)
+        teacher_rating = schedule_helper.get_avg_teacher_rating(course.teacher_id, session)
         if teacher_rating is None:
             continue
         
@@ -148,12 +148,12 @@ def score_schedule_time(schedule: list[Period], preference: str) -> float:
             continue
         
         if preference == 'evening':
-            earliest = helper.get_earliest_course_time(courses_in_day)
+            earliest = schedule_helper.get_earliest_course_time(courses_in_day)
             daily_score = ((max_difference - (latest_start - earliest))/max_difference) * 100
             weekly_morning_score.append(daily_score)
             
         elif preference == "morning":
-            latest = helper.get_latest_course_time(courses_in_day)
+            latest = schedule_helper.get_latest_course_time(courses_in_day)
             daily_score = ((max_difference - (latest - earliest_finish))/max_difference) * 100
             weekly_morning_score.append(daily_score)
         
