@@ -1,7 +1,7 @@
-from backend.models import Period
-from backend.scripts.schedule import group
+from models import Period
+from scripts.schedule import group
 from sqlalchemy.orm import Session
-from backend.scripts.schedule import schedule_helper
+from scripts.schedule import schedule_helper
 
 def score_short_breaks(schedule: list[Period]) -> float:
     """ Returns a score between 0 and 100 to rate a schedule based on how little breaks there are.

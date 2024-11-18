@@ -1,4 +1,4 @@
-from backend.models import Period
+from models import Period
 
 def group_periods(periods: list[Period]) -> dict:
     """

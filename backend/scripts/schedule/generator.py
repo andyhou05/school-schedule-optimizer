@@ -1,8 +1,8 @@
-from backend.models import Period
-from backend.scripts.db_helper import connect_db
-from backend.scripts.schedule import group
-from backend.scripts.schedule import scorer
-from backend.scripts.schedule import schedule_helper
+from models import Period
+from scripts.db_helper import connect_db
+from scripts.schedule import group
+from scripts.schedule import scorer
+from scripts.schedule import schedule_helper
         
 
 def generate_schedule(requested_course_ids: list[str], preferences: dict, n_results: int = 5) -> list[dict]:

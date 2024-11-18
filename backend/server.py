@@ -8,7 +8,7 @@ from scripts.schedule.generator import generate_schedule
 # CRUD operations for TeacherRatings
 
 @app.route("/teacher_ratings", methods=["GET"])
-def get_teachers():
+def get_teacher_ratingss():
     teachers = TeacherRatings.query.all()
     json_teachers = list(map(lambda x: x.to_json(), teachers))
     return jsonify({"teachers":json_teachers}), 200

@@ -1,9 +1,9 @@
-from backend.scripts.scrapers import teacher_scraper
-from backend.scripts.scrapers import course_scraper
-from backend.scripts.schedule import generator
-from backend.scripts.schedule import scorer
-from backend.scripts.db_helper import connect_db
-from backend.models import Period
+from scripts.scrapers import teacher_scraper
+from scripts.scrapers import course_scraper
+from scripts.schedule import generator
+from scripts.schedule import scorer
+from scripts.db_helper import connect_db
+from models import Period
             
 
 if __name__ == "__main__":

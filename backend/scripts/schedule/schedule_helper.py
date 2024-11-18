@@ -1,6 +1,6 @@
 import math
-from backend.models import Period
-from backend.models import TeacherRatings
+from models import Period
+from models import TeacherRatings
 from sqlalchemy.orm import Session
 from functools import lru_cache
 
