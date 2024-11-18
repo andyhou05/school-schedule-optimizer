@@ -1,6 +1,7 @@
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from seleniumbase import Driver
 from backend.models import Teacher
 from backend.models import TeacherRatings
 from backend.scripts.db_helper import connect_db
@@ -224,3 +225,8 @@ def scrape_teachers(driver: WebDriver) -> None:
         
         After that, we will create new entries in Teacher table with the new null values in teacher_id
         """
+        
+    def run_scraper():
+        driver = Driver(uc=True)
+        driver.get("https://ratemyteachers.com/ca/quebec/montreal/vanier-college")
+        scrape_teachers(driver)

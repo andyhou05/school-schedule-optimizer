@@ -2,6 +2,7 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from seleniumbase import Driver
 from backend.scripts.db_helper import connect_db
 from backend.scripts.db_helper import add_entry
 from backend.models import Period
@@ -198,3 +199,8 @@ def scrape_courses(driver: WebDriver, start_page: int = 1):
         # Refind the pagination to avoid StaleElementException
         pages = driver.find_elements(By.XPATH, '//ul[@class="pagination"]/li/a')
         pages[-1].click()
+    
+    def run_scraper():
+        driver = Driver(uc=True)
+        driver.get("https://vanierlivecourseschedule.powerappsportals.com/") # MAKE THE WINDOW LONG TO AVOID UNCLICKABLE ELEMENT
+        scrape_courses(driver, start_page=0)
