@@ -4,7 +4,6 @@ from backend.scripts.schedule import generator
 from backend.scripts.schedule import scorer
 from backend.scripts.db_helper import connect_db
 from backend.models import Period
-from seleniumbase import Driver
             
 
 if __name__ == "__main__":
@@ -34,15 +33,10 @@ if __name__ == "__main__":
     
     
     # TEACHER SCRAPER
-    # We will use seleniumbase to avoid bot detection
-    #driver = Driver(uc=True)
-    #driver.get("https://ratemyteachers.com/ca/quebec/montreal/vanier-college")
-    #teacher_scraper.scrape_teachers(driver)
+    # teacher_scraper.run_scraper()
     
     
     
     # COURSE SCRAPER
-    #driver = Driver(uc=True)
-    #driver.get("https://vanierlivecourseschedule.powerappsportals.com/") # MAKE THE WINDOW LONG TO AVOID UNCLICKABLE ELEMENT
-    #course_scraper.scrape_courses(driver, start_page=35)
+    # course_scraper.run_scraper()
     
