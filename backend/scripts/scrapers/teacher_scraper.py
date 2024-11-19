@@ -2,12 +2,14 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from seleniumbase import Driver
-from models import Teacher
-from models import TeacherRatings
+from thefuzz import process
+
+import math
+
 from scripts.db_helper import connect_db
 from scripts.db_helper import add_entry
-from thefuzz import process
-import math
+from models import Teacher
+from models import TeacherRatings
 
         
 def average(nums: list[float]) -> float:

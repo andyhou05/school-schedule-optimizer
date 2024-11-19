@@ -3,16 +3,17 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from seleniumbase import Driver
+from sqlalchemy.orm import Session
+from thefuzz import process
+
+import re
+import time
+
 from scripts.db_helper import connect_db
 from scripts.db_helper import add_entry
 from models import Period
 from models import Teacher
-from thefuzz import process
 from config import db
-from models import Period
-from sqlalchemy.orm import Session
-import re
-import time
 
 def split_general_info(input_string: str) -> list:
     """

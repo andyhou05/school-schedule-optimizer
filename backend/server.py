@@ -1,9 +1,10 @@
 from flask import request, jsonify
-from config import app, db
+
+from scripts.schedule.generator import generate_schedule
 from models import Period
 from models import Teacher
 from models import TeacherRatings
-from scripts.schedule.generator import generate_schedule
+from config import app, db
 
 # CRUD operations for TeacherRatings
 

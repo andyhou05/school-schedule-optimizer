@@ -1,6 +1,7 @@
+from sqlalchemy.orm import Session
+
 from models import Period
 from scripts.schedule import group
-from sqlalchemy.orm import Session
 from scripts.schedule import schedule_helper
 
 def score_short_breaks(schedule: list[Period]) -> float:

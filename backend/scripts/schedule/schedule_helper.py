@@ -1,8 +1,10 @@
+from sqlalchemy.orm import Session
+
 import math
+from functools import lru_cache
+
 from models import Period
 from models import TeacherRatings
-from sqlalchemy.orm import Session
-from functools import lru_cache
 
 @lru_cache()
 def time_to_int(time: str) -> int:
