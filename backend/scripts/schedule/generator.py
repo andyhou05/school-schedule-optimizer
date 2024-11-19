@@ -35,7 +35,7 @@ def generate_schedule(requested_course_ids: list[str], preferences: dict, n_resu
     course_order = sorted(course_frequencies, key = course_frequencies.get)
     
     # - We keep track of the course_number to make sure all requested courses get added.
-    for course_number, course_id in enumerate(course_order):
+    for course_number, course_id in enumerate(course_order, start=1):
         course_options = grouped_courses.get(course_id)
         
         # temp_schedules is used to keep track of all possible schedules when looking at any given course, we will keep the top 'n_result' schedules
@@ -57,5 +57,5 @@ def generate_schedule(requested_course_ids: list[str], preferences: dict, n_resu
                    
         schedules = sorted(temp_schedules, key = lambda x: x["score"], reverse=True)[:n_results]
         
-    return schedules
+    return [{"periods": [period.to_json() for period in schedule["periods"]], "score": schedule["score"]} for schedule in schedules]
         

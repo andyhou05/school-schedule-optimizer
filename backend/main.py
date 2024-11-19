@@ -19,11 +19,11 @@ if __name__ == "__main__":
     
     
     # SCHEDULE GENERATION TESTS
-    #courses = ["603-101-MA", "345-102-MQ", "109-101-MQ", "201-NYB-05", "203-SN1-RE", "202-SN1-RE"]
-    #courses = ["603-101-MA", "109-101-MQ"]
-    #preferences = {"day off": "Mon.", "breaks":" regular", "time": "morning"}
-    #preferences = {}
-    #print(generator.generate_schedule(courses, preferences))
+    courses = ["603-101-MA", "345-102-MQ", "109-101-MQ", "201-NYB-05", "203-SN1-RE", "202-SN1-RE"]
+    courses = ["603-101-MA", "109-101-MQ"]
+    preferences = {"day off": "Mon.", "breaks":" regular", "time": "morning"}
+    preferences = {}
+    print(generator.generate_schedule(courses, preferences))
     
     
     

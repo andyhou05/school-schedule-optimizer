@@ -3,13 +3,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from seleniumbase import Driver
-from backend.scripts.db_helper import connect_db
-from backend.scripts.db_helper import add_entry
-from backend.models import Period
-from backend.models import Teacher
+from scripts.db_helper import connect_db
+from scripts.db_helper import add_entry
+from models import Period
+from models import Teacher
 from thefuzz import process
-from backend.config import db
-from backend.models import Period
+from config import db
+from models import Period
 from sqlalchemy.orm import Session
 import re
 import time

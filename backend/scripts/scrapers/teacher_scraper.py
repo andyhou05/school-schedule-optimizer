@@ -2,10 +2,10 @@ from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from seleniumbase import Driver
-from backend.models import Teacher
-from backend.models import TeacherRatings
-from backend.scripts.db_helper import connect_db
-from backend.scripts.db_helper import add_entry
+from models import Teacher
+from models import TeacherRatings
+from scripts.db_helper import connect_db
+from scripts.db_helper import add_entry
 from thefuzz import process
 import math
 
