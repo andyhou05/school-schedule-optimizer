@@ -1,5 +1,13 @@
+import { useState } from "react";
+import { Button } from "@radix-ui/themes";
+import ScheduleForm from "./components/ScheduleForm";
+
 function App() {
-  return <div>Hello</div>;
+  return (
+    <>
+      <ScheduleForm></ScheduleForm>
+    </>
+  );
 }
 
 export default App;
