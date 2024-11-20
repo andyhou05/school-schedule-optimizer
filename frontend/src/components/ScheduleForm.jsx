@@ -4,36 +4,20 @@ import { Text, TextField, Box, Flex, Card, Button } from "@radix-ui/themes";
 const ScheduleForm = () => {
   return (
     <form>
-      <Box
-        width="100%"
-        height="100vh"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Card>
-          <Box
-            width="400px"
-            style={{
-              textAlign: "center",
-              margin: "auto",
-              marginTop: "50px",
-              display: "flex",
-              flexDirection: "column",
-              gap: "15px",
-            }}
-          >
-            <Text>Enter Course ID</Text>
+      <Flex width="100%" height="100vh" align="center" justify="center">
+        <Card style={{ boxShadow: "var(--shadow-4)" }}>
+          <Flex width="400px" direction="column" gap="4" m="auto" mt="50px">
+            <Text align="center">Enter Course ID</Text>
             <TextField.Root size="3"></TextField.Root>
-          </Box>
+          </Flex>
 
-          <Box width="1000px" height="600px">
-            <Button size="3">Continue</Button>
+          <Box width="1000px" height="600px" position="relative">
+            <Box position="absolute" bottom="16px" right="32px">
+              <Button size="3">Continue</Button>
+            </Box>
           </Box>
         </Card>
-      </Box>
+      </Flex>
     </form>
   );
 };
