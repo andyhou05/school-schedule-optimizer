@@ -16,9 +16,8 @@ const ScheduleForm = () => {
   const onEnter = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      courses.includes(input)
-        ? setCourses([...courses])
-        : setCourses([...courses, input.replace(/\s/g, "")]); // remove all white space
+      if (!courses.includes(input) && input != "")
+        setCourses([...courses, input.replace(/\s/g, "")]); // remove all white space in course id
       setInput("");
     }
   };
@@ -34,6 +33,7 @@ const ScheduleForm = () => {
               size="3"
               onKeyDown={onEnter}
               onChange={(e) => setInput(e.target.value)}
+              placeholder="e.g. 603-101-MQ"
               value={input}
             ></TextField.Root>
           </Flex>
@@ -56,8 +56,8 @@ const ScheduleForm = () => {
             </Card>
 
             <Box position="absolute" bottom="16px" right="32px">
-              <Button size="3" asChild>
-                <a href="">Continue</a>
+              <Button size="3" variant="solid" disabled={!courses.length}>
+                Continue
               </Button>
             </Box>
           </Flex>
