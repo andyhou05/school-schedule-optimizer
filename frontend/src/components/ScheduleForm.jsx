@@ -16,8 +16,10 @@ const ScheduleForm = () => {
   const onEnter = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      setCourses([...courses, input.replace(/\s/g, "")]); // remove all white space
-      e.target.value = "";
+      courses.includes(input)
+        ? setCourses([...courses])
+        : setCourses([...courses, input.replace(/\s/g, "")]); // remove all white space
+      setInput("");
     }
   };
 
@@ -28,9 +30,11 @@ const ScheduleForm = () => {
           <Flex width="400px" direction="column" gap="4" m="auto" mt="50px">
             <Text align="center">Enter Course ID</Text>
             <TextField.Root
+              aria-label="courseInput"
               size="3"
               onKeyDown={onEnter}
               onChange={(e) => setInput(e.target.value)}
+              value={input}
             ></TextField.Root>
           </Flex>
           <Flex
@@ -44,8 +48,8 @@ const ScheduleForm = () => {
             <Card style={{ width: "100%" }}>
               <ScrollArea type="auto" scrollbars="vertical">
                 <Flex direction="column" gap="5">
-                  {courses.map((course, index) => (
-                    <Text key={index}>{course}</Text>
+                  {courses.map((course) => (
+                    <Text key={course}>{course}</Text>
                   ))}
                 </Flex>
               </ScrollArea>
