@@ -7,7 +7,10 @@ import {
   Card,
   Button,
   ScrollArea,
+  DataList,
 } from "@radix-ui/themes";
+
+const CourseListItem = () => {};
 
 const ScheduleForm = () => {
   const [courses, setCourses] = useState([]);
@@ -16,7 +19,7 @@ const ScheduleForm = () => {
   const onEnter = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      if (!courses.includes(input) && input != "")
+      if (!courses.includes(input) && input.trim() != "")
         setCourses([...courses, input.replace(/\s/g, "")]); // remove all white space in course id
       setInput("");
     }
@@ -38,8 +41,8 @@ const ScheduleForm = () => {
             ></TextField.Root>
           </Flex>
           <Flex
-            width="1000px"
-            height="600px"
+            width="120vh"
+            height="60vh"
             position="relative"
             justify="center"
             p="60px"
