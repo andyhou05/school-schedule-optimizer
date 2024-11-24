@@ -51,9 +51,13 @@ const ScheduleForm = () => {
             <Card style={{ width: "100%" }}>
               <ScrollArea type="auto" scrollbars="vertical">
                 <Flex direction="column" gap="5">
-                  {courses.map((course) => (
-                    <Text key={course}>{course}</Text>
-                  ))}
+                  <DataList.Root orientation="vertical">
+                    <DataList.Item>
+                      {courses.map((course) => (
+                        <DataList.Value key={course}>{course}</DataList.Value>
+                      ))}
+                    </DataList.Item>
+                  </DataList.Root>
                 </Flex>
               </ScrollArea>
             </Card>
