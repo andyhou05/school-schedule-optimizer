@@ -6,11 +6,53 @@ import {
   Flex,
   Card,
   Button,
+  IconButton,
   ScrollArea,
   DataList,
 } from "@radix-ui/themes";
+import { Cross1Icon } from "@radix-ui/react-icons";
 
-const CourseListItem = () => {};
+const CourseList = ({ courses, setCourses }) => {
+  const handleDelete = (courseToDelete) => {
+    setCourses(courses.filter((course) => course !== courseToDelete));
+  };
+
+  return (
+    <DataList.Root orientation="vertical">
+      {courses.map((course) => (
+        <DataList.Item>
+          <Flex justify="center" align="center" py="3">
+            <Card>
+              <Flex
+                width="80vh"
+                height="7vh"
+                direction="row"
+                gap="5"
+                align="center"
+              >
+                <Box pl="4">
+                  <IconButton
+                    size="2"
+                    color="red"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleDelete(course);
+                    }}
+                  >
+                    <Cross1Icon></Cross1Icon>
+                  </IconButton>
+                </Box>
+                <DataList.Value key={course}>
+                  <Text weight="bold">{course}</Text>
+                </DataList.Value>
+              </Flex>
+            </Card>
+          </Flex>
+        </DataList.Item>
+      ))}
+    </DataList.Root>
+  );
+};
 
 const ScheduleForm = () => {
   const [courses, setCourses] = useState([]);
@@ -48,19 +90,12 @@ const ScheduleForm = () => {
             p="60px"
             pb="100px"
           >
-            <Card style={{ width: "100%" }}>
-              <ScrollArea type="auto" scrollbars="vertical">
-                <Flex direction="column" gap="5">
-                  <DataList.Root orientation="vertical">
-                    <DataList.Item>
-                      {courses.map((course) => (
-                        <DataList.Value key={course}>{course}</DataList.Value>
-                      ))}
-                    </DataList.Item>
-                  </DataList.Root>
-                </Flex>
-              </ScrollArea>
-            </Card>
+            <ScrollArea type="auto" scrollbars="vertical">
+              <CourseList
+                courses={courses}
+                setCourses={setCourses}
+              ></CourseList>
+            </ScrollArea>
 
             <Box position="absolute" bottom="16px" right="32px">
               <Button size="3" variant="solid" disabled={!courses.length}>
