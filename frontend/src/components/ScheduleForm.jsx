@@ -9,6 +9,7 @@ import {
   IconButton,
   ScrollArea,
   DataList,
+  Em,
 } from "@radix-ui/themes";
 import { Cross1Icon } from "@radix-ui/react-icons";
 
@@ -47,6 +48,22 @@ const CourseList = ({ courses, setCourses }) => {
                     {course}
                   </Text>
                 </DataList.Value>
+                <Flex
+                  position="absolute"
+                  right="5vh"
+                  direction="row"
+                  align="center"
+                  gap="4"
+                >
+                  <Text size="3" as="label" htmlFor="section">
+                    <Em>Section (optional)</Em>
+                  </Text>
+                  <TextField.Root
+                    inputMode="numeric"
+                    id="section"
+                    placeholder="00000"
+                  ></TextField.Root>
+                </Flex>
               </Flex>
             </Card>
           </Flex>
@@ -74,7 +91,9 @@ const ScheduleForm = () => {
       <Flex width="100%" height="100vh" align="center" justify="center">
         <Card style={{ boxShadow: "var(--shadow-4)" }}>
           <Flex width="400px" direction="column" gap="4" m="auto" mt="50px">
-            <Text align="center">Enter Course ID</Text>
+            <Text align="center" size="5">
+              Enter Course ID
+            </Text>
             <TextField.Root
               aria-label="courseInput"
               size="3"
