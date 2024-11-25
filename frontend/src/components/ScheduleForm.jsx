@@ -43,7 +43,9 @@ const CourseList = ({ courses, setCourses }) => {
                   </IconButton>
                 </Box>
                 <DataList.Value key={course}>
-                  <Text weight="bold">{course}</Text>
+                  <Text weight="medium" size="4">
+                    {course}
+                  </Text>
                 </DataList.Value>
               </Flex>
             </Card>
@@ -61,7 +63,7 @@ const ScheduleForm = () => {
   const onEnter = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      if (!courses.includes(input) && input.trim() != "")
+      if (!courses.includes(input.replace(/\s/g, "")) && input.trim() != "")
         setCourses([...courses, input.replace(/\s/g, "")]); // remove all white space in course id
       setInput("");
     }
