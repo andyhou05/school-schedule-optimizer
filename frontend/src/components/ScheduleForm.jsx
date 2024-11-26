@@ -10,6 +10,7 @@ import {
   ScrollArea,
   DataList,
   Em,
+  Separator,
 } from "@radix-ui/themes";
 import { Cross1Icon } from "@radix-ui/react-icons";
 
@@ -34,6 +35,7 @@ const CourseList = ({ courses, setCourses }) => {
                 <Box pl="4">
                   <IconButton
                     size="2"
+                    variant="outline"
                     color="red"
                     onClick={(e) => {
                       e.preventDefault();
@@ -55,6 +57,7 @@ const CourseList = ({ courses, setCourses }) => {
                   align="center"
                   gap="4"
                 >
+                  <Separator orientation="vertical" size="2" />
                   <Text size="3" as="label" htmlFor="section">
                     <Em>Section (optional)</Em>
                   </Text>
