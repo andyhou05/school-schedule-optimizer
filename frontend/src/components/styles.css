@@ -1,0 +1,47 @@
+@import "../../node_modules/@radix-ui/themes/styles.css";
+
+.ToastViewport {
+  position: fixed;
+  padding: 0;
+  top: 20px;
+  left: 50%;
+  list-style: none;
+  transform: translateX(
+    -50%
+  ); /* Offset by half the width to ensure centering */
+}
+
+.ToastRoot {
+  background-color: var(--gray-7);
+  width: 25vh;
+  padding: 15px;
+  border-radius: 6px;
+  box-shadow: var(--shadow-6);
+}
+
+.ToastRoot[data-state="open"] {
+  animation: slideDown 200ms ease-out;
+}
+
+.ToastRoot[data-state="closed"] {
+  animation: slideUp 500ms ease-in-out;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-200%);
+  }
+  to {
+    tranform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-200%);
+  }
+}

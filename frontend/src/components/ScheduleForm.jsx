@@ -13,6 +13,7 @@ import {
   Separator,
 } from "@radix-ui/themes";
 import { Cross1Icon } from "@radix-ui/react-icons";
+import ScheduleToast from "./ScheduleToast";
 
 const CourseList = ({ courses, setCourses }) => {
   const handleDelete = (courseToDelete) => {
@@ -22,7 +23,7 @@ const CourseList = ({ courses, setCourses }) => {
   return (
     <DataList.Root orientation="vertical">
       {courses.map((course) => (
-        <DataList.Item>
+        <DataList.Item key={course}>
           <Flex justify="center" align="center" py="3">
             <Card>
               <Flex
@@ -79,9 +80,11 @@ const CourseList = ({ courses, setCourses }) => {
 const ScheduleForm = () => {
   const [courses, setCourses] = useState([]);
   const [input, setInput] = useState("");
+  const [openToast, setOpenToast] = useState(false);
 
   const onEnter = (e) => {
     if (e.key === "Enter") {
+      setOpenToast(true);
       e.preventDefault();
       if (!courses.includes(input.replace(/\s/g, "")) && input.trim() != "")
         setCourses([...courses, input.replace(/\s/g, "")]); // remove all white space in course id
@@ -129,6 +132,12 @@ const ScheduleForm = () => {
           </Flex>
         </Card>
       </Flex>
+      <ScheduleToast
+        title="Successful!"
+        description={courses[courses.length - 1] + " has been added"}
+        open={openToast}
+        onOpenChange={setOpenToast}
+      ></ScheduleToast>
     </form>
   );
 };
