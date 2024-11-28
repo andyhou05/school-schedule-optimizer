@@ -82,12 +82,17 @@ const ScheduleForm = () => {
   const [input, setInput] = useState("");
   const [openToast, setOpenToast] = useState(false);
 
+  const sanitizeInput = (input = "") => {
+    return input.replace(/\s/g, "").toUpperCase();
+  };
+
   const onEnter = (e) => {
     if (e.key === "Enter") {
-      setOpenToast(true);
       e.preventDefault();
-      if (!courses.includes(input.replace(/\s/g, "")) && input.trim() != "")
-        setCourses([...courses, input.replace(/\s/g, "")]); // remove all white space in course id
+      if (!courses.includes(sanitizeInput(input)) && input.trim() != "") {
+        setCourses([...courses, sanitizeInput(input)]); // remove all white space in course id
+        setOpenToast(true);
+      }
       setInput("");
     }
   };
