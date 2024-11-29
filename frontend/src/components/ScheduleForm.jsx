@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Text,
   TextField,
@@ -81,6 +81,12 @@ const ScheduleForm = () => {
   const [courses, setCourses] = useState([]);
   const [input, setInput] = useState("");
   const [openToast, setOpenToast] = useState(false);
+  const timerRef = useRef(0);
+
+  // Used for toast re-renders
+  useEffect(() => {
+    return () => clearTimeout(timerRef.current);
+  }, []);
 
   // Removes all white space and makes all characters upper case.
   const sanitizeInput = (input = "") => {
@@ -91,8 +97,12 @@ const ScheduleForm = () => {
     if (e.key === "Enter") {
       e.preventDefault();
       if (!courses.includes(sanitizeInput(input)) && input.trim() != "") {
+        setOpenToast(false);
         setCourses([...courses, sanitizeInput(input)]);
-        setOpenToast(true);
+        window.clearTimeout(timerRef.current);
+        timerRef.current = setTimeout(() => {
+          setOpenToast(true);
+        }, 100);
       }
       setInput("");
     }
