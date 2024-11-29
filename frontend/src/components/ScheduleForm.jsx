@@ -12,7 +12,7 @@ import {
   Em,
   Separator,
 } from "@radix-ui/themes";
-import { Cross1Icon } from "@radix-ui/react-icons";
+import { Cross1Icon, CheckCircledIcon } from "@radix-ui/react-icons";
 import ScheduleToast from "./ScheduleToast";
 
 const CourseList = ({ courses, setCourses }) => {
@@ -82,6 +82,7 @@ const ScheduleForm = () => {
   const [input, setInput] = useState("");
   const [openToast, setOpenToast] = useState(false);
 
+  // Removes all white space and makes all characters upper case.
   const sanitizeInput = (input = "") => {
     return input.replace(/\s/g, "").toUpperCase();
   };
@@ -90,7 +91,7 @@ const ScheduleForm = () => {
     if (e.key === "Enter") {
       e.preventDefault();
       if (!courses.includes(sanitizeInput(input)) && input.trim() != "") {
-        setCourses([...courses, sanitizeInput(input)]); // remove all white space in course id
+        setCourses([...courses, sanitizeInput(input)]);
         setOpenToast(true);
       }
       setInput("");
@@ -142,6 +143,7 @@ const ScheduleForm = () => {
         description={courses[courses.length - 1] + " has been added"}
         open={openToast}
         onOpenChange={setOpenToast}
+        IconComponent={CheckCircledIcon}
       ></ScheduleToast>
     </form>
   );

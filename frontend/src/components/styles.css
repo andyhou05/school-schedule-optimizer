@@ -13,7 +13,7 @@
 
 .ToastRoot {
   background-color: var(--gray-7);
-  width: 25vh;
+  width: 32vh;
   padding: 15px;
   border-radius: 6px;
   box-shadow: var(--shadow-6);
@@ -44,4 +44,14 @@
   to {
     transform: translateY(-200%);
   }
+}
+
+.ToastIcon {
+  bottom: 50%;
+  transform: translateY(50%); /* Offset by half the width to ensure centering */
+  padding-left: 1%;
+}
+
+.ToastText {
+  padding-left: 1%;
 }
