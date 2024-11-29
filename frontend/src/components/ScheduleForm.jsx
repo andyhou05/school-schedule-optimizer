@@ -6,11 +6,7 @@ import {
   Flex,
   Card,
   Button,
-  IconButton,
   ScrollArea,
-  DataList,
-  Em,
-  Separator,
 } from "@radix-ui/themes";
 import { CheckCircledIcon } from "@radix-ui/react-icons";
 import ScheduleToast from "./ScheduleToast";
@@ -21,6 +17,7 @@ const ScheduleForm = () => {
   const [input, setInput] = useState("");
   const [openToast, setOpenToast] = useState(false);
   const timerRef = useRef(0);
+  const lastAddedCourse = useRef("");
 
   // Used for toast re-renders
   useEffect(() => {
@@ -35,11 +32,13 @@ const ScheduleForm = () => {
   const onEnter = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      if (!courses.includes(sanitizeInput(input)) && input.trim() != "") {
+      const sanitizedInput = sanitizeInput(input);
+      if (!courses.includes(sanitizedInput) && input.trim() != "") {
         setOpenToast(false);
-        setCourses([...courses, sanitizeInput(input)]);
         window.clearTimeout(timerRef.current);
-        timerRef.current = setTimeout(() => {
+        setCourses([...courses, sanitizedInput]);
+        timerRef.current = window.setTimeout(() => {
+          lastAddedCourse.current = sanitizedInput;
           setOpenToast(true);
         }, 100);
       }
@@ -89,7 +88,7 @@ const ScheduleForm = () => {
       </Flex>
       <ScheduleToast
         title="Successful!"
-        description={courses[courses.length - 1] + " has been added"}
+        description={`${lastAddedCourse.current} has been added`}
         open={openToast}
         onOpenChange={setOpenToast}
         IconComponent={CheckCircledIcon}
