@@ -30,12 +30,17 @@ const ScheduleForm = () => {
     return input.replace(/\s/g, "").toUpperCase();
   };
 
+  const removeToast = () => {
+    setOpenConfirmationToast(false);
+    setOpenDupliacteToast(false);
+  };
+
   const onEnter = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
       const sanitizedInput = sanitizeInput(input);
       if (!courses.includes(sanitizedInput) && input.trim() != "") {
-        setOpenConfirmationToast(false);
+        removeToast();
         setCourses([...courses, sanitizedInput]);
         window.clearTimeout(timerRef.current);
         timerRef.current = window.setTimeout(() => {
@@ -43,7 +48,7 @@ const ScheduleForm = () => {
           setOpenConfirmationToast(true);
         }, 100);
       } else if (courses.includes(sanitizedInput)) {
-        setOpenDupliacteToast(false);
+        removeToast();
         window.clearTimeout(timerRef.current);
         timerRef.current = window.setTimeout(() => {
           setOpenDupliacteToast(true);
