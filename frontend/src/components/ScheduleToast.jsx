@@ -11,7 +11,7 @@ const ScheduleToast = ({
   IconComponent,
 }) => {
   return (
-    <Toast.Provider duration="2500">
+    <Toast.Provider duration="2500" swipeDirection="up">
       <Toast.Root className="ToastRoot" open={open} onOpenChange={onOpenChange}>
         <Flex direction="row" gap="4">
           <IconComponent

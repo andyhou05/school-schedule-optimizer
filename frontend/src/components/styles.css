@@ -27,6 +27,19 @@
   animation: hide 200ms ease-in-out;
 }
 
+.ToastRoot[data-swipe="move"] {
+  transform: translateY(var(--radix-toast-swipe-move-y));
+}
+
+.ToastRoot[data-swipe="cancel"] {
+  transform: translateY(0);
+  transition: transform 250ms ease-out;
+}
+
+.ToastRoot[data-swipe="end"] {
+  animation: slideUp 200ms ease-out;
+}
+
 @keyframes slideDown {
   from {
     transform: translateY(-200%);
@@ -38,7 +51,7 @@
 
 @keyframes slideUp {
   from {
-    transform: translateY(0);
+    transform: translateY(var(--radix-toast-swipe-end-y));
   }
 
   to {
