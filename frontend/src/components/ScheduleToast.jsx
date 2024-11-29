@@ -9,6 +9,7 @@ const ScheduleToast = ({
   open,
   onOpenChange,
   IconComponent,
+  color,
 }) => {
   return (
     <Toast.Provider duration="2500" swipeDirection="up">
@@ -16,7 +17,7 @@ const ScheduleToast = ({
         <Flex direction="row" gap="4">
           <IconComponent
             className="ToastIcon"
-            color="lightgreen"
+            color={color}
             height="24px"
             width="24px"
           ></IconComponent>

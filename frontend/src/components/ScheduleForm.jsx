@@ -8,14 +8,15 @@ import {
   Button,
   ScrollArea,
 } from "@radix-ui/themes";
-import { CheckCircledIcon } from "@radix-ui/react-icons";
+import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
 import ScheduleToast from "./ScheduleToast";
 import CourseList from "./CourseList";
 
 const ScheduleForm = () => {
   const [courses, setCourses] = useState([]);
   const [input, setInput] = useState("");
-  const [openToast, setOpenToast] = useState(false);
+  const [openConfirmationToast, setOpenConfirmationToast] = useState(false);
+  const [openDuplicateToast, setOpenDupliacteToast] = useState(false);
   const timerRef = useRef(0);
   const lastAddedCourse = useRef("");
 
@@ -34,12 +35,18 @@ const ScheduleForm = () => {
       e.preventDefault();
       const sanitizedInput = sanitizeInput(input);
       if (!courses.includes(sanitizedInput) && input.trim() != "") {
-        setOpenToast(false);
-        window.clearTimeout(timerRef.current);
+        setOpenConfirmationToast(false);
         setCourses([...courses, sanitizedInput]);
+        window.clearTimeout(timerRef.current);
         timerRef.current = window.setTimeout(() => {
           lastAddedCourse.current = sanitizedInput;
-          setOpenToast(true);
+          setOpenConfirmationToast(true);
+        }, 100);
+      } else if (courses.includes(sanitizedInput)) {
+        setOpenDupliacteToast(false);
+        window.clearTimeout(timerRef.current);
+        timerRef.current = window.setTimeout(() => {
+          setOpenDupliacteToast(true);
         }, 100);
       }
       setInput("");
@@ -89,9 +96,18 @@ const ScheduleForm = () => {
       <ScheduleToast
         title="Successful!"
         description={`${lastAddedCourse.current} has been added`}
-        open={openToast}
-        onOpenChange={setOpenToast}
+        open={openConfirmationToast}
+        onOpenChange={setOpenConfirmationToast}
         IconComponent={CheckCircledIcon}
+        color="lightgreen"
+      ></ScheduleToast>
+      <ScheduleToast
+        title="Error!"
+        description={`${lastAddedCourse.current} has already been added`}
+        open={openDuplicateToast}
+        onOpenChange={setOpenDupliacteToast}
+        IconComponent={CrossCircledIcon}
+        color="red"
       ></ScheduleToast>
     </form>
   );
