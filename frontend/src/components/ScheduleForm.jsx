@@ -22,14 +22,19 @@ const ScheduleForm = () => {
   const duplicateCourse = useRef("");
   const coursesData = useRef([]);
 
-  const showToast = (type, message, sanitizedInput = "") => {
+  const showToast = (type, sanitizedInput = "") => {
+    var message = "";
     setToast({ open: false, type, message });
     clearTimeout(timerRef.current);
     setTimeout(() => {
       if (type == "valid") {
         lastAddedCourse.current = sanitizedInput;
+        message = `${lastAddedCourse.current} has been added`;
       } else if (type == "duplicate") {
         duplicateCourse.current = sanitizedInput;
+        message = `${duplicateCourse.current} is already added`;
+      } else if (type == "invalid") {
+        message = "Invalid course code, try again";
       }
       setToast({ open: true, type, message });
     }, 100);
@@ -74,25 +79,17 @@ const ScheduleForm = () => {
         input.trim() != ""
       ) {
         setInputCourses([...inputCourses, sanitizedInput]);
-        showToast(
-          "valid",
-          `${lastAddedCourse.current} has been added`,
-          sanitizedInput
-        );
+        showToast("valid", sanitizedInput);
       }
 
       // Duplicate input
       else if (inputCourses.includes(sanitizedInput)) {
-        showToast(
-          "duplicate",
-          `${duplicateCourse.current} is already added`,
-          sanitizedInput
-        );
+        showToast("duplicate", sanitizedInput);
       }
 
       // Invalid input
       else {
-        showToast("invalid", "Invalid course code, try again");
+        showToast("invalid");
       }
       setInput("");
     }
