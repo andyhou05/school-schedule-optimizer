@@ -40,11 +40,6 @@ const ScheduleForm = () => {
     fetchData();
   }, []);
 
-  // Used for toast re-renders
-  useEffect(() => {
-    return () => clearTimeout(timerRef.current);
-  }, []);
-
   // Removes all white space and makes all characters upper case.
   const sanitizeInput = (input = "") => {
     return input.replace(/\s/g, "").toUpperCase();
@@ -154,7 +149,7 @@ const ScheduleForm = () => {
       ></ScheduleToast>
       <ScheduleToast
         title="Error!"
-        description={`${duplicateCourse.current} has already been added`}
+        description={`${duplicateCourse.current} is already added`}
         open={openDuplicateToast}
         onOpenChange={setOpenDupliacteToast}
         IconComponent={CrossCircledIcon}
