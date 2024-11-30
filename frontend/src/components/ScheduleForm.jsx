@@ -17,8 +17,10 @@ const ScheduleForm = () => {
   const [input, setInput] = useState("");
   const [openConfirmationToast, setOpenConfirmationToast] = useState(false);
   const [openDuplicateToast, setOpenDupliacteToast] = useState(false);
+
   const timerRef = useRef(0);
   const lastAddedCourse = useRef("");
+  const duplicateCourse = useRef("");
   const coursesData = useRef([]);
 
   // Fetch all existing courses for input validation
@@ -55,7 +57,10 @@ const ScheduleForm = () => {
   const onEnter = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
+      // Capitalize all letters and remove white space
       const sanitizedInput = sanitizeInput(input);
+
+      // Valid input
       if (!inputCourses.includes(sanitizedInput) && input.trim() != "") {
         removeToast();
         setInputCourses([...inputCourses, sanitizedInput]);
@@ -64,10 +69,14 @@ const ScheduleForm = () => {
           lastAddedCourse.current = sanitizedInput;
           setOpenConfirmationToast(true);
         }, 100);
-      } else if (inputCourses.includes(sanitizedInput)) {
+      }
+
+      // Duplicate input
+      else if (inputCourses.includes(sanitizedInput)) {
         removeToast();
         window.clearTimeout(timerRef.current);
         timerRef.current = window.setTimeout(() => {
+          duplicateCourse.current = sanitizedInput;
           setOpenDupliacteToast(true);
         }, 100);
       }
@@ -125,7 +134,7 @@ const ScheduleForm = () => {
       ></ScheduleToast>
       <ScheduleToast
         title="Error!"
-        description={`${lastAddedCourse.current} has already been added`}
+        description={`${duplicateCourse.current} has already been added`}
         open={openDuplicateToast}
         onOpenChange={setOpenDupliacteToast}
         IconComponent={CrossCircledIcon}
