@@ -17,6 +17,7 @@ const ScheduleForm = () => {
   const [input, setInput] = useState("");
   const [openConfirmationToast, setOpenConfirmationToast] = useState(false);
   const [openDuplicateToast, setOpenDupliacteToast] = useState(false);
+  const [openErrorToast, setOpenErrorToast] = useState(false);
 
   const timerRef = useRef(0);
   const lastAddedCourse = useRef("");
@@ -30,7 +31,8 @@ const ScheduleForm = () => {
         const result = await fetch("http://127.0.0.1:5000/courses").then(
           (response) => response.json()
         );
-        coursesData.current = result;
+        coursesData.current = result.courses;
+        console.log(coursesData.current);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -52,6 +54,11 @@ const ScheduleForm = () => {
   const removeToast = () => {
     setOpenConfirmationToast(false);
     setOpenDupliacteToast(false);
+    setOpenErrorToast(false);
+  };
+
+  const validateCourseId = (id) => {
+    return coursesData.current.some((course) => course.courseId == id);
   };
 
   const onEnter = (e) => {
@@ -61,7 +68,11 @@ const ScheduleForm = () => {
       const sanitizedInput = sanitizeInput(input);
 
       // Valid input
-      if (!inputCourses.includes(sanitizedInput) && input.trim() != "") {
+      if (
+        validateCourseId(sanitizedInput) &&
+        !inputCourses.includes(sanitizedInput) &&
+        input.trim() != ""
+      ) {
         removeToast();
         setInputCourses([...inputCourses, sanitizedInput]);
         window.clearTimeout(timerRef.current);
@@ -78,6 +89,15 @@ const ScheduleForm = () => {
         timerRef.current = window.setTimeout(() => {
           duplicateCourse.current = sanitizedInput;
           setOpenDupliacteToast(true);
+        }, 100);
+      }
+
+      // Invalid input
+      else {
+        removeToast();
+        window.clearTimeout(timerRef.current);
+        timerRef.current = window.setTimeout(() => {
+          setOpenErrorToast(true);
         }, 100);
       }
       setInput("");
@@ -97,7 +117,7 @@ const ScheduleForm = () => {
               size="3"
               onKeyDown={onEnter}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="e.g. 603-101-MQ"
+              placeholder="e.g. 603-101-MA"
               value={input}
             ></TextField.Root>
           </Flex>
@@ -137,6 +157,14 @@ const ScheduleForm = () => {
         description={`${duplicateCourse.current} has already been added`}
         open={openDuplicateToast}
         onOpenChange={setOpenDupliacteToast}
+        IconComponent={CrossCircledIcon}
+        color="red"
+      ></ScheduleToast>
+      <ScheduleToast
+        title="Error!"
+        description="Invalid course code, try again"
+        open={openErrorToast}
+        onOpenChange={setOpenErrorToast}
         IconComponent={CrossCircledIcon}
         color="red"
       ></ScheduleToast>
