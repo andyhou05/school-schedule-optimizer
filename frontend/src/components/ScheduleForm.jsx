@@ -25,19 +25,20 @@ const ScheduleForm = () => {
   const coursesData = useRef([]);
 
   // Fetch all existing courses for input validation
+  const fetchData = async () => {
+    try {
+      const result = await fetch("http://127.0.0.1:5000/courses").then(
+        (response) => response.json()
+      );
+      return result.courses || [];
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      return [];
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await fetch("http://127.0.0.1:5000/courses").then(
-          (response) => response.json()
-        );
-        coursesData.current = result.courses;
-        console.log(coursesData.current);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
+    fetchData().then((coursesArray) => (coursesData.current = coursesArray));
   }, []);
 
   // Removes all white space and makes all characters upper case.
