@@ -13,12 +13,28 @@ import ScheduleToast from "./ScheduleToast";
 import CourseList from "./CourseList";
 
 const ScheduleForm = () => {
-  const [courses, setCourses] = useState([]);
+  const [inputCourses, setInputCourses] = useState([]);
   const [input, setInput] = useState("");
   const [openConfirmationToast, setOpenConfirmationToast] = useState(false);
   const [openDuplicateToast, setOpenDupliacteToast] = useState(false);
   const timerRef = useRef(0);
   const lastAddedCourse = useRef("");
+  const coursesData = useRef([]);
+
+  // Fetch all existing courses for input validation
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await fetch("http://127.0.0.1:5000/courses").then(
+          (response) => response.json()
+        );
+        coursesData.current = result;
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   // Used for toast re-renders
   useEffect(() => {
@@ -30,6 +46,7 @@ const ScheduleForm = () => {
     return input.replace(/\s/g, "").toUpperCase();
   };
 
+  // Used to hide all toast notifications whenever a new one appears
   const removeToast = () => {
     setOpenConfirmationToast(false);
     setOpenDupliacteToast(false);
@@ -39,15 +56,15 @@ const ScheduleForm = () => {
     if (e.key === "Enter") {
       e.preventDefault();
       const sanitizedInput = sanitizeInput(input);
-      if (!courses.includes(sanitizedInput) && input.trim() != "") {
+      if (!inputCourses.includes(sanitizedInput) && input.trim() != "") {
         removeToast();
-        setCourses([...courses, sanitizedInput]);
+        setInputCourses([...inputCourses, sanitizedInput]);
         window.clearTimeout(timerRef.current);
         timerRef.current = window.setTimeout(() => {
           lastAddedCourse.current = sanitizedInput;
           setOpenConfirmationToast(true);
         }, 100);
-      } else if (courses.includes(sanitizedInput)) {
+      } else if (inputCourses.includes(sanitizedInput)) {
         removeToast();
         window.clearTimeout(timerRef.current);
         timerRef.current = window.setTimeout(() => {
@@ -85,13 +102,13 @@ const ScheduleForm = () => {
           >
             <ScrollArea type="auto" scrollbars="vertical">
               <CourseList
-                courses={courses}
-                setCourses={setCourses}
+                courses={inputCourses}
+                setCourses={setInputCourses}
               ></CourseList>
             </ScrollArea>
 
             <Box position="absolute" bottom="16px" right="32px">
-              <Button size="3" variant="solid" disabled={!courses.length}>
+              <Button size="3" variant="solid" disabled={!inputCourses.length}>
                 Continue
               </Button>
             </Box>
