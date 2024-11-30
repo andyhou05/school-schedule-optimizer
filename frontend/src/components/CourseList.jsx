@@ -12,9 +12,10 @@ import {
 } from "@radix-ui/themes";
 import { Cross1Icon } from "@radix-ui/react-icons";
 
-const CourseList = ({ courses, setCourses }) => {
+const CourseList = ({ courses, setCourses, showToast }) => {
   const handleDelete = (courseToDelete) => {
     setCourses(courses.filter((course) => course !== courseToDelete));
+    showToast("delete", courseToDelete);
   };
 
   return (

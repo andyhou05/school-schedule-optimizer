@@ -27,9 +27,11 @@ const ScheduleForm = () => {
     setToast({ open: false, type, message });
     clearTimeout(timerRef.current);
     setTimeout(() => {
-      if (type == "valid") {
+      if (type == "add") {
         lastAddedCourse.current = sanitizedInput;
         message = `${lastAddedCourse.current} has been added`;
+      } else if (type == "delete") {
+        message = `${sanitizedInput} has been deleted`;
       } else if (type == "duplicate") {
         duplicateCourse.current = sanitizedInput;
         message = `${duplicateCourse.current} is already added`;
@@ -79,7 +81,7 @@ const ScheduleForm = () => {
         input.trim() != ""
       ) {
         setInputCourses([...inputCourses, sanitizedInput]);
-        showToast("valid", sanitizedInput);
+        showToast("add", sanitizedInput);
       }
 
       // Duplicate input
@@ -124,6 +126,7 @@ const ScheduleForm = () => {
               <CourseList
                 courses={inputCourses}
                 setCourses={setInputCourses}
+                showToast={showToast}
               ></CourseList>
             </ScrollArea>
 
@@ -136,14 +139,22 @@ const ScheduleForm = () => {
         </Card>
       </Flex>
       <ScheduleToast
-        title={toast.type === "valid" ? "Successful!" : "Error!"}
+        title={
+          toast.type === "add" || toast.type === "delete"
+            ? "Successful!"
+            : "Error!"
+        }
         description={toast.message}
         open={toast.open}
         onOpenChange={(open) => setToast((prev) => ({ ...prev, open }))}
         IconComponent={
-          toast.type === "valid" ? CheckCircledIcon : CrossCircledIcon
+          toast.type === "add" || toast.type === "delete"
+            ? CheckCircledIcon
+            : CrossCircledIcon
         }
-        color={toast.type === "valid" ? "lightgreen" : "red"}
+        color={
+          toast.type === "add" || toast.type === "delete" ? "lightgreen" : "red"
+        }
       ></ScheduleToast>
     </form>
   );
