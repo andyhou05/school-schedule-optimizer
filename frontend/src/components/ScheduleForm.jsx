@@ -15,14 +15,25 @@ import CourseList from "./CourseList";
 const ScheduleForm = () => {
   const [inputCourses, setInputCourses] = useState([]);
   const [input, setInput] = useState("");
-  const [openConfirmationToast, setOpenConfirmationToast] = useState(false);
-  const [openDuplicateToast, setOpenDupliacteToast] = useState(false);
-  const [openErrorToast, setOpenErrorToast] = useState(false);
+  const [toast, setToast] = useState({ open: false, type: "", message: "" });
 
   const timerRef = useRef(0);
   const lastAddedCourse = useRef("");
   const duplicateCourse = useRef("");
   const coursesData = useRef([]);
+
+  const showToast = (type, message, sanitizedInput = "") => {
+    setToast({ open: false, type, message });
+    clearTimeout(timerRef.current);
+    setTimeout(() => {
+      if (type == "valid") {
+        lastAddedCourse.current = sanitizedInput;
+      } else if (type == "duplicate") {
+        duplicateCourse.current = sanitizedInput;
+      }
+      setToast({ open: true, type, message });
+    }, 100);
+  };
 
   // Fetch all existing courses for input validation
   const fetchData = async () => {
@@ -46,13 +57,6 @@ const ScheduleForm = () => {
     return input.replace(/\s/g, "").toUpperCase();
   };
 
-  // Used to hide all toast notifications whenever a new one appears
-  const removeToast = () => {
-    setOpenConfirmationToast(false);
-    setOpenDupliacteToast(false);
-    setOpenErrorToast(false);
-  };
-
   const validateCourseId = (id) => {
     return coursesData.current.some((course) => course.courseId == id);
   };
@@ -69,32 +73,26 @@ const ScheduleForm = () => {
         !inputCourses.includes(sanitizedInput) &&
         input.trim() != ""
       ) {
-        removeToast();
         setInputCourses([...inputCourses, sanitizedInput]);
-        window.clearTimeout(timerRef.current);
-        timerRef.current = window.setTimeout(() => {
-          lastAddedCourse.current = sanitizedInput;
-          setOpenConfirmationToast(true);
-        }, 100);
+        showToast(
+          "valid",
+          `${lastAddedCourse.current} has been added`,
+          sanitizedInput
+        );
       }
 
       // Duplicate input
       else if (inputCourses.includes(sanitizedInput)) {
-        removeToast();
-        window.clearTimeout(timerRef.current);
-        timerRef.current = window.setTimeout(() => {
-          duplicateCourse.current = sanitizedInput;
-          setOpenDupliacteToast(true);
-        }, 100);
+        showToast(
+          "duplicate",
+          `${duplicateCourse.current} is already added`,
+          sanitizedInput
+        );
       }
 
       // Invalid input
       else {
-        removeToast();
-        window.clearTimeout(timerRef.current);
-        timerRef.current = window.setTimeout(() => {
-          setOpenErrorToast(true);
-        }, 100);
+        showToast("invalid", "Invalid course code, try again");
       }
       setInput("");
     }
@@ -141,28 +139,14 @@ const ScheduleForm = () => {
         </Card>
       </Flex>
       <ScheduleToast
-        title="Successful!"
-        description={`${lastAddedCourse.current} has been added`}
-        open={openConfirmationToast}
-        onOpenChange={setOpenConfirmationToast}
-        IconComponent={CheckCircledIcon}
-        color="lightgreen"
-      ></ScheduleToast>
-      <ScheduleToast
-        title="Error!"
-        description={`${duplicateCourse.current} is already added`}
-        open={openDuplicateToast}
-        onOpenChange={setOpenDupliacteToast}
-        IconComponent={CrossCircledIcon}
-        color="red"
-      ></ScheduleToast>
-      <ScheduleToast
-        title="Error!"
-        description="Invalid course code, try again"
-        open={openErrorToast}
-        onOpenChange={setOpenErrorToast}
-        IconComponent={CrossCircledIcon}
-        color="red"
+        title={toast.type === "valid" ? "Successful!" : "Error!"}
+        description={toast.message}
+        open={toast.open}
+        onOpenChange={(open) => setToast((prev) => ({ ...prev, open }))}
+        IconComponent={
+          toast.type === "valid" ? CheckCircledIcon : CrossCircledIcon
+        }
+        color={toast.type === "valid" ? "lightgreen" : "red"}
       ></ScheduleToast>
     </form>
   );
