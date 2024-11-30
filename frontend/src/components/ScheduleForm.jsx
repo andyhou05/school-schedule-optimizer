@@ -21,24 +21,35 @@ const ScheduleForm = () => {
   const lastAddedCourse = useRef("");
   const duplicateCourse = useRef("");
   const coursesData = useRef([]);
+  const lastToastMessage = useRef("");
+  const lastToastType = useRef("");
 
   const showToast = (type, sanitizedInput = "") => {
-    var message = "";
-    setToast({ open: false, type, message });
+    setToast({
+      open: false,
+      type: lastToastType.current,
+      message: lastToastMessage.current,
+    });
     clearTimeout(timerRef.current);
     setTimeout(() => {
-      if (type == "add") {
-        lastAddedCourse.current = sanitizedInput;
-        message = `${lastAddedCourse.current} has been added`;
-      } else if (type == "delete") {
-        message = `${sanitizedInput} has been deleted`;
-      } else if (type == "duplicate") {
-        duplicateCourse.current = sanitizedInput;
-        message = `${duplicateCourse.current} is already added`;
-      } else if (type == "invalid") {
-        message = "Invalid course code, try again";
+      lastToastType.current = type;
+      switch (type) {
+        case "add":
+          lastAddedCourse.current = sanitizedInput;
+          lastToastMessage.current = `${lastAddedCourse.current} has been added`;
+          break;
+        case "delete":
+          lastToastMessage.current = `${sanitizedInput} has been deleted`;
+          break;
+        case "duplicate":
+          duplicateCourse.current = sanitizedInput;
+          lastToastMessage.current = `${duplicateCourse.current} is already added`;
+          break;
+        case "invalid":
+          lastToastMessage.current = "Invalid course code, try again";
+          break;
       }
-      setToast({ open: true, type, message });
+      setToast({ open: true, type, message: lastToastMessage.current });
     }, 100);
   };
 
