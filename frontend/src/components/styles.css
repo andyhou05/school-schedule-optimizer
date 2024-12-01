@@ -13,7 +13,7 @@
 
 .ToastRoot {
   background-color: var(--gray-7);
-  width: 35vh;
+  width: 300px;
   padding: 15px;
   border-radius: 6px;
   box-shadow: var(--shadow-6);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Text,
   TextField,
@@ -9,10 +9,13 @@ import {
   DataList,
   Em,
   Separator,
+  Tooltip,
 } from "@radix-ui/themes";
 import { Cross1Icon } from "@radix-ui/react-icons";
 
-const CourseList = ({ courses, setCourses, showToast }) => {
+const CourseList = ({ courses, setCourses, showToast, coursesData }) => {
+  const [sectionTooltipOpen, setSectionTooltipOpen] = useState(false);
+
   const handleDelete = (courseToDelete) => {
     setCourses(courses.filter((course) => course !== courseToDelete));
     showToast("delete", courseToDelete);
@@ -60,11 +63,19 @@ const CourseList = ({ courses, setCourses, showToast }) => {
                   <Text size="3" as="label" htmlFor="section">
                     <Em>Section (optional)</Em>
                   </Text>
-                  <TextField.Root
-                    inputMode="numeric"
-                    id="section"
-                    placeholder="00000"
-                  ></TextField.Root>
+                  <Tooltip
+                    content="hello"
+                    open={sectionTooltipOpen}
+                    sideOffset={5}
+                  >
+                    <TextField.Root
+                      inputMode="numeric"
+                      id="section"
+                      placeholder="00000"
+                      onInput={() => setSectionTooltipOpen(true)}
+                      onBlur={() => setSectionTooltipOpen(false)}
+                    ></TextField.Root>
+                  </Tooltip>
                 </Flex>
               </Flex>
             </Card>

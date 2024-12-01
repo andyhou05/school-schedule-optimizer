@@ -25,6 +25,7 @@ const ScheduleForm = () => {
   const lastToastType = useRef("");
 
   const showToast = (type, sanitizedInput = "") => {
+    // Set toast to closed state but keep old toast state during close animation
     setToast({
       open: false,
       type: lastToastType.current,
@@ -50,7 +51,7 @@ const ScheduleForm = () => {
           break;
       }
       setToast({ open: true, type, message: lastToastMessage.current });
-    }, 100);
+    }, 50);
   };
 
   // Fetch all existing courses for input validation
@@ -138,6 +139,7 @@ const ScheduleForm = () => {
                 courses={inputCourses}
                 setCourses={setInputCourses}
                 showToast={showToast}
+                coursesData={coursesData}
               ></CourseList>
             </ScrollArea>
 
