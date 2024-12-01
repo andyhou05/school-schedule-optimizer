@@ -21,6 +21,10 @@ const CourseList = ({ courses, setCourses, showToast, coursesData }) => {
     showToast("delete", courseToDelete);
   };
 
+  const validateSection = (input) => {
+    return coursesData.current.some((course) => course.section == input);
+  };
+
   return (
     <DataList.Root orientation="vertical">
       {courses.map((course) => (
@@ -64,12 +68,15 @@ const CourseList = ({ courses, setCourses, showToast, coursesData }) => {
                     <Em>Section (optional)</Em>
                   </Text>
                   <Tooltip
-                    content="hello"
-                    open={sectionInput.length > 0}
+                    content="Invalid"
+                    open={
+                      sectionInput.length > 0 && !validateSection(sectionInput)
+                    }
                     sideOffset={5}
                   >
                     <TextField.Root
                       inputMode="numeric"
+                      variant="soft"
                       id="section"
                       placeholder="00000"
                       onChange={(e) => {
