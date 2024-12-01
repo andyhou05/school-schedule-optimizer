@@ -14,7 +14,7 @@ import {
 import { Cross1Icon } from "@radix-ui/react-icons";
 
 const CourseList = ({ courses, setCourses, showToast, coursesData }) => {
-  const [sectionTooltipOpen, setSectionTooltipOpen] = useState(false);
+  const [sectionInput, setSectionInput] = useState("");
 
   const handleDelete = (courseToDelete) => {
     setCourses(courses.filter((course) => course !== courseToDelete));
@@ -65,15 +65,16 @@ const CourseList = ({ courses, setCourses, showToast, coursesData }) => {
                   </Text>
                   <Tooltip
                     content="hello"
-                    open={sectionTooltipOpen}
+                    open={sectionInput.length > 0}
                     sideOffset={5}
                   >
                     <TextField.Root
                       inputMode="numeric"
                       id="section"
                       placeholder="00000"
-                      onInput={() => setSectionTooltipOpen(true)}
-                      onBlur={() => setSectionTooltipOpen(false)}
+                      onChange={(e) => {
+                        setSectionInput(e.target.value);
+                      }}
                     ></TextField.Root>
                   </Tooltip>
                 </Flex>
