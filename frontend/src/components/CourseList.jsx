@@ -83,15 +83,15 @@ const CourseList = ({ courses, setCourses, showToast, coursesData }) => {
                         outlineColor:
                           sectionInput.length > 0 &&
                           !validateSection(sectionInput)
-                            ? "red"
-                            : "gray",
+                            ? "var(--red-6)"
+                            : "var(--slate-7)",
                         backgroundColor:
                           sectionInput.length > 0 &&
                           !validateSection(sectionInput)
-                            ? "red"
-                            : "gray",
+                            ? "var(--red-4)"
+                            : "var(--slate-5)",
                         transition:
-                          "outline-color 0.3s ease, background-color 0.3s ease",
+                          "outline-color 0.5s ease, background-color 0.5s ease",
                       }}
                       onChange={(e) => {
                         setSectionInput(e.target.value);
