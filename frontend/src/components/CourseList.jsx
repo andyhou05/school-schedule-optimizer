@@ -14,20 +14,29 @@ import {
 import { Cross1Icon } from "@radix-ui/react-icons";
 
 const CourseList = ({ courses, setCourses, showToast, coursesData }) => {
-  const [sectionInput, setSectionInput] = useState("");
+  const [sectionInput, setSectionInput] = useState([]);
 
-  const handleDelete = (courseToDelete) => {
+  const handleDelete = (courseToDelete, index) => {
     setCourses(courses.filter((course) => course !== courseToDelete));
     showToast("delete", courseToDelete);
+    setSectionInput(sectionInput.splice(index, 1));
   };
 
   const validateSection = (input) => {
     return coursesData.current.some((course) => course.section == input);
   };
 
+  const handleSectionInput = (value, index) => {
+    setSectionInput((prev) => {
+      const updatedSectionInput = [...prev];
+      updatedSectionInput[index] = value;
+      return updatedSectionInput;
+    });
+  };
+
   return (
     <DataList.Root orientation="vertical">
-      {courses.map((course) => (
+      {courses.map((course, index) => (
         <DataList.Item key={course}>
           <Flex justify="center" align="center" py="3">
             <Card>
@@ -45,7 +54,7 @@ const CourseList = ({ courses, setCourses, showToast, coursesData }) => {
                     color="red"
                     onClick={(e) => {
                       e.preventDefault();
-                      handleDelete(course);
+                      handleDelete(course, index);
                     }}
                   >
                     <Cross1Icon></Cross1Icon>
@@ -70,7 +79,8 @@ const CourseList = ({ courses, setCourses, showToast, coursesData }) => {
                   <Tooltip
                     content="Invalid"
                     open={
-                      sectionInput.length > 0 && !validateSection(sectionInput)
+                      sectionInput[index]?.length > 0 &&
+                      !validateSection(sectionInput[index])
                     }
                     sideOffset={5}
                   >
@@ -81,20 +91,20 @@ const CourseList = ({ courses, setCourses, showToast, coursesData }) => {
                       placeholder="00000"
                       style={{
                         outlineColor:
-                          sectionInput.length > 0 &&
-                          !validateSection(sectionInput)
+                          sectionInput[index]?.length > 0 &&
+                          !validateSection(sectionInput[index])
                             ? "var(--red-6)"
                             : "var(--slate-7)",
                         backgroundColor:
-                          sectionInput.length > 0 &&
-                          !validateSection(sectionInput)
+                          sectionInput[index]?.length > 0 &&
+                          !validateSection(sectionInput[index])
                             ? "var(--red-4)"
                             : "var(--slate-5)",
                         transition:
                           "outline-color 0.5s ease, background-color 0.5s ease",
                       }}
                       onChange={(e) => {
-                        setSectionInput(e.target.value);
+                        handleSectionInput(e.target.value, index);
                       }}
                     ></TextField.Root>
                   </Tooltip>
