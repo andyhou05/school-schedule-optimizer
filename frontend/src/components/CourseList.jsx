@@ -79,6 +79,20 @@ const CourseList = ({ courses, setCourses, showToast, coursesData }) => {
                       variant="soft"
                       id="section"
                       placeholder="00000"
+                      style={{
+                        outlineColor:
+                          sectionInput.length > 0 &&
+                          !validateSection(sectionInput)
+                            ? "red"
+                            : "gray",
+                        backgroundColor:
+                          sectionInput.length > 0 &&
+                          !validateSection(sectionInput)
+                            ? "red"
+                            : "gray",
+                        transition:
+                          "outline-color 0.3s ease, background-color 0.3s ease",
+                      }}
                       onChange={(e) => {
                         setSectionInput(e.target.value);
                       }}
