@@ -9,7 +9,6 @@ import {
   DataList,
   Em,
   Separator,
-  Tooltip,
 } from "@radix-ui/themes";
 import { Cross1Icon } from "@radix-ui/react-icons";
 
@@ -19,17 +18,22 @@ const CourseList = ({ courses, setCourses, showToast, coursesData }) => {
   const handleDelete = (courseToDelete, index) => {
     setCourses(courses.filter((course) => course !== courseToDelete));
     showToast("delete", courseToDelete);
-    setSectionInput(sectionInput.splice(index, 1));
+    setSectionInput((prev) => prev.filter((_, i) => i !== index));
   };
 
   const validateSection = (input) => {
-    return coursesData.current.some((course) => course.section == input);
+    return input.length == 0
+      ? true
+      : coursesData.current.some((course) => course.section == input);
   };
 
   const handleSectionInput = (value, index) => {
     setSectionInput((prev) => {
       const updatedSectionInput = [...prev];
-      updatedSectionInput[index] = value;
+      updatedSectionInput[index] =
+        value.length >= 5 || value.length == 0
+          ? value
+          : "0".repeat(5 - value.length).concat(value);
       return updatedSectionInput;
     });
   };
@@ -76,38 +80,29 @@ const CourseList = ({ courses, setCourses, showToast, coursesData }) => {
                   <Text size="3" as="label" htmlFor="section">
                     <Em>Section (optional)</Em>
                   </Text>
-                  <Tooltip
-                    content="Invalid"
-                    open={
-                      sectionInput[index]?.length > 0 &&
-                      !validateSection(sectionInput[index])
-                    }
-                    sideOffset={5}
-                  >
-                    <TextField.Root
-                      inputMode="numeric"
-                      variant="soft"
-                      id="section"
-                      placeholder="00000"
-                      style={{
-                        outlineColor:
-                          sectionInput[index]?.length > 0 &&
-                          !validateSection(sectionInput[index])
-                            ? "var(--red-6)"
-                            : "var(--slate-7)",
-                        backgroundColor:
-                          sectionInput[index]?.length > 0 &&
-                          !validateSection(sectionInput[index])
-                            ? "var(--red-4)"
-                            : "var(--slate-5)",
-                        transition:
-                          "outline-color 0.5s ease, background-color 0.5s ease",
-                      }}
-                      onChange={(e) => {
-                        handleSectionInput(e.target.value, index);
-                      }}
-                    ></TextField.Root>
-                  </Tooltip>
+                  <TextField.Root
+                    inputMode="numeric"
+                    variant="soft"
+                    id="section"
+                    placeholder="00000"
+                    style={{
+                      outlineColor:
+                        sectionInput[index] &&
+                        !validateSection(sectionInput[index])
+                          ? "var(--red-6)"
+                          : "var(--slate-7)",
+                      backgroundColor:
+                        sectionInput[index] &&
+                        !validateSection(sectionInput[index])
+                          ? "var(--red-4)"
+                          : "var(--slate-5)",
+                      transition:
+                        "outline-color 0.5s ease, background-color 0.5s ease",
+                    }}
+                    onChange={(e) => {
+                      handleSectionInput(e.target.value, index);
+                    }}
+                  ></TextField.Root>
                 </Flex>
               </Flex>
             </Card>
