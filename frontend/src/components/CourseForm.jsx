@@ -150,6 +150,9 @@ const CourseForm = () => {
                 size="3"
                 variant="solid"
                 disabled={!inputCourses.length || !validSectionInput}
+                style={{
+                  transition: "background-color 0.25s ease, color 0.25s ease",
+                }}
               >
                 Continue
               </Button>
