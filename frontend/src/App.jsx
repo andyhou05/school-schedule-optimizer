@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Button } from "@radix-ui/themes";
-import CourseForm from "./components/CourseForm";
+import ScheduleForm from "./components/ScheduleForm";
 
 function App() {
   return (
     <>
-      <CourseForm></CourseForm>
+      <ScheduleForm></ScheduleForm>
     </>
   );
 }
