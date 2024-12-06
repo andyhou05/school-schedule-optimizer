@@ -168,7 +168,7 @@ const CourseForm = () => {
               style={{
                 position: "absolute",
                 bottom: "16px",
-                opacity: !inputCourses.length || !validSectionInput ? "1" : "0",
+                opacity: !validSectionInput ? "1" : "0",
                 transition: "opacity 0.25s ease",
               }}
             >

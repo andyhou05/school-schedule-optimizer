@@ -24,11 +24,22 @@ const CourseList = ({
   const handleDelete = (courseToDelete, index) => {
     setCourses(courses.filter((course) => course !== courseToDelete));
     showToast("delete", courseToDelete);
-    setSectionInput((prev) => prev.filter((_, i) => i !== index));
+    setSectionInput((prev) => {
+      const updatedSectionInput = [...prev].filter((_, i) => i !== index);
+
+      // Update validity
+      setValidSectionInput(
+        updatedSectionInput.every((section) => {
+          return validateSection(section);
+        })
+      );
+
+      return updatedSectionInput;
+    });
   };
 
   const validateSection = (input) => {
-    return input.length == 0
+    return !input
       ? true
       : coursesData.current.some((course) => course.section == input);
   };
