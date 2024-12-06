@@ -12,10 +12,11 @@ import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
 import ScheduleToast from "./ScheduleToast";
 import CourseList from "./CourseList";
 
-const ScheduleForm = () => {
+const CourseForm = () => {
   const [inputCourses, setInputCourses] = useState([]);
   const [input, setInput] = useState("");
   const [toast, setToast] = useState({ open: false, type: "", message: "" });
+  const [validSectionInput, setValidSectionInput] = useState(true);
 
   const timerRef = useRef(0);
   const lastAddedCourse = useRef("");
@@ -138,13 +139,18 @@ const ScheduleForm = () => {
               <CourseList
                 courses={inputCourses}
                 setCourses={setInputCourses}
+                setValidSectionInput={setValidSectionInput}
                 showToast={showToast}
                 coursesData={coursesData}
               ></CourseList>
             </ScrollArea>
 
             <Box position="absolute" bottom="16px" right="32px">
-              <Button size="3" variant="solid" disabled={!inputCourses.length}>
+              <Button
+                size="3"
+                variant="solid"
+                disabled={!inputCourses.length || !validSectionInput}
+              >
                 Continue
               </Button>
             </Box>
@@ -173,4 +179,4 @@ const ScheduleForm = () => {
   );
 };
 
-export default ScheduleForm;
+export default CourseForm;

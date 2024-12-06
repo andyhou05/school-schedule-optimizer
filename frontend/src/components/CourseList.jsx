@@ -12,7 +12,13 @@ import {
 } from "@radix-ui/themes";
 import { Cross1Icon } from "@radix-ui/react-icons";
 
-const CourseList = ({ courses, setCourses, showToast, coursesData }) => {
+const CourseList = ({
+  courses,
+  setCourses,
+  setValidSectionInput,
+  showToast,
+  coursesData,
+}) => {
   const [sectionInput, setSectionInput] = useState([]);
 
   const handleDelete = (courseToDelete, index) => {
@@ -29,11 +35,20 @@ const CourseList = ({ courses, setCourses, showToast, coursesData }) => {
 
   const handleSectionInput = (value, index) => {
     setSectionInput((prev) => {
+      // Update the section input
       const updatedSectionInput = [...prev];
       updatedSectionInput[index] =
         value.length >= 5 || value.length == 0
           ? value
           : "0".repeat(5 - value.length).concat(value);
+
+      // Update validity
+      setValidSectionInput(
+        updatedSectionInput.every((section) => {
+          return validateSection(section);
+        })
+      );
+
       return updatedSectionInput;
     });
   };
