@@ -22,6 +22,7 @@ const CourseForm = () => {
   const [input, setInput] = useState("");
   const [toast, setToast] = useState({ open: false, type: "", message: "" });
   const [validSectionInput, setValidSectionInput] = useState(true);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const timerRef = useRef(0);
   const lastAddedCourse = useRef("");
@@ -29,6 +30,11 @@ const CourseForm = () => {
   const coursesData = useRef([]);
   const lastToastMessage = useRef("");
   const lastToastType = useRef("");
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitted(true);
+  };
 
   const showToast = (type, sanitizedInput = "") => {
     // Set toast to closed state but keep old toast state during close animation
@@ -118,7 +124,13 @@ const CourseForm = () => {
   return (
     <form>
       <Flex width="100%" height="100vh" align="center" justify="center">
-        <Card style={{ boxShadow: "var(--shadow-4)" }}>
+        <Card
+          style={{
+            boxShadow: "var(--shadow-4)",
+            transform: isSubmitted ? "translateY(-100vh)" : "",
+            transition: "transform 0.25s ease-in-out",
+          }}
+        >
           <Flex width="400px" direction="column" gap="4" m="auto" mt="50px">
             <Text align="center" size="5">
               Enter Course ID
@@ -158,6 +170,7 @@ const CourseForm = () => {
                 style={{
                   transition: "background-color 0.25s ease, color 0.25s ease",
                 }}
+                onClick={onSubmit}
               >
                 Continue
               </Button>
