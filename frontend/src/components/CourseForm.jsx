@@ -7,8 +7,13 @@ import {
   Card,
   Button,
   ScrollArea,
+  Callout,
 } from "@radix-ui/themes";
-import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
+import {
+  CheckCircledIcon,
+  CrossCircledIcon,
+  ExclamationTriangleIcon,
+} from "@radix-ui/react-icons";
 import ScheduleToast from "./ScheduleToast";
 import CourseList from "./CourseList";
 
@@ -157,6 +162,23 @@ const CourseForm = () => {
                 Continue
               </Button>
             </Box>
+            <Callout.Root
+              color="red"
+              role="alert"
+              style={{
+                position: "absolute",
+                bottom: "16px",
+                opacity: !inputCourses.length || !validSectionInput ? "1" : "0",
+                transition: "opacity 0.25s ease",
+              }}
+            >
+              <Callout.Icon>
+                <ExclamationTriangleIcon />
+              </Callout.Icon>
+              <Callout.Text>
+                Please enter valid section numbers before continuing.
+              </Callout.Text>
+            </Callout.Root>
           </Flex>
         </Card>
       </Flex>
