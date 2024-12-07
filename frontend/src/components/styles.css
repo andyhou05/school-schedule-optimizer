@@ -84,5 +84,5 @@
 }
 
 .card-down {
-  transform: translateY(100vh);
+  transform: translateY(1vh);
 }

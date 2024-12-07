@@ -19,7 +19,7 @@ import CourseList from "./CourseList";
 import FormCard from "./FormCard";
 import "./styles.css";
 
-const CourseForm = ({ step, setStep }) => {
+const CourseForm = ({ step, setStep, direction, setDirection }) => {
   const [inputCourses, setInputCourses] = useState([]);
   const [input, setInput] = useState("");
   const [toast, setToast] = useState({ open: false, type: "", message: "" });
@@ -35,6 +35,7 @@ const CourseForm = ({ step, setStep }) => {
   const onSubmit = (e) => {
     e.preventDefault();
     setStep((prev) => prev + 1);
+    setDirection("forward");
   };
 
   const showToast = (type, sanitizedInput = "") => {
@@ -124,7 +125,7 @@ const CourseForm = ({ step, setStep }) => {
 
   return (
     <>
-      <FormCard className={step == 2 ? "card-up" : ""}>
+      <FormCard step={1} currentStep={step} direction={direction}>
         <Flex width="400px" direction="column" gap="4" m="auto" mt="50px">
           <Text align="center" size="5">
             Enter Course ID

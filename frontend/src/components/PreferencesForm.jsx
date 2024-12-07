@@ -1,13 +1,22 @@
 import React from "react";
-import { Text, Flex } from "@radix-ui/themes";
-import FormCardWrapper from "./FormCard";
+import { Text, Flex, Button } from "@radix-ui/themes";
+import FormCard from "./FormCard";
 
-const PreferencesForm = ({ step, setStep }) => {
+const PreferencesForm = ({ step, setStep, direction, setDirection }) => {
   return (
     <>
-      <FormCardWrapper className={step == 2 ? "card-up" : ""}>
+      <FormCard step={2} currentStep={step} direction={direction}>
         <Flex height="60vh"></Flex>
-      </FormCardWrapper>
+        <Button
+          onClick={(e) => {
+            e.preventDefault();
+            setStep((prev) => prev - 1);
+            setDirection("backward");
+          }}
+        >
+          click
+        </Button>
+      </FormCard>
     </>
   );
 };
