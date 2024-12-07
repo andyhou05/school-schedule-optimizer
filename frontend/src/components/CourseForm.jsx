@@ -16,7 +16,7 @@ import {
 } from "@radix-ui/react-icons";
 import ScheduleToast from "./ScheduleToast";
 import CourseList from "./CourseList";
-import FormCard from "./FormCardWrapper";
+import FormCard from "./FormCard";
 
 const CourseForm = () => {
   const [inputCourses, setInputCourses] = useState([]);
