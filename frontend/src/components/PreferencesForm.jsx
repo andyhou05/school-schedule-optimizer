@@ -5,7 +5,7 @@ import FormCardWrapper from "./FormCard";
 const PreferencesForm = ({ step, setStep }) => {
   return (
     <>
-      <FormCardWrapper transform={step == 2 ? "translateY(-100vh)" : ""}>
+      <FormCardWrapper className={step == 2 ? "card-up" : ""}>
         <Flex height="60vh"></Flex>
       </FormCardWrapper>
     </>

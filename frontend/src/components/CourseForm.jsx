@@ -124,7 +124,7 @@ const CourseForm = ({ step, setStep }) => {
 
   return (
     <>
-      <FormCard transform={step == 2 ? "translateY(-100vh)" : ""}>
+      <FormCard className={step == 2 ? "card-up" : ""}>
         <Flex width="400px" direction="column" gap="4" m="auto" mt="50px">
           <Text align="center" size="5">
             Enter Course ID
