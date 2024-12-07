@@ -17,13 +17,13 @@ import {
 import ScheduleToast from "./ScheduleToast";
 import CourseList from "./CourseList";
 import FormCard from "./FormCard";
+import "./styles.css";
 
-const CourseForm = () => {
+const CourseForm = ({ step, setStep }) => {
   const [inputCourses, setInputCourses] = useState([]);
   const [input, setInput] = useState("");
   const [toast, setToast] = useState({ open: false, type: "", message: "" });
   const [validSectionInput, setValidSectionInput] = useState(true);
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const timerRef = useRef(0);
   const lastAddedCourse = useRef("");
@@ -34,7 +34,7 @@ const CourseForm = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    setIsSubmitted(true);
+    setStep((prev) => prev + 1);
   };
 
   const showToast = (type, sanitizedInput = "") => {
@@ -124,7 +124,7 @@ const CourseForm = () => {
 
   return (
     <>
-      <FormCard transform={isSubmitted ? "translateY(-100vh)" : ""}>
+      <FormCard transform={step == 2 ? "translateY(-100vh)" : ""}>
         <Flex width="400px" direction="column" gap="4" m="auto" mt="50px">
           <Text align="center" size="5">
             Enter Course ID

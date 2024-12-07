@@ -8,7 +8,7 @@ const FormCard = ({ children, transform }) => {
         style={{
           boxShadow: "var(--shadow-4)",
           transform: transform,
-          transition: "transform 0.25s ease-in-out",
+          transition: "transform 0.5s ease-in-out",
         }}
       >
         <Box width="125vh" m="auto" mt="50px">
