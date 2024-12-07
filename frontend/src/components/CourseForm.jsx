@@ -16,6 +16,7 @@ import {
 } from "@radix-ui/react-icons";
 import ScheduleToast from "./ScheduleToast";
 import CourseList from "./CourseList";
+import FormCard from "./FormCardWrapper";
 
 const CourseForm = () => {
   const [inputCourses, setInputCourses] = useState([]);
@@ -122,79 +123,71 @@ const CourseForm = () => {
   };
 
   return (
-    <form>
-      <Flex width="100%" height="100vh" align="center" justify="center">
-        <Card
-          style={{
-            boxShadow: "var(--shadow-4)",
-            transform: isSubmitted ? "translateY(-100vh)" : "",
-            transition: "transform 0.25s ease-in-out",
-          }}
+    <>
+      <FormCard transform={isSubmitted ? "translateY(-100vh)" : ""}>
+        <Flex width="400px" direction="column" gap="4" m="auto" mt="50px">
+          <Text align="center" size="5">
+            Enter Course ID
+          </Text>
+          <TextField.Root
+            aria-label="courseInput"
+            size="3"
+            onKeyDown={onEnter}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="e.g. 603-101-MA"
+            value={input}
+          ></TextField.Root>
+        </Flex>
+        <Flex
+          width="120vh"
+          height="60vh"
+          position="relative"
+          justify="center"
+          p="60px"
+          pb="100px"
         >
-          <Flex width="400px" direction="column" gap="4" m="auto" mt="50px">
-            <Text align="center" size="5">
-              Enter Course ID
-            </Text>
-            <TextField.Root
-              aria-label="courseInput"
-              size="3"
-              onKeyDown={onEnter}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="e.g. 603-101-MA"
-              value={input}
-            ></TextField.Root>
-          </Flex>
-          <Flex
-            width="120vh"
-            height="60vh"
-            position="relative"
-            justify="center"
-            p="60px"
-            pb="100px"
-          >
-            <ScrollArea type="auto" scrollbars="vertical">
-              <CourseList
-                courses={inputCourses}
-                setCourses={setInputCourses}
-                setValidSectionInput={setValidSectionInput}
-                showToast={showToast}
-                coursesData={coursesData}
-              ></CourseList>
-            </ScrollArea>
+          <ScrollArea type="auto" scrollbars="vertical">
+            <CourseList
+              courses={inputCourses}
+              setCourses={setInputCourses}
+              setValidSectionInput={setValidSectionInput}
+              showToast={showToast}
+              coursesData={coursesData}
+            ></CourseList>
+          </ScrollArea>
 
-            <Box position="absolute" bottom="16px" right="32px">
-              <Button
-                size="3"
-                variant="solid"
-                disabled={!inputCourses.length || !validSectionInput}
-                style={{
-                  transition: "background-color 0.25s ease, color 0.25s ease",
-                }}
-                onClick={onSubmit}
-              >
-                Continue
-              </Button>
-            </Box>
-            <Callout.Root
-              color="red"
-              role="alert"
+          <Box position="absolute" bottom="16px" right="32px">
+            <Button
+              size="3"
+              variant="solid"
+              disabled={!inputCourses.length || !validSectionInput}
               style={{
-                position: "absolute",
-                bottom: "16px",
-                opacity: !validSectionInput ? "1" : "0",
-                transition: "opacity 0.25s ease",
+                transition: "background-color 0.25s ease, color 0.25s ease",
               }}
+              onClick={onSubmit}
             >
-              <Callout.Icon>
-                <ExclamationTriangleIcon />
-              </Callout.Icon>
-              <Callout.Text>
-                Please enter valid section numbers before continuing.
-              </Callout.Text>
-            </Callout.Root>
-          </Flex>
-        </Card>
-      </Flex>
+              Continue
+            </Button>
+          </Box>
+          <Callout.Root
+            color="red"
+            role="alert"
+            style={{
+              position: "absolute",
+              bottom: "16px",
+              opacity: !validSectionInput ? "1" : "0",
+              transition: "opacity 0.25s ease",
+            }}
+          >
+            <Callout.Icon>
+              <ExclamationTriangleIcon />
+            </Callout.Icon>
+            <Callout.Text>
+              Please enter valid section numbers before continuing.
+            </Callout.Text>
+          </Callout.Root>
+        </Flex>
+      </FormCard>
       <ScheduleToast
         title={
           toast.type === "add" || toast.type === "delete"
@@ -213,7 +206,7 @@ const CourseForm = () => {
           toast.type === "add" || toast.type === "delete" ? "lightgreen" : "red"
         }
       ></ScheduleToast>
-    </form>
+    </>
   );
 };
 
