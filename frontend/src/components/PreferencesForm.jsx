@@ -10,16 +10,19 @@ import {
   Separator,
 } from "@radix-ui/themes";
 import FormCard from "./FormCard";
+import PreferenceRadioCards from "./PreferenceRadioCards";
 
 const PreferenceItem = ({ children, text }) => {
   return (
-    <Box width="100%">
-      <Flex direction="row" gap="5">
+    <Box width="100">
+      <Flex direction="row" gap="5" height="5vh" align="center">
         <Text size="5">
           <Em>{text}</Em>
         </Text>
         <Separator orientation="vertical" size="2"></Separator>
-        {children}
+        <Flex height="5vh" width="5000px">
+          {children}
+        </Flex>
       </Flex>
     </Box>
   );
@@ -33,7 +36,13 @@ const PreferencesForm = ({ step, setStep, direction, setDirection }) => {
           Preferences
         </Heading>
         <Flex height="60vh" direction="column" gap="9" pt="5" ml="9">
-          <PreferenceItem text="Breaks"></PreferenceItem>
+          <PreferenceItem text="Breaks">
+            <PreferenceRadioCards
+              size="3"
+              gap="9"
+              items={["No Preferences", "Short Breaks", "Regular Breaks"]}
+            ></PreferenceRadioCards>
+          </PreferenceItem>
           <PreferenceItem text="Class Time"></PreferenceItem>
           <PreferenceItem text="Day Off"></PreferenceItem>
           <PreferenceItem text="Intensive"></PreferenceItem>
