@@ -11,7 +11,10 @@ import {
   Tooltip,
   IconButton,
 } from "@radix-ui/themes";
-import { QuestionMarkCircledIcon } from "@radix-ui/react-icons";
+import {
+  QuestionMarkCircledIcon,
+  InfoCircledIcon,
+} from "@radix-ui/react-icons";
 import FormCard from "./FormCard";
 import PreferenceRadioCards from "./PreferenceRadioCards";
 
@@ -45,9 +48,23 @@ const PreferencesForm = ({ step, setStep, direction, setDirection }) => {
   return (
     <>
       <FormCard step={2} currentStep={step} direction={direction}>
-        <Heading size={"8"} ml="9" mb="9">
-          Preferences
-        </Heading>
+        <Flex align="center" gap="4" ml="9" mb="9">
+          <Heading size={"8"} as="h1">
+            Preferences
+          </Heading>
+          <Tooltip delayDuration={150}>
+            <IconButton
+              radius="full"
+              color="gray"
+              mt="2"
+              variant="ghost"
+              size="1"
+              onClick={(e) => e.preventDefault()}
+            >
+              <InfoCircledIcon height="20px" width="20px"></InfoCircledIcon>
+            </IconButton>
+          </Tooltip>
+        </Flex>
         <Flex height="60vh" direction="column" gap="9" pt="5" ml="7">
           <PreferenceItem text="Breaks">
             <PreferenceRadioCards
