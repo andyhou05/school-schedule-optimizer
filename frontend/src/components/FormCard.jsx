@@ -22,7 +22,7 @@ const FormCard = ({ children, step, currentStep, direction }) => {
           transition: "transform 0.5s ease-in-out",
         }}
       >
-        <Box width="125vh" m="auto" mt="50px">
+        <Box width="60vw" m="auto" mt="50px">
           {children}
         </Box>
       </Card>
