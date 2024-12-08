@@ -8,7 +8,10 @@ import {
   Box,
   Em,
   Separator,
+  Tooltip,
+  IconButton,
 } from "@radix-ui/themes";
+import { QuestionMarkCircledIcon } from "@radix-ui/react-icons";
 import FormCard from "./FormCard";
 import PreferenceRadioCards from "./PreferenceRadioCards";
 
@@ -16,6 +19,16 @@ const PreferenceItem = ({ children, text }) => {
   return (
     <Box width="100">
       <Flex direction="row" gap="5" height="5vh" align="center">
+        <Tooltip delayDuration={150}>
+          <IconButton
+            radius="full"
+            size="1"
+            variant="ghost"
+            onClick={(e) => e.preventDefault()}
+          >
+            <QuestionMarkCircledIcon height="20px" width="20px" />
+          </IconButton>
+        </Tooltip>
         <Text size="5">
           <Em>{text}</Em>
         </Text>
@@ -35,7 +48,7 @@ const PreferencesForm = ({ step, setStep, direction, setDirection }) => {
         <Heading size={"8"} ml="9" mb="9">
           Preferences
         </Heading>
-        <Flex height="60vh" direction="column" gap="9" pt="5" ml="9">
+        <Flex height="60vh" direction="column" gap="9" pt="5" ml="7">
           <PreferenceItem text="Breaks">
             <PreferenceRadioCards
               size="3"
