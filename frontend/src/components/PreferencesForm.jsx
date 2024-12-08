@@ -11,6 +11,20 @@ import {
 } from "@radix-ui/themes";
 import FormCard from "./FormCard";
 
+const PreferenceItem = ({ children, text }) => {
+  return (
+    <Box width="100%">
+      <Flex direction="row" gap="5">
+        <Text size="5">
+          <Em>{text}</Em>
+        </Text>
+        <Separator orientation="vertical" size="2"></Separator>
+        {children}
+      </Flex>
+    </Box>
+  );
+};
+
 const PreferencesForm = ({ step, setStep, direction, setDirection }) => {
   return (
     <>
@@ -19,38 +33,10 @@ const PreferencesForm = ({ step, setStep, direction, setDirection }) => {
           Preferences
         </Heading>
         <Flex height="60vh" direction="column" gap="9" pt="5" ml="9">
-          <Box width="100%">
-            <Flex direction="row" gap="5">
-              <Text size="5">
-                <Em>Breaks</Em>
-              </Text>
-              <Separator orientation="vertical" size="2"></Separator>
-            </Flex>
-          </Box>
-          <Box width="100%">
-            <Flex direction="row" gap="5">
-              <Text size="5">
-                <Em>Class Time</Em>
-              </Text>
-              <Separator orientation="vertical" size="2"></Separator>
-            </Flex>
-          </Box>
-          <Box width="100%">
-            <Flex direction="row" gap="5">
-              <Text size="5">
-                <Em>Day Off</Em>
-              </Text>
-              <Separator orientation="vertical" size="2"></Separator>
-            </Flex>
-          </Box>
-          <Box width="100%">
-            <Flex direction="row" gap="5">
-              <Text size="5">
-                <Em>Intensive</Em>
-              </Text>
-              <Separator orientation="vertical" size="2"></Separator>
-            </Flex>
-          </Box>
+          <PreferenceItem text="Breaks"></PreferenceItem>
+          <PreferenceItem text="Class Time"></PreferenceItem>
+          <PreferenceItem text="Day Off"></PreferenceItem>
+          <PreferenceItem text="Intensive"></PreferenceItem>
         </Flex>
         <Box position="absolute" bottom="32px" height="4vh" width="60vw">
           <Button
