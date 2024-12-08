@@ -4,7 +4,7 @@ import {
   Flex,
   Button,
   Heading,
-  RadioCards,
+  Checkbox,
   Box,
   Em,
   Separator,
@@ -20,7 +20,7 @@ const PreferenceItem = ({ children, text }) => {
           <Em>{text}</Em>
         </Text>
         <Separator orientation="vertical" size="2"></Separator>
-        <Flex height="5vh" width="5000px">
+        <Flex height="5vh" width="5000px" align="center">
           {children}
         </Flex>
       </Flex>
@@ -43,9 +43,30 @@ const PreferencesForm = ({ step, setStep, direction, setDirection }) => {
               items={["No Preferences", "Short Breaks", "Regular Breaks"]}
             ></PreferenceRadioCards>
           </PreferenceItem>
-          <PreferenceItem text="Class Time"></PreferenceItem>
-          <PreferenceItem text="Day Off"></PreferenceItem>
-          <PreferenceItem text="Intensive"></PreferenceItem>
+          <PreferenceItem text="Class Time">
+            <PreferenceRadioCards
+              size="3"
+              gap="9"
+              items={["No Preferences", "Morning Classes", "Evening Classes"]}
+            ></PreferenceRadioCards>
+          </PreferenceItem>
+          <PreferenceItem text="Day Off">
+            <PreferenceRadioCards
+              size="2"
+              gap="8"
+              items={[
+                "None",
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+              ]}
+            ></PreferenceRadioCards>
+          </PreferenceItem>
+          <PreferenceItem text="Intensive">
+            <Checkbox ml="3" size="3"></Checkbox>
+          </PreferenceItem>
         </Flex>
         <Box position="absolute" bottom="32px" height="4vh" width="60vw">
           <Button

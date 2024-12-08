@@ -5,6 +5,7 @@ const PreferenceRadioCards = ({ size, gap, items = [] }) => {
   return (
     <RadioCards.Root
       defaultValue="1"
+      ml="6"
       variant="classic"
       size={size}
       gap={gap}
