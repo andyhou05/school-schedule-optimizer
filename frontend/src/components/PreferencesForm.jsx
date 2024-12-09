@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Text,
   Flex,
@@ -45,6 +45,11 @@ const PreferenceItem = ({ children, text }) => {
 };
 
 const PreferencesForm = ({ step, setStep, direction, setDirection }) => {
+  const [breaks, setBreaks] = useState("");
+  const [time, setTime] = useState("");
+  const [dayOff, setDayOff] = useState("");
+  const [intensive, setIntensive] = useState("");
+
   return (
     <>
       <FormCard step={2} currentStep={step} direction={direction}>
@@ -71,6 +76,7 @@ const PreferencesForm = ({ step, setStep, direction, setDirection }) => {
               size="3"
               gap="9"
               items={["No Preferences", "Short Breaks", "Regular Breaks"]}
+              setSelectedValue={setBreaks}
             ></PreferenceRadioCards>
           </PreferenceItem>
           <PreferenceItem text="Class Time">
@@ -78,6 +84,7 @@ const PreferencesForm = ({ step, setStep, direction, setDirection }) => {
               size="3"
               gap="9"
               items={["No Preferences", "Morning Classes", "Evening Classes"]}
+              setSelectedValue={setTime}
             ></PreferenceRadioCards>
           </PreferenceItem>
           <PreferenceItem text="Day Off">
@@ -92,10 +99,11 @@ const PreferencesForm = ({ step, setStep, direction, setDirection }) => {
                 "Thursday",
                 "Friday",
               ]}
+              setSelectedValue={setDayOff}
             ></PreferenceRadioCards>
           </PreferenceItem>
           <PreferenceItem text="Intensive">
-            <Checkbox ml="3" size="3"></Checkbox>
+            <Checkbox ml="3" size="3" onCheckedChange={setIntensive}></Checkbox>
           </PreferenceItem>
         </Flex>
         <Box position="absolute" bottom="32px" height="4vh" width="60vw">
