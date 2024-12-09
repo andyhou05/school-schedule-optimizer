@@ -161,6 +161,7 @@ def delete_course(id):
 def generate_schedules():
     data = request.get_json()
     selected_courses = data.get("courses")
+    specific_courses = data.get("specific_courses", [])
     preferences = data.get("preferences", {})
     
     if not selected_courses:

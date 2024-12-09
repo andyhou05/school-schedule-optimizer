@@ -5,6 +5,7 @@ from functools import lru_cache
 
 from models import Period
 from models import TeacherRatings
+from scripts.schedule import scorer
 
 @lru_cache()
 def time_to_int(time: str) -> int:
@@ -117,3 +118,23 @@ def is_time_conflict(schedule: list[Period], period_to_check: Period) -> bool:
             if start < current_end and end > current_start:
                 return True
     return False 
+
+def add_specific_courses(specific_courses: list[dict], session: Session, total_number_of_courses: int, preferences: dict) -> list[dict]:
+    """ Adds courses with sepcific sections to a list. 
+
+    Args:
+        specific_courses (list[dict]): List of specific courses and sections {"course_id": , "section": }
+        session (Session): DB connection session
+        total_number_of_courses (int): total number of requested courses, used for scoring
+        preferences (dict): User preferences for schedule.
+
+    Returns:
+        list[dict]: List of periods and score of the specific courses.
+    """
+    
+    periods = []
+    for course_dict in specific_courses:
+        course_id = course_dict["course_id"]
+        section = course_dict["section"]
+        periods.extend(session.query(Period).filter(Period.course_id == course_id, Period.section == section).all())
+    return [{"periods": periods, "score": scorer.score_schedule(periods, len(specific_courses)/total_number_of_courses, preferences, session) }]
