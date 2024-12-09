@@ -22,7 +22,7 @@ def generate_schedule(requested_course_ids: list[str], preferences: dict, specif
     
     session = connect_db()
     
-    schedules = [{"periods": [], "score": 0}] if len(specific_courses == 0) else schedule_helper.add_specific_courses(specific_courses, session, len(requested_course_ids), preferences)
+    schedules = [{"periods": [], "score": 0}] if len(specific_courses) == 0 else schedule_helper.add_specific_courses(specific_courses, session, len(requested_course_ids) + len(specific_courses), preferences)
     periods = session.query(Period).filter(Period.course_id.in_(requested_course_ids)).all()
     
     # Filter courses by user day off preference

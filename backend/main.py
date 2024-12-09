@@ -21,12 +21,12 @@ if __name__ == "__main__":
     
     # SCHEDULE GENERATION TESTS
     #courses = ["603-101-MA", "345-102-MQ", "109-101-MQ", "201-NYB-05", "203-SN1-RE", "202-SN1-RE"]
-    #courses = ["603-101-MA", "109-101-MQ"]
+    courses = ["603-101-MB"]
     #preferences = {"day off": "Mon.", "breaks":" regular", "time": "morning"}
-    #print(generator.generate_schedule(courses, preferences))
+    print(generator.generate_schedule(courses, {}, [{"course_id": "603-101-MA", "section": "00021"}], 1))
     
     # SCHEDULE HELPER TESTS
-    print(schedule_helper.add_specific_courses(specific_courses=[{"course_id": "603-101-MA", "section": "00021"}, {"course_id": "603-101-MA", "section": "00017"}], session=session, total_number_of_courses=2, preferences={}))
+    #print(schedule_helper.add_specific_courses(specific_courses=[{"course_id": "603-101-MA", "section": "00021"}], session=session, total_number_of_courses=1, preferences={}))
     
     # ID MATCHING
     #teacher_scraper.match_all_teacher_id()
