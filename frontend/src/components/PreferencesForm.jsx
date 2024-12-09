@@ -44,30 +44,21 @@ const PreferenceItem = ({ children, text }) => {
   );
 };
 
-const PreferencesForm = ({ step, setStep, direction, setDirection }) => {
-  const [breaksValue, setBreaksValue] = useState("");
-  const [timeValue, setTimeValue] = useState("");
-  const [dayOffValue, setDayOffValue] = useState("");
-  const [intensiveValue, setIntensiveValue] = useState("");
-
-  const generate_schedules = () => {
-    const breaks =
-      breaksValue == 2 ? "short" : breaksValue == 3 ? "regular" : "";
-    const time = timeValue == 2 ? "morning" : timeValue == 3 ? "evening" : "";
-    const dayOff =
-      dayOffValue == 2
-        ? "Mon."
-        : dayOffValue == 3
-        ? "Tue."
-        : dayOffValue == 4
-        ? "Wed."
-        : dayOffValue == 5
-        ? "Thu."
-        : dayOffValue == 6
-        ? "Fri."
-        : "";
-  };
-
+const PreferencesForm = ({
+  step,
+  setStep,
+  direction,
+  setDirection,
+  breaksValue,
+  setBreaksValue,
+  timeValue,
+  setTimeValue,
+  dayOffValue,
+  setDayOffValue,
+  intensive,
+  setIntensive,
+  generate_schedules,
+}) => {
   return (
     <>
       <FormCard step={2} currentStep={step} direction={direction}>
@@ -121,11 +112,7 @@ const PreferencesForm = ({ step, setStep, direction, setDirection }) => {
             ></PreferenceRadioCards>
           </PreferenceItem>
           <PreferenceItem text="Intensive">
-            <Checkbox
-              ml="3"
-              size="3"
-              onCheckedChange={setIntensiveValue}
-            ></Checkbox>
+            <Checkbox ml="3" size="3" onCheckedChange={setIntensive}></Checkbox>
           </PreferenceItem>
         </Flex>
         <Box position="absolute" bottom="32px" height="4vh" width="60vw">

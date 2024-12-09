@@ -18,8 +18,14 @@ import CourseList from "./CourseList";
 import FormCard from "./FormCard";
 import "./styles.css";
 
-const CourseForm = ({ step, setStep, direction, setDirection }) => {
-  const [inputCourses, setInputCourses] = useState([]);
+const CourseForm = ({
+  step,
+  setStep,
+  direction,
+  setDirection,
+  inputCourses,
+  setInputCourses,
+}) => {
   const [input, setInput] = useState("");
   const [toast, setToast] = useState({ open: false, type: "", message: "" });
   const [validSectionInput, setValidSectionInput] = useState(true);
