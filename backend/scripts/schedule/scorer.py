@@ -181,7 +181,7 @@ def score_schedule_preferences(schedule: list[Period], preferences: dict) -> flo
     time_score = score_schedule_time(schedule, preferences.get('time'))
     
     if breaks_score == -1 and time_score == -1:
-        return 100100
+        return 100
     elif breaks_score == -1:
         return time_score
     elif time_score == -1:

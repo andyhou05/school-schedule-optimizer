@@ -12,7 +12,7 @@ def generate_schedule(requested_course_ids: list[str], preferences: dict, n_resu
 
     Args:
         requested_classes (list[str]): List of course ids the user wants to have.
-        preferences (dict): User preferences for schedule generation, can include dayOff, time, and breaks. If the user has no preferences, an empty dict can be used as input.
+        preferences (dict): User preferences for schedule generation, can include dayOff (Mon., Tue., etc.), time (morning, evening), and breaks (short, regular). If the user has no preferences, an empty dict can be used as input.
         n_results (int, optional): Number of schedules generated. Defaults to 5.
 
     Returns:
