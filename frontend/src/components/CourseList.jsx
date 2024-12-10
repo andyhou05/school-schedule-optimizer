@@ -24,20 +24,22 @@ const CourseList = ({
 
   // Used to update state in CourseForm, ensures the update happens after rendering of this component
   useEffect(() => {
-    // Update validity
-    setValidSectionInput(
-      sectionInput.every((section) => {
-        return validateSection(section); // we also need to check for course, not just section
-      })
-    );
-
     // Update section value in course object
     setInputCourses((prev) => {
-      return prev.map((course, currentIndex) => {
+      const newInputCourses = prev.map((course, currentIndex) => {
         return sectionIndex == currentIndex
           ? { id: course.id, section: sectionInput[sectionIndex] }
           : course;
       });
+
+      // Update validity
+      setValidSectionInput(
+        newInputCourses.every((course) => {
+          return validateSection(course);
+        })
+      );
+
+      return newInputCourses;
     });
   }, [sectionInput]);
 
@@ -51,8 +53,8 @@ const CourseList = ({
 
       // Update validity
       setValidSectionInput(
-        updatedSectionInput.every((section) => {
-          return validateSection(section);
+        inputCourses.every((course) => {
+          return validateSection(course);
         })
       );
 
@@ -60,10 +62,14 @@ const CourseList = ({
     });
   };
 
-  const validateSection = (input) => {
-    return !input
+  const validateSection = (inputCourse) => {
+    return !inputCourse.section.length
       ? true
-      : coursesData.current.some((course) => course.section == input);
+      : coursesData.current.some(
+          (course) =>
+            course.courseId == inputCourse.id &&
+            course.section == inputCourse.section
+        );
   };
 
   const handleSectionInput = (value, index) => {
@@ -130,12 +136,12 @@ const CourseList = ({
                     style={{
                       outlineColor:
                         sectionInput[index] &&
-                        !validateSection(sectionInput[index])
+                        !validateSection(inputCourses[index])
                           ? "var(--red-6)"
                           : "var(--slate-7)",
                       backgroundColor:
                         sectionInput[index] &&
-                        !validateSection(sectionInput[index])
+                        !validateSection(inputCourses[index])
                           ? "var(--red-4)"
                           : "var(--slate-5)",
                       transition:
