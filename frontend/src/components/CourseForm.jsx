@@ -103,21 +103,26 @@ const CourseForm = ({
     if (e.key === "Enter") {
       e.preventDefault();
       // Capitalize all letters and remove white space
-      const sanitizedInput = sanitizeInput(input);
+      const sanitizedCourseInput = sanitizeInput(input);
 
       // Valid input
       if (
-        validateCourseId(sanitizedInput) &&
-        !inputCourses.includes(sanitizedInput) &&
+        validateCourseId(sanitizedCourseInput) &&
+        !inputCourses.some((course) => course.id == sanitizedCourseInput) &&
         input.trim() != ""
       ) {
-        setInputCourses([...inputCourses, sanitizedInput]);
-        showToast("add", sanitizedInput);
+        setInputCourses([
+          ...inputCourses,
+          { id: sanitizedCourseInput, section: "" },
+        ]);
+        showToast("add", sanitizedCourseInput);
       }
 
       // Duplicate input
-      else if (inputCourses.includes(sanitizedInput)) {
-        showToast("duplicate", sanitizedInput);
+      else if (
+        inputCourses.some((course) => course.id == sanitizedCourseInput)
+      ) {
+        showToast("duplicate", sanitizedCourseInput);
       }
 
       // Invalid input
@@ -154,8 +159,8 @@ const CourseForm = ({
         >
           <ScrollArea type="auto" scrollbars="vertical">
             <CourseList
-              courses={inputCourses}
-              setCourses={setInputCourses}
+              inputCourses={inputCourses}
+              setInputCourses={setInputCourses}
               setValidSectionInput={setValidSectionInput}
               showToast={showToast}
               coursesData={coursesData}

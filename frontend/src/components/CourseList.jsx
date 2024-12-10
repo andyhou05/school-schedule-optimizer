@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   TextField,
@@ -13,16 +13,38 @@ import {
 import { Cross1Icon } from "@radix-ui/react-icons";
 
 const CourseList = ({
-  courses,
-  setCourses,
+  inputCourses,
+  setInputCourses,
   setValidSectionInput,
   showToast,
   coursesData,
 }) => {
   const [sectionInput, setSectionInput] = useState([]);
+  const [sectionIndex, setSectionIndex] = useState(0);
+
+  // Used to update state in CourseForm, ensures the update happens after rendering of this component
+  useEffect(() => {
+    // Update validity
+    setValidSectionInput(
+      sectionInput.every((section) => {
+        return validateSection(section); // we also need to check for course, not just section
+      })
+    );
+
+    // Update section value in course object
+    setInputCourses((prev) => {
+      return prev.map((course, currentIndex) => {
+        return sectionIndex == currentIndex
+          ? { id: course.id, section: sectionInput[sectionIndex] }
+          : course;
+      });
+    });
+  }, [sectionInput]);
 
   const handleDelete = (courseToDelete, index) => {
-    setCourses(courses.filter((course) => course !== courseToDelete));
+    setInputCourses(
+      inputCourses.filter((course) => course.id !== courseToDelete)
+    );
     showToast("delete", courseToDelete);
     setSectionInput((prev) => {
       const updatedSectionInput = [...prev].filter((_, i) => i !== index);
@@ -45,6 +67,7 @@ const CourseList = ({
   };
 
   const handleSectionInput = (value, index) => {
+    setSectionIndex(index);
     setSectionInput((prev) => {
       // Update the section input
       const updatedSectionInput = [...prev];
@@ -53,21 +76,14 @@ const CourseList = ({
           ? value
           : "0".repeat(5 - value.length).concat(value);
 
-      // Update validity
-      setValidSectionInput(
-        updatedSectionInput.every((section) => {
-          return validateSection(section);
-        })
-      );
-
       return updatedSectionInput;
     });
   };
 
   return (
     <DataList.Root orientation="vertical">
-      {courses.map((course, index) => (
-        <DataList.Item key={course}>
+      {inputCourses.map((course, index) => (
+        <DataList.Item key={course.id}>
           <Flex justify="center" align="center" py="3">
             <Card>
               <Flex
@@ -84,15 +100,15 @@ const CourseList = ({
                     color="red"
                     onClick={(e) => {
                       e.preventDefault();
-                      handleDelete(course, index);
+                      handleDelete(course.id, index);
                     }}
                   >
                     <Cross1Icon></Cross1Icon>
                   </IconButton>
                 </Box>
-                <DataList.Value key={course}>
+                <DataList.Value key={course.id}>
                   <Text weight="medium" size="4">
-                    {course}
+                    {course.id}
                   </Text>
                 </DataList.Value>
                 <Flex
