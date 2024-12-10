@@ -49,13 +49,9 @@ const PreferencesForm = ({
   setStep,
   direction,
   setDirection,
-  breaksValue,
   setBreaksValue,
-  timeValue,
   setTimeValue,
-  dayOffValue,
   setDayOffValue,
-  intensive,
   setIntensive,
   generate_schedules,
 }) => {

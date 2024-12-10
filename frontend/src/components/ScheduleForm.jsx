@@ -87,13 +87,9 @@ const ScheduleForm = () => {
           setStep={setStep}
           direction={direction}
           setDirection={setDirection}
-          breaksValue={breaksValue}
           setBreaksValue={setBreaksValue}
-          timeValue={timeValue}
           setTimeValue={setTimeValue}
-          dayOffValue={dayOffValue}
           setDayOffValue={setDayOffValue}
-          intensive={intensive}
           setIntensive={setIntensive}
           generate_schedules={generate_schedules}
         ></PreferencesForm>
