@@ -25,6 +25,8 @@ const CourseForm = ({
   setDirection,
   inputCourses,
   setInputCourses,
+  setSpecificCourses,
+  setCourses,
 }) => {
   const [input, setInput] = useState("");
   const [toast, setToast] = useState({ open: false, type: "", message: "" });
@@ -41,6 +43,19 @@ const CourseForm = ({
     e.preventDefault();
     setStep((prev) => prev + 1);
     setDirection("forward");
+
+    const specificCourses = [];
+    const courses = [];
+    inputCourses.forEach((course) => {
+      course.section.length > 0
+        ? specificCourses.push({
+            course_id: course.id,
+            section: course.section,
+          })
+        : courses.push(course.id);
+    });
+    setSpecificCourses(specificCourses);
+    setCourses(courses);
   };
 
   const showToast = (type, sanitizedInput = "") => {

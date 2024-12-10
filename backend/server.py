@@ -161,13 +161,13 @@ def delete_course(id):
 def generate_schedules():
     data = request.get_json()
     selected_courses = data.get("courses")
-    specific_courses = data.get("specific_courses", [])
+    specific_courses = data.get("specificCourses", [])
     preferences = data.get("preferences", {})
     
-    if not selected_courses:
+    if not selected_courses and not specific_courses:
         return jsonify({"message":"Invalid request, you must enter a course."}), 400
     
-    schedules = generate_schedule(requested_course_ids=selected_courses, preferences=preferences)
+    schedules = generate_schedule(requested_course_ids=selected_courses, preferences=preferences, specific_courses=specific_courses)
     return jsonify(schedules), 200
     
 

@@ -4,17 +4,24 @@ import CourseForm from "./CourseForm";
 import PreferencesForm from "./PreferencesForm";
 
 const ScheduleForm = () => {
-  const [inputCourses, setInputCourses] = useState([]);
+  const [inputCourses, setInputCourses] = useState([]); // This state is used to render the list items
+
+  // These states are used for sending info to API
+  const [specificCourses, setSpecificCourses] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [breaksValue, setBreaksValue] = useState("");
   const [timeValue, setTimeValue] = useState("");
   const [dayOffValue, setDayOffValue] = useState("");
   const [intensive, setIntensive] = useState("");
+
+  // These states are used for animation
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState("forward");
 
   const sendRequest = async (breaks, time, dayOff, intensive) => {
     const payload = {
-      courses: inputCourses,
+      courses: courses,
+      specificCourses: specificCourses,
       preferences: {
         dayOff: { dayOff },
         time: { time },
@@ -71,6 +78,9 @@ const ScheduleForm = () => {
           setDirection={setDirection}
           inputCourses={inputCourses}
           setInputCourses={setInputCourses}
+          setSpecificCourses={setSpecificCourses}
+          courses={courses}
+          setCourses={setCourses}
         ></CourseForm>
         <PreferencesForm
           step={step}
