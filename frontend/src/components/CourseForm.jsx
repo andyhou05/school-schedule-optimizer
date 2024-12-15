@@ -182,7 +182,7 @@ const CourseForm = ({
             ></CourseList>
           </ScrollArea>
 
-          <Box position="absolute" bottom="16px" right="32px">
+          <Box position="absolute" bottom="3%" right="12%">
             <Button
               size="3"
               variant="solid"
