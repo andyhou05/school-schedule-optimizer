@@ -43,6 +43,7 @@ class Period(db.Model):
     teacher_id = db.Column(db.Integer, db.ForeignKey("teacher.id"), nullable=True)
     day = db.Column(db.String(15), unique=False, nullable=False)
     time = db.Column(db.String(50), unique=False, nullable=False)
+    intensive = db.Column(db.Boolean(), unique=False, nullable=False)
     
     def to_json(self):
         return {
@@ -53,7 +54,8 @@ class Period(db.Model):
             "seats":self.seats,
             "teacherId":self.teacher_id,
             "day":self.day,
-            "time":self.time
+            "time":self.time,
+            "intensive":self.intensive
         }
         
     def __repr__(self):

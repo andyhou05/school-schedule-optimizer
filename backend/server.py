@@ -116,11 +116,12 @@ def create_course():
     seats = request.json.get("seats")
     teacher_id = request.json.get("teacherId")
     time = request.json.get("time")
+    intensive = request.json.get("intensive")
     
     if not section or not course_id or not name or not seats or not time:
         return (jsonify({"message":"You must enter a section, course id, name, time slot, and number of seats"}), 400)
     
-    new_course = Period(section=section, course_id=course_id, name=name, seats=seats, teacher_id=teacher_id, time=time)
+    new_course = Period(section=section, course_id=course_id, name=name, seats=seats, teacher_id=teacher_id, time=time, intensive=intensive)
     try:
         db.session.add(new_course)
         db.session.commit()

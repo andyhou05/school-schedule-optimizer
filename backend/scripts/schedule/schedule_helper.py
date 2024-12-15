@@ -99,6 +99,23 @@ def filter_day_off(courses: list[list[Period]], day_off: str | None) -> list[lis
         course for course in courses
         if not any(period.day == day_off for period in course)
     ]
+    
+def filter_intensive(courses: list[list[Period]], intensive: bool) -> list[list[Period]]:
+    """ Filters courses based on a preference for intensive courses.
+
+    Args:
+        courses (list[list[Period]]): List of courses, the inner lists are the periods that represent the course's schedule.
+        intensive (bool): The preference on whether the user wants to include intensive courses.
+
+    Returns:
+        list[list[Period]]: Filtered courses that do not contain any periods on the requested day off.
+    """
+    if intensive:
+        return courses
+    
+    return [course for course in courses
+            if not any(bool(period.intensive) for period in course)]
+    
 
 def is_time_conflict(schedule: list[Period], period_to_check: Period) -> bool:
     """ Returns whether or not there is a time conflict between a schedule and a period.
