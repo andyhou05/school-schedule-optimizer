@@ -23,14 +23,15 @@ const ScheduleForm = () => {
       courses: courses,
       specificCourses: specificCourses,
       preferences: {
-        dayOff: { dayOff },
-        time: { time },
-        breaks: { breaks },
+        dayOff,
+        time,
+        breaks,
+        intensive,
       },
     };
 
     try {
-      const response = await fetch("http://localhost:5000/generate_schedule", {
+      const response = await fetch("http://127.0.0.1:5000/generate_schedule", {
         method: "POST",
         body: JSON.stringify(payload),
         headers: {

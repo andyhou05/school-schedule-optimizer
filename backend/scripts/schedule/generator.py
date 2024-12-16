@@ -5,7 +5,7 @@ from scripts.schedule import scorer
 from scripts.schedule import schedule_helper
         
 
-def generate_schedule(requested_course_ids: list[str], preferences: dict, specific_courses: list[dict], intensive: bool, n_results: int = 5) -> list[dict]:
+def generate_schedule(requested_course_ids: list[str], preferences: dict, specific_courses: list[dict],  n_results: int = 5) -> list[dict]:
     """ Generates n_result schedules based on a beam search algorithm using user preferences to return close optimal results.
      The algorithm tries to add courses starting with those with the lowest frequencies. It tries to add every course option
      to every current schedule and keeps the 'n_result' schedules with the highest scores for the next course iteration.
@@ -14,7 +14,6 @@ def generate_schedule(requested_course_ids: list[str], preferences: dict, specif
         requested_classes (list[str]): List of course ids the user wants to have.
         preferences (dict): User preferences for schedule generation, can include dayOff (Mon., Tue., etc.), time (morning, evening), and breaks (short, regular). If the user has no preferences, an empty dict can be used as input.
         specific_courses (list[dict]): List of dictionnaries ({"course_id": , "section":}) containing a course with a specific section number.
-        intensive (bool): True if the user wants to include intensive courses in the schedule.
         n_results (int, optional): Number of schedules generated. Defaults to 5.
 
 
@@ -33,7 +32,6 @@ def generate_schedule(requested_course_ids: list[str], preferences: dict, specif
     
     # Filter courses by user day off preference
     filtered_day_off_courses = schedule_helper.filter_day_off(filtered_intensive_courses, preferences.get("day off"))
-    print(filtered_day_off_courses)
     
     # Group courses by their course ids and find the occurences to optimize for beam search
     grouped_courses, course_frequencies = group.group_courses(filtered_day_off_courses)

@@ -108,7 +108,13 @@ const PreferencesForm = ({
             ></PreferenceRadioCards>
           </PreferenceItem>
           <PreferenceItem text="Intensive">
-            <Checkbox ml="3" size="3" onCheckedChange={setIntensive}></Checkbox>
+            <Checkbox
+              ml="3"
+              size="3"
+              onCheckedChange={(e) => {
+                setIntensive(e);
+              }}
+            ></Checkbox>
           </PreferenceItem>
         </Flex>
         <Box position="absolute" bottom="32px" height="4vh" width="60vw">
