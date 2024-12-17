@@ -86,3 +86,34 @@
 .card-down {
   transform: translateY(1vh);
 }
+
+.schedule-grid {
+  border: 1px solid white;
+  width: 50vw;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+th {
+  border: 1px solid white;
+}
+
+td {
+  border: 1px solid white;
+  text-align: center;
+}
+
+.schedule-grid th:first-child,
+.schedule-grid td:first-child {
+  width: 7%; /* Fixed width for the first column */
+}
+
+.schedule-grid th:not(:first-child),
+.schedule-grid td:not(:first-child) {
+  width: auto; /* Remaining columns will equally divide the rest of the space */
+}
+
+.time-slot {
+  font-size: 75%;
+  font-family: Arial, Helvetica, sans-serif;
+}

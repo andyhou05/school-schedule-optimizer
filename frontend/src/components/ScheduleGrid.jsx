@@ -1,4 +1,5 @@
 import React from "react";
+import "./styles.css";
 
 const ScheduleGrid = () => {
   const columnHeaders = [
@@ -19,36 +20,24 @@ const ScheduleGrid = () => {
     .slice(0, -1);
 
   return (
-    <table
-      style={{
-        border: "1px solid white",
-        width: "50vw",
-        borderCollapse: "collapse",
-      }}
-    >
+    <table className="schedule-grid">
       <thead>
         <tr>
           {columnHeaders.map((header, index) => (
-            <th
-              key={index}
-              style={{ border: "1px solid white", padding: "5px" }}
-            >
-              {header}
-            </th>
+            <th key={index}>{header}</th>
           ))}
         </tr>
       </thead>
       <tbody>
-        {Array.from({ length: 21 }, (_, row) => (
+        {Array.from({ length: 20 }, (_, row) => (
           <tr>
-            <td
-              key={`${row}-0`}
-              style={{ border: "1px solid white", textAlign: "center" }}
-            >
+            <td key={`${row}-0`} className="time-slot">
               {times[row]}
+              <br></br>
+              {times[row + 1]}
             </td>
             {Array.from({ length: 7 }, (_, column) => (
-              <td key={row - column} style={{ border: "1px solid white" }}></td>
+              <td key={row - column}></td>
             ))}
           </tr>
         ))}
