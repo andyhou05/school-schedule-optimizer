@@ -2,8 +2,8 @@ import React from "react";
 import GridLayout from "react-grid-layout";
 
 const ScheduleGrid = () => {
-  const days = [
-    "",
+  const columnHeaders = [
+    "Time",
     "Monday",
     "Tuesday",
     "Wednesday",
@@ -12,6 +12,12 @@ const ScheduleGrid = () => {
     "Saturday",
     "Sunday",
   ];
+  const minutes = ["00", "30"];
+  const times = Array.from({ length: 11 }, (_, hour) =>
+    Array.from({ length: 2 }, (_, index) => `${8 + hour}:${minutes[index]}`)
+  )
+    .flat()
+    .slice(0, -1);
   const layout = [
     // Column Headers (days)
     ...Array.from({ length: 8 }, (_, column) => ({
@@ -44,18 +50,25 @@ const ScheduleGrid = () => {
       width={1200}
       margin={[1, 0]}
     >
-      {/* Column Headers */}
+      {/* Column Headers (days) */}
       {Array.from({ length: 8 }, (_, column) => (
         <div key={`${column + 1}`} style={{ border: "1px solid lightblue" }}>
-          {days[column]}
+          {columnHeaders[column]}
         </div>
       ))}
 
-      {/* Dynamic Cells for rows */}
+      {/* Row Headers (time slots)*/}
+      {Array.from({ length: 21 }, (_, row) => (
+        <div key={`cell-${row}-0`} style={{ border: "1px solid lightblue" }}>
+          {times[row]}
+        </div>
+      ))}
+
+      {/* Cells in grid */}
       {Array.from({ length: 21 }, (_, row) =>
-        Array.from({ length: 8 }, (_, column) => (
+        Array.from({ length: 7 }, (_, column) => (
           <div
-            key={`cell-${row}-${column}`}
+            key={`cell-${row}-${column + 1}`}
             style={{ border: "1px solid lightblue" }}
           ></div>
         ))
