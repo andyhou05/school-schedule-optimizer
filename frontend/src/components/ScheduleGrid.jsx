@@ -58,61 +58,72 @@ const ScheduleGrid = () => {
   transformCourseTime(courses);
 
   return (
-    <table className="schedule-grid">
-      <thead>
-        <tr>
-          {/* Column headers (days) */}
-          {columnHeaders.map((header, index) => (
-            <th key={index}>{header}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {Array.from({ length: 20 }, (_, row) => (
-          <tr key={row}>
-            {/* Row headers (time slots) */}
-            <td key={`${row}-0`} className="time-slot">
-              {times[row]}
-              <br></br>
-              {times[row + 1]}
-            </td>
-
-            {/* Course cells */}
-            {Array.from({ length: 7 }, (_, column) => {
-              const courseForCell = courses.find(
-                (course) =>
-                  daysIndexMap[course.day] === column + 1 &&
-                  course.start === row
-              );
-
-              if (courseForCell) {
-                return (
-                  <td
-                    key={`${row}-${column}`}
-                    className="course-slot"
-                    rowSpan={courseForCell.duration}
-                  >
-                    {courseForCell.name}
-                  </td>
-                );
-              }
-
-              {
-                /* Check if the current slot is occupied by a course */
-              }
-              const isOccuppied = courses.some(
-                (course) =>
-                  daysIndexMap[course.day] === column + 1 &&
-                  row > course.start &&
-                  row < course.end
-              );
-
-              return isOccuppied ? null : <td key={`${row}-${column}`}></td>;
-            })}
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
+      <table className="schedule-grid">
+        <thead>
+          <tr>
+            {/* Column headers (days) */}
+            {columnHeaders.map((header, index) => (
+              <th key={index}>{header}</th>
+            ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {Array.from({ length: 20 }, (_, row) => (
+            <tr key={row}>
+              {/* Row headers (time cell) */}
+              <td key={`${row}-0`} className="time-cell">
+                {times[row]}
+                <br></br>
+                {times[row + 1]}
+              </td>
+
+              {/* Course cells */}
+              {Array.from({ length: 7 }, (_, column) => {
+                const courseForCell = courses.find(
+                  (course) =>
+                    daysIndexMap[course.day] === column + 1 &&
+                    course.start === row
+                );
+
+                if (courseForCell) {
+                  return (
+                    <td
+                      key={`${row}-${column}`}
+                      className="course-cell"
+                      rowSpan={courseForCell.duration}
+                    >
+                      {courseForCell.name}
+                    </td>
+                  );
+                }
+
+                {
+                  /* Check if the current cell is occupied by a course */
+                }
+                const isOccuppied = courses.some(
+                  (course) =>
+                    daysIndexMap[course.day] === column + 1 &&
+                    row > course.start &&
+                    row < course.end
+                );
+
+                return isOccuppied ? null : (
+                  <td key={`${row}-${column}`} className="empty-cell"></td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 export default ScheduleGrid;
