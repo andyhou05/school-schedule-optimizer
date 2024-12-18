@@ -1,4 +1,5 @@
 import React from "react";
+import { Flex, Em, Strong, Text } from "@radix-ui/themes";
 import "./styles.css";
 
 const ScheduleGrid = () => {
@@ -100,7 +101,14 @@ const ScheduleGrid = () => {
                       className="course-cell"
                       rowSpan={courseForCell.duration}
                     >
-                      {courseForCell.name}
+                      <Flex direction="column">
+                        <Text size="2" weight="medium">
+                          <Em>{courseForCell.name}</Em>
+                        </Text>
+                        <Text
+                          style={{ fontSize: "10px" }}
+                        >{`${courseForCell.course_id} sec. ${courseForCell.section}`}</Text>
+                      </Flex>
                     </td>
                   );
                 }
