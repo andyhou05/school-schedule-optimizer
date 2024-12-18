@@ -19,19 +19,43 @@ const ScheduleGrid = () => {
     .flat()
     .slice(0, -1);
   const courses = [
-    { name: "Math", day: "Monday", start: 0, duration: 2 }, // 8:00 to 9:00
-    { name: "Science", day: "Wednesday", start: 4, duration: 3 }, // 10:00 to 11:30
-    { name: "History", day: "Friday", start: 6, duration: 4 }, // 12:00 to 2:00
+    {
+      section: "00001",
+      course_id: "101-101-VA",
+      name: "Anatomy and Physiology I",
+      teacher_id: 1713,
+      day: "Mon.",
+      time: "8:00 - 10:00",
+    },
   ];
   const daysIndexMap = {
-    Monday: 1,
-    Tuesday: 2,
-    Wednesday: 3,
-    Thursday: 4,
-    Friday: 5,
-    Saturday: 6,
-    Sunday: 7,
+    "Mon.": 1,
+    "Tue.": 2,
+    "Wed.": 3,
+    "Thu.": 4,
+    "Fri.": 5,
+    "Sat.": 6,
+    "Sun.": 7,
   };
+
+  // TODO: Convert time on the backend
+  const convertTimeBlock = (time) => {
+    const [hour, minutes] = time.trim().split(":").map(Number);
+    let timeBlock = (Math.floor(hour) - 8) * 2;
+    timeBlock = minutes === 30 ? timeBlock + 1 : timeBlock;
+    return timeBlock;
+  };
+  const transformCourseTime = (courses = []) => {
+    courses.forEach((course, _) => {
+      const [start, end] = course.time
+        .split(" - ")
+        .map((time, _) => convertTimeBlock(time));
+      course.start = start;
+      course.end = end;
+      course.duration = end - start;
+    });
+  };
+  transformCourseTime(courses);
 
   return (
     <table className="schedule-grid">
@@ -80,7 +104,7 @@ const ScheduleGrid = () => {
                 (course) =>
                   daysIndexMap[course.day] === column + 1 &&
                   row > course.start &&
-                  row < course.start + course.duration
+                  row < course.end
               );
 
               return isOccuppied ? null : <td key={`${row}-${column}`}></td>;
