@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Flex, Em, Strong, Text } from "@radix-ui/themes";
 import "./styles.css";
 
@@ -24,7 +24,7 @@ const ScheduleGrid = () => {
       section: "00001",
       course_id: "101-101-VA",
       name: "Anatomy and Physiology I",
-      teacher_id: 1713,
+      teacher_id: 2075,
       day: "Mon.",
       time: "8:00 - 10:00",
     },
@@ -38,6 +38,7 @@ const ScheduleGrid = () => {
     "Sat.": 6,
     "Sun.": 7,
   };
+  const teachers = {};
 
   // TODO: Convert time on the backend
   const convertTimeBlock = (time) => {
@@ -56,7 +57,26 @@ const ScheduleGrid = () => {
       course.duration = end - start;
     });
   };
+
+  const fetchTeacherData = async (teacher_id) => {
+    try {
+      const result = await fetch(
+        `http://127.0.0.1:5000/get_teacher_rating/${teacher_id}`
+      ).then((response) => response.json());
+      return result.teacherRatings;
+    } catch (error) {
+      console.log("Error fetching data", error);
+      return [];
+    }
+  };
   transformCourseTime(courses);
+
+  useEffect(() => {
+    courses.forEach((course, _) => {
+      const teacher_id = course.teacher_id;
+      teachers.teacher_id = fetchTeacherData(teacher_id);
+    });
+  }, []);
 
   return (
     <div

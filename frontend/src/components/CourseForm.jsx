@@ -89,7 +89,7 @@ const CourseForm = ({
   };
 
   // Fetch all existing courses for input validation
-  const fetchData = async () => {
+  const fetchCourseData = async () => {
     try {
       const result = await fetch("http://127.0.0.1:5000/courses").then(
         (response) => response.json()
@@ -102,7 +102,9 @@ const CourseForm = ({
   };
 
   useEffect(() => {
-    fetchData().then((coursesArray) => (coursesData.current = coursesArray));
+    fetchCourseData().then(
+      (coursesArray) => (coursesData.current = coursesArray)
+    );
   }, []);
 
   // Removes all white space and makes all characters upper case.
