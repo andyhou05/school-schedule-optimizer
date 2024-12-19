@@ -9,7 +9,7 @@ from config import app, db
 # CRUD operations for TeacherRatings
 
 @app.route("/teacher_ratings", methods=["GET"])
-def get_teacher_ratingss():
+def get_teacher_ratings():
     teachers = TeacherRatings.query.all()
     json_teachers = list(map(lambda x: x.to_json(), teachers))
     return jsonify({"teachers":json_teachers}), 200
@@ -54,6 +54,15 @@ def delete_teacher_rating(id):
     db.session.delete(teacher)
     db.session.commit()
     return jsonify({"message":"Teacher Rating deleted"}), 200
+
+@app.route("/get_teacher_rating/<int:teacher_id>", methods=["GET"])
+def get_teacher_rating(teacher_id):
+    teacher_ratings = TeacherRatings.query.filter(TeacherRatings.teacher_id == teacher_id).all()
+    
+    if not teacher_ratings:
+        return jsonify({"message": "Teacher Rating not found"}), 404
+    json_teacher_ratings = list(map(lambda x: x.to_json(), teacher_ratings))
+    return jsonify({"teacher_ratings": json_teacher_ratings}), 200
 
 # CRUD operations for Teacher
 
