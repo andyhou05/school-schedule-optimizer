@@ -38,7 +38,7 @@ const ScheduleGrid = () => {
     "Sat.": 6,
     "Sun.": 7,
   };
-  const teachers = {};
+  const [teachers, setTeachers] = useState({});
 
   // TODO: Convert time on the backend
   const convertTimeBlock = (time) => {
@@ -48,18 +48,19 @@ const ScheduleGrid = () => {
     return timeBlock;
   };
   const transformCourseTime = () => {
-    setCourses((prev) => {
-      const updatedCourses = [...prev];
-      updatedCourses.forEach((course, _) => {
+    setCourses((prev) =>
+      prev.map((course) => {
         const [start, end] = course.time
           .split(" - ")
-          .map((time, _) => convertTimeBlock(time));
-        course.start = start;
-        course.end = end;
-        course.duration = end - start;
-      });
-      return updatedCourses;
-    });
+          .map((time) => convertTimeBlock(time));
+        return {
+          ...course,
+          start,
+          end,
+          duration: end - start,
+        };
+      })
+    );
   };
 
   const fetchTeacherData = async (teacher_id) => {
