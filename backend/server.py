@@ -62,7 +62,7 @@ def get_teacher_rating(teacher_id):
     if not teacher_ratings:
         return jsonify({"message": "Teacher Rating not found"}), 404
     json_teacher_ratings = list(map(lambda x: x.to_json(), teacher_ratings))
-    return jsonify({"teacher_ratings": json_teacher_ratings}), 200
+    return jsonify({"teacherRatings": json_teacher_ratings}), 200
 
 # CRUD operations for Teacher
 
