@@ -89,7 +89,7 @@
 
 .schedule-grid {
   border: 1px solid #f4f4f309;
-  width: 50vw;
+  width: 800px;
   border-collapse: collapse;
   table-layout: fixed;
 }
@@ -128,5 +128,7 @@ td {
 
 .schedule-grid th:not(:first-child),
 .schedule-grid td:not(:first-child) {
-  width: auto; /* Remaining columns will equally divide the rest of the space */
+  width: calc(
+    (100% - 7%) / 7
+  ); /* Remaining columns will equally divide the rest of the space */
 }

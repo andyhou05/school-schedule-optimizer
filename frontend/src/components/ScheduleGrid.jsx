@@ -64,7 +64,7 @@ const ScheduleGrid = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "100vh",
+        height: "150vh",
       }}
     >
       <table className="schedule-grid">
