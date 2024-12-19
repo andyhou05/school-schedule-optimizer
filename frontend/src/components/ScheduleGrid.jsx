@@ -19,7 +19,7 @@ const ScheduleGrid = () => {
   )
     .flat()
     .slice(0, -1);
-  const courses = [
+  const [courses, setCourses] = useState([
     {
       section: "00001",
       course_id: "101-101-VA",
@@ -28,7 +28,7 @@ const ScheduleGrid = () => {
       day: "Mon.",
       time: "8:00 - 10:00",
     },
-  ];
+  ]);
   const daysIndexMap = {
     "Mon.": 1,
     "Tue.": 2,
@@ -47,14 +47,18 @@ const ScheduleGrid = () => {
     timeBlock = minutes === 30 ? timeBlock + 1 : timeBlock;
     return timeBlock;
   };
-  const transformCourseTime = (courses = []) => {
-    courses.forEach((course, _) => {
-      const [start, end] = course.time
-        .split(" - ")
-        .map((time, _) => convertTimeBlock(time));
-      course.start = start;
-      course.end = end;
-      course.duration = end - start;
+  const transformCourseTime = () => {
+    setCourses((prev) => {
+      const updatedCourses = [...prev];
+      updatedCourses.forEach((course, _) => {
+        const [start, end] = course.time
+          .split(" - ")
+          .map((time, _) => convertTimeBlock(time));
+        course.start = start;
+        course.end = end;
+        course.duration = end - start;
+      });
+      return updatedCourses;
     });
   };
 
@@ -69,9 +73,9 @@ const ScheduleGrid = () => {
       return [];
     }
   };
-  transformCourseTime(courses);
 
   useEffect(() => {
+    transformCourseTime();
     courses.forEach((course, _) => {
       const teacher_id = course.teacher_id;
       teachers.teacher_id = fetchTeacherData(teacher_id);
