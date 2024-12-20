@@ -6,6 +6,7 @@ ESSENTIAL:
 - Check for time errors on Course Form
 - Route the application
 - Change cell colors based on teacher rating
+- Add text to all tooltips
 
 CODE STRUCTURE:
 

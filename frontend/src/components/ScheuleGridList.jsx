@@ -428,12 +428,13 @@ const ScheduleGridList = () => {
     },
   };
   return (
-    <Flex direction="column" height="600vh">
+    <Flex direction="column" height="500vh">
       {data.schedules.map((schedule, index) => (
         <ScheduleGrid
           key={index}
           coursesData={schedule.periods}
           teacherRatingsData={data.teacherRatings}
+          scheduleScore={schedule.score}
         ></ScheduleGrid>
       ))}
     </Flex>

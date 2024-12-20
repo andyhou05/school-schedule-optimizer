@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Em, Link, Text } from "@radix-ui/themes";
+import { Flex, Em, Tooltip, Link, Text, IconButton } from "@radix-ui/themes";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
 import "./styles.css";
 
-const ScheduleGrid = ({ coursesData, teacherRatingsData }) => {
+const ScheduleGrid = ({ coursesData, teacherRatingsData, scheduleScore }) => {
   const columnHeaders = [
     "Time",
     "Monday",
@@ -63,6 +64,7 @@ const ScheduleGrid = ({ coursesData, teacherRatingsData }) => {
     <div
       style={{
         display: "flex",
+        flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
@@ -150,6 +152,26 @@ const ScheduleGrid = ({ coursesData, teacherRatingsData }) => {
           )}
         </tbody>
       </table>
+      <Flex gap="2" pt="4" align="center" height="10%">
+        <Tooltip delayDuration={150}>
+          <IconButton
+            radius="full"
+            color="gray"
+            mt="0"
+            variant="ghost"
+            size="1"
+            onClick={(e) => e.preventDefault()}
+          >
+            <InfoCircledIcon height="22px" width="22px"></InfoCircledIcon>
+          </IconButton>
+        </Tooltip>
+        <Text size="6">
+          <Em>Schedule Score:</Em>
+        </Text>
+        <Text size="6" weight="bold">
+          <Em>{scheduleScore.toFixed(2)}%</Em>
+        </Text>
+      </Flex>
     </div>
   );
 };
