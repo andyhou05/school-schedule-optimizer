@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Button } from "@radix-ui/themes";
 import ScheduleForm from "./components/ScheduleForm";
-import ScheduleGrid from "./components/ScheduleGrid";
+import ScheduleGridList from "./components/ScheuleGridList";
 
 function App() {
   return (
     <>
-      <ScheduleGrid></ScheduleGrid>
+      <ScheduleGridList></ScheduleGridList>
     </>
   );
 }
