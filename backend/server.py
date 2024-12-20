@@ -178,7 +178,15 @@ def generate_schedules():
         return jsonify({"message":"Invalid request, you must enter a course."}), 400
     
     schedules = generate_schedule(requested_course_ids=selected_courses, preferences=preferences, specific_courses=specific_courses)
-    return jsonify(schedules), 200
+    teacher_ratings = {}
+    for schedule in schedules:
+        for period in schedule["periods"]:
+            if teacher_ratings.get(period["teacherId"]) is None:
+                current_ratings = TeacherRatings.query.filter(TeacherRatings.teacher_id == period["teacherId"]).all()
+                json_teacher_ratings = list(map(lambda x: x.to_json(), current_ratings))
+                teacher_ratings[period["teacherId"]] = json_teacher_ratings
+            
+    return jsonify(schedules, {"teacherRatings": teacher_ratings}), 200
     
 
 @app.route("/")

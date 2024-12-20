@@ -2,3 +2,5 @@ Convert Start, End, Duration time on the backend
 Receive Teacher Data directly from the backend
 Route the application
 Check for time errors on Course Form
+Remove useless server routes
+Handle errors better
