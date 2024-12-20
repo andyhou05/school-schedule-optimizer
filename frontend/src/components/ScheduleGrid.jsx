@@ -152,7 +152,7 @@ const ScheduleGrid = ({ coursesData, teacherRatingsData, scheduleScore }) => {
           )}
         </tbody>
       </table>
-      <Flex gap="2" pt="4" align="center" height="10%">
+      <Flex gap="2" align="center" height="5%">
         <Tooltip delayDuration={150}>
           <IconButton
             radius="full"
