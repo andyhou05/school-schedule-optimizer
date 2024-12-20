@@ -24,7 +24,7 @@ const ScheduleGrid = () => {
       section: "00001",
       course_id: "101-101-VA",
       name: "Anatomy and Physiology I",
-      teacher_id: 2075,
+      teacher_id: 2143,
       day: "Mon.",
       time: "8:00 - 10:00",
     },
@@ -75,13 +75,25 @@ const ScheduleGrid = () => {
     }
   };
 
+  const fetchAllTeacherData = async () => {
+    const updatedTeachers = { ...teachers };
+    for (const course of courses) {
+      const teacher_id = course.teacher_id;
+      if (!teachers[teacher_id]) {
+        const teacherData = await fetchTeacherData(teacher_id);
+        updatedTeachers[teacher_id] = teacherData;
+      }
+    }
+    setTeachers(updatedTeachers);
+  };
+
   useEffect(() => {
     transformCourseTime();
-    courses.forEach((course, _) => {
-      const teacher_id = course.teacher_id;
-      teachers.teacher_id = fetchTeacherData(teacher_id);
-    });
   }, []);
+
+  useEffect(() => {
+    fetchAllTeacherData();
+  }, [courses]);
 
   return (
     <div
@@ -130,9 +142,13 @@ const ScheduleGrid = () => {
                         <Text size="2" weight="medium">
                           <Em>{courseForCell.name}</Em>
                         </Text>
-                        <Text
-                          style={{ fontSize: "10px" }}
-                        >{`${courseForCell.course_id} sec. ${courseForCell.section}`}</Text>
+                        <Text style={{ fontSize: "10px" }}>{`${
+                          courseForCell.course_id
+                        } sec. ${courseForCell.section} ${
+                          teachers[courseForCell.teacher_id]
+                            ? teachers[courseForCell.teacher_id][0].rating
+                            : "hi"
+                        }`}</Text>
                       </Flex>
                     </td>
                   );
