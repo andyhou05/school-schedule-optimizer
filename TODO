@@ -1,6 +1,9 @@
-Convert Start, End, Duration time on the backend
-Receive Teacher Data directly from the backend
-Route the application
+Render list of ScheduleGrid components
+Show Schedule scores
+Rate My Teacher links clickable
 Check for time errors on Course Form
+Route the application
+Change cell colors based on teacher rating
+Convert Start, End, Duration time on the backend
 Remove useless server routes
 Handle errors better

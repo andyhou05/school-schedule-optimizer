@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Em, Strong, Text } from "@radix-ui/themes";
+import { Flex, Em, Link, Text } from "@radix-ui/themes";
 import "./styles.css";
 
 const ScheduleGrid = () => {
@@ -13,22 +13,41 @@ const ScheduleGrid = () => {
     "Saturday",
     "Sunday",
   ];
+
   const minutes = ["00", "30"];
   const times = Array.from({ length: 11 }, (_, hour) =>
     Array.from(minutes, (minute, _) => `${8 + hour}:${minute}`)
   )
     .flat()
     .slice(0, -1);
+
   const [courses, setCourses] = useState([
     {
+      courseId: "530-HSA-VA",
+      day: "Fri.",
+      id: 8772,
+      intensive: false,
+      name: "Introduction to Cinema",
+      seats: 0,
       section: "00001",
-      course_id: "101-101-VA",
-      name: "Anatomy and Physiology I",
-      teacher_id: 2143,
-      day: "Mon.",
-      time: "8:00 - 10:00",
+      teacherId: 2075,
+      time: "8:30 - 11:30",
     },
   ]);
+
+  const teacherRatings = {
+    2075: {
+      avgRating: 52.0,
+      links: [
+        "https://ratemyteachers.com/ca/quebec/montreal/vanier-college/stefik",
+        "https://ratemyteachers.com/ca/quebec/montreal/vanier-college/dan-stefik",
+        "https://ratemyteachers.com/ca/quebec/montreal/vanier-college/daniel-stefik",
+        "https://ratemyteachers.com/ca/quebec/montreal/vanier-college/daniel-w-stefik",
+      ],
+      name: " Daniel W. Stefik",
+    },
+  };
+
   const daysIndexMap = {
     "Mon.": 1,
     "Tue.": 2,
@@ -38,7 +57,6 @@ const ScheduleGrid = () => {
     "Sat.": 6,
     "Sun.": 7,
   };
-  const [teachers, setTeachers] = useState({});
 
   // TODO: Convert time on the backend
   const convertTimeBlock = (time) => {
@@ -63,37 +81,9 @@ const ScheduleGrid = () => {
     );
   };
 
-  const fetchTeacherData = async (teacher_id) => {
-    try {
-      const result = await fetch(
-        `http://127.0.0.1:5000/get_teacher_rating/${teacher_id}`
-      ).then((response) => response.json());
-      return result.teacherRatings;
-    } catch (error) {
-      console.log("Error fetching data", error);
-      return [];
-    }
-  };
-
-  const fetchAllTeacherData = async () => {
-    const updatedTeachers = { ...teachers };
-    for (const course of courses) {
-      const teacher_id = course.teacher_id;
-      if (!teachers[teacher_id]) {
-        const teacherData = await fetchTeacherData(teacher_id);
-        updatedTeachers[teacher_id] = teacherData;
-      }
-    }
-    setTeachers(updatedTeachers);
-  };
-
   useEffect(() => {
     transformCourseTime();
   }, []);
-
-  useEffect(() => {
-    fetchAllTeacherData();
-  }, [courses]);
 
   return (
     <div
@@ -142,13 +132,23 @@ const ScheduleGrid = () => {
                         <Text size="2" weight="medium">
                           <Em>{courseForCell.name}</Em>
                         </Text>
-                        <Text style={{ fontSize: "10px" }}>{`${
-                          courseForCell.course_id
-                        } sec. ${courseForCell.section} ${
-                          teachers[courseForCell.teacher_id]
-                            ? teachers[courseForCell.teacher_id][0].rating
-                            : "hi"
-                        }`}</Text>
+                        <Text
+                          style={{ fontSize: "10px" }}
+                        >{`${courseForCell.courseId} sec. ${courseForCell.section}`}</Text>
+                        <br></br>
+                        <Text size="1">
+                          <Em>
+                            <Link
+                              href="#"
+                              weight="medium"
+                              style={{ color: "blue" }}
+                              onClick={(e) => e.preventDefault()}
+                            >{`${teacherRatings[courseForCell.teacherId].name}: 
+                        ${
+                          teacherRatings[courseForCell.teacherId].avgRating
+                        }%`}</Link>
+                          </Em>
+                        </Text>
                       </Flex>
                     </td>
                   );

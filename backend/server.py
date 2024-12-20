@@ -188,12 +188,14 @@ def generate_schedules():
                 
                 # Avg teacher rating across all instances
                 ratings_list = [teacher.rating for teacher in current_ratings if teacher.rating is not None]
-                avg_rating = sum(ratings_list)/len(ratings_list) if (len(ratings_list) != 0) else None
+                avg_rating = sum(ratings_list)/len(ratings_list) * 20 if (len(ratings_list) != 0) else None # we want it as a %
                 
                 # All RateMyTeacher links
                 links = [teacher.link for teacher in current_ratings]
+                
+                name = Teacher.query.filter(Teacher.id == period["teacherId"]).first().name
 
-                teacher_ratings[period["teacherId"]] = {"avgRating": avg_rating, "links": links}
+                teacher_ratings[period["teacherId"]] = {"name": name, "avgRating": avg_rating, "links": links}
             
     return jsonify(schedules, {"teacherRatings": teacher_ratings}), 200
     
