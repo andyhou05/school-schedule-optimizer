@@ -197,7 +197,7 @@ def generate_schedules():
 
                 teacher_ratings[period["teacherId"]] = {"name": name, "avgRating": avg_rating, "links": links}
             
-    return jsonify(schedules, {"teacherRatings": teacher_ratings}), 200
+    return jsonify({"schedules": schedules, "teacherRatings": teacher_ratings}), 200
     
 
 @app.route("/")
