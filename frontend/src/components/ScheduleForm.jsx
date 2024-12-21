@@ -5,6 +5,7 @@ import CourseForm from "./CourseForm";
 import PreferencesForm from "./PreferencesForm";
 
 const ScheduleForm = () => {
+  const navigate = useNavigate();
   const [inputCourses, setInputCourses] = useState([]); // This state is used to render the list items
 
   // Used for sending info to API
@@ -14,11 +15,8 @@ const ScheduleForm = () => {
     preferences: { dayOff: "", time: "", breaks: "", intensive: false },
   });
 
-  const navigate = useNavigate();
-
-  // These states are used for animation
-  const [step, setStep] = useState(1);
-  const [direction, setDirection] = useState("forward");
+  // Used to animate between form components
+  const [animation, setAnimation] = useState({ step: 1, direction: "forward" });
 
   const generateSchedules = async () => {
     try {
@@ -45,20 +43,15 @@ const ScheduleForm = () => {
     <Box height="100vh" overflow="hidden">
       <form style={{ overflow: "hidden" }}>
         <CourseForm
-          step={step}
-          setStep={setStep}
-          direction={direction}
-          setDirection={setDirection}
+          animation={animation}
+          setAnimation={setAnimation}
           inputCourses={inputCourses}
           setInputCourses={setInputCourses}
           setUserPreferences={setUserPreferences}
         ></CourseForm>
         <PreferencesForm
-          step={step}
-          setStep={setStep}
-          direction={direction}
-          setDirection={setDirection}
-          userPreferences={userPreferences}
+          animation={animation}
+          setAnimation={setAnimation}
           setUserPreferences={setUserPreferences}
           generate_schedules={generateSchedules}
         ></PreferencesForm>

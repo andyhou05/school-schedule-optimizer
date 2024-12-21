@@ -45,16 +45,18 @@ const PreferenceItem = ({ children, text }) => {
 };
 
 const PreferencesForm = ({
-  step,
-  setStep,
-  direction,
-  setDirection,
+  animation,
+  setAnimation,
   setUserPreferences,
   generate_schedules,
 }) => {
   return (
     <>
-      <FormCard step={2} currentStep={step} direction={direction}>
+      <FormCard
+        step={2}
+        currentStep={animation.step}
+        direction={animation.direction}
+      >
         <Flex align="center" gap="4" ml="9" mb="9">
           <Heading size={"8"} as="h1">
             Preferences
@@ -129,8 +131,10 @@ const PreferencesForm = ({
             style={{ position: "absolute", left: "32px" }}
             onClick={(e) => {
               e.preventDefault();
-              setStep((prev) => prev - 1);
-              setDirection("backward");
+              setAnimation((prev) => ({
+                step: prev.step - 1,
+                direction: "backward",
+              }));
             }}
           >
             Go back

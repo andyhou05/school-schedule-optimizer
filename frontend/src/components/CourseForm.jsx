@@ -19,10 +19,8 @@ import FormCard from "./FormCard";
 import "./styles.css";
 
 const CourseForm = ({
-  step,
-  setStep,
-  direction,
-  setDirection,
+  animation,
+  setAnimation,
   inputCourses,
   setInputCourses,
   setUserPreferences,
@@ -40,8 +38,7 @@ const CourseForm = ({
 
   const onSubmit = (e) => {
     e.preventDefault();
-    setStep((prev) => prev + 1);
-    setDirection("forward");
+    setAnimation((prev) => ({ step: prev.step + 1, direction: "forward" }));
 
     const specificCourses = [];
     const courses = [];
@@ -154,7 +151,11 @@ const CourseForm = ({
 
   return (
     <>
-      <FormCard step={1} currentStep={step} direction={direction}>
+      <FormCard
+        step={1}
+        currentStep={animation.step}
+        direction={animation.direction}
+      >
         <Flex width="400px" direction="column" gap="4" m="auto" mt="50px">
           <Text align="center" size="5">
             Enter Course ID
