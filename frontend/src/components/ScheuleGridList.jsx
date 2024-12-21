@@ -1,15 +1,21 @@
-import React from "react";
-import { Flex, Box, Text } from "@radix-ui/themes";
-import { useLocation } from "react-router";
+import React, { useEffect } from "react";
+import { Flex } from "@radix-ui/themes";
+import { useLocation, useNavigate } from "react-router";
 import "./ScheduleGrid";
 import ScheduleGrid from "./ScheduleGrid";
 
 const ScheduleGridList = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const data = location.state;
+
+  useEffect(() => {
+    if (data == null) navigate("/");
+  }, []);
+
   return (
     <Flex direction="column" height="500vh">
-      {data.schedules.map((schedule, index) => (
+      {data?.schedules.map((schedule, index) => (
         <ScheduleGrid
           key={index}
           coursesData={schedule.periods}
