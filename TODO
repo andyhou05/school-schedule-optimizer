@@ -1,10 +1,12 @@
 ESSENTIAL:
 
-- Render list of ScheduleGrid components
-- Show Schedule scores
+- Route back to form if no data
 - Rate My Teacher links clickable
 - Check for time errors on Course Form
-- Route the application
+- Loader when generating schedules
+- Show not found page for 0 schedules
+- Button to go back
+- Preserve form state with url params
 - Change cell colors based on teacher rating
 - Add text to all tooltips
 
@@ -12,5 +14,6 @@ CODE STRUCTURE:
 
 - Convert Start, End, Duration time on the backend
 - Put each component in its own folder
+- avoid antipatterns
 - Remove useless server routes
 - Handle errors better

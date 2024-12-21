@@ -54,6 +54,7 @@ def score_regular_breaks(schedule: list[Period]) -> float:
     scores = []
     for courses_in_day in weekly_schedule:
         if len(courses_in_day) < 2:
+            scores.append(100)
             continue
         earliest = schedule_helper.get_earliest_course_time(courses_in_day)
         latest = schedule_helper.get_latest_course_time(courses_in_day)
