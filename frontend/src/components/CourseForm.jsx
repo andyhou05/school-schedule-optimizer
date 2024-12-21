@@ -25,8 +25,8 @@ const CourseForm = ({
   setDirection,
   inputCourses,
   setInputCourses,
-  setSpecificCourses,
-  setCourses,
+  userPreferences,
+  setUserPreferences,
 }) => {
   const [input, setInput] = useState("");
   const [toast, setToast] = useState({ open: false, type: "", message: "" });
@@ -54,8 +54,11 @@ const CourseForm = ({
           })
         : courses.push(course.id);
     });
-    setSpecificCourses(specificCourses);
-    setCourses(courses);
+    setUserPreferences({
+      courses: courses,
+      specificCourses: specificCourses,
+      preferences: { dayOff: "", time: "", breaks: "", intensive: false },
+    });
   };
 
   const showToast = (type, sanitizedInput = "") => {

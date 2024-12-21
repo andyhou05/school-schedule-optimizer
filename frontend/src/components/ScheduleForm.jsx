@@ -7,35 +7,23 @@ import PreferencesForm from "./PreferencesForm";
 const ScheduleForm = () => {
   const [inputCourses, setInputCourses] = useState([]); // This state is used to render the list items
 
-  // These states are used for sending info to API
-  const [specificCourses, setSpecificCourses] = useState([]);
-  const [courses, setCourses] = useState([]);
-  const [breaksValue, setBreaksValue] = useState("");
-  const [timeValue, setTimeValue] = useState("");
-  const [dayOffValue, setDayOffValue] = useState("");
-  const [intensive, setIntensive] = useState("");
+  // Used for sending info to API
+  const [userPreferences, setUserPreferences] = useState({
+    courses: [],
+    specificCourses: [],
+    preferences: { dayOff: "", time: "", breaks: "", intensive: false },
+  });
   const navigate = useNavigate();
 
   // These states are used for animation
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState("forward");
 
-  const requestSchedules = async (breaks, time, dayOff, intensive) => {
-    const payload = {
-      courses: courses,
-      specificCourses: specificCourses,
-      preferences: {
-        dayOff,
-        time,
-        breaks,
-        intensive,
-      },
-    };
-
+  const generateSchedules = async () => {
     try {
       const response = await fetch("http://127.0.0.1:5000/generate_schedule", {
         method: "POST",
-        body: JSON.stringify(payload),
+        body: JSON.stringify(userPreferences),
         headers: {
           "Content-Type": "application/json",
         },
@@ -52,25 +40,6 @@ const ScheduleForm = () => {
     }
   };
 
-  const generate_schedules = () => {
-    const breaks =
-      breaksValue == 2 ? "short" : breaksValue == 3 ? "regular" : "";
-    const time = timeValue == 2 ? "morning" : timeValue == 3 ? "evening" : "";
-    const dayOff =
-      dayOffValue == 2
-        ? "Mon."
-        : dayOffValue == 3
-        ? "Tue."
-        : dayOffValue == 4
-        ? "Wed."
-        : dayOffValue == 5
-        ? "Thu."
-        : dayOffValue == 6
-        ? "Fri."
-        : "";
-    requestSchedules(breaks, time, dayOff, intensive);
-  };
-
   return (
     <Box height="100vh" overflow="hidden">
       <form style={{ overflow: "hidden" }}>
@@ -81,20 +50,17 @@ const ScheduleForm = () => {
           setDirection={setDirection}
           inputCourses={inputCourses}
           setInputCourses={setInputCourses}
-          setSpecificCourses={setSpecificCourses}
-          courses={courses}
-          setCourses={setCourses}
+          userPreferences={userPreferences}
+          setUserPreferences={setUserPreferences}
         ></CourseForm>
         <PreferencesForm
           step={step}
           setStep={setStep}
           direction={direction}
           setDirection={setDirection}
-          setBreaksValue={setBreaksValue}
-          setTimeValue={setTimeValue}
-          setDayOffValue={setDayOffValue}
-          setIntensive={setIntensive}
-          generate_schedules={generate_schedules}
+          userPreferences={userPreferences}
+          setUserPreferences={setUserPreferences}
+          generate_schedules={generateSchedules}
         ></PreferencesForm>
       </form>
     </Box>
