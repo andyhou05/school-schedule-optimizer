@@ -187,19 +187,6 @@ const CourseForm = ({
             ></CourseList>
           </ScrollArea>
 
-          <Box position="absolute" bottom="3%" right="12%">
-            <Button
-              size="3"
-              variant="solid"
-              disabled={!inputCourses.length || !validSectionInput}
-              style={{
-                transition: "background-color 0.25s ease, color 0.25s ease",
-              }}
-              onClick={onSubmit}
-            >
-              Continue
-            </Button>
-          </Box>
           <Callout.Root
             color="red"
             role="alert"
@@ -218,6 +205,21 @@ const CourseForm = ({
             </Callout.Text>
           </Callout.Root>
         </Flex>
+        <Box position="absolute" bottom="32px" height="4vh" width="60vw">
+          <Button
+            size="3"
+            variant="solid"
+            disabled={!inputCourses.length || !validSectionInput}
+            style={{
+              transition: "background-color 0.25s ease, color 0.25s ease",
+              position: "absolute",
+              right: "32px",
+            }}
+            onClick={onSubmit}
+          >
+            Continue
+          </Button>
+        </Box>
       </FormCard>
       <ScheduleToast
         title={
