@@ -31,7 +31,7 @@ def generate_schedule(requested_course_ids: list[str], preferences: dict, specif
     filtered_intensive_courses = schedule_helper.filter_intensive(possible_courses, bool(preferences.get("intensive")))
     
     # Filter courses by user day off preference
-    filtered_day_off_courses = schedule_helper.filter_day_off(filtered_intensive_courses, preferences.get("day off"))
+    filtered_day_off_courses = schedule_helper.filter_day_off(filtered_intensive_courses, preferences.get("dayOff"))
     
     # Group courses by their course ids and find the occurences to optimize for beam search
     grouped_courses, course_frequencies = group.group_courses(filtered_day_off_courses)
