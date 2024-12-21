@@ -132,6 +132,7 @@ const PreferencesForm = ({
           <Button
             size="3"
             style={{ position: "absolute", right: "32px" }}
+            type="submit"
             onClick={(e) => {
               e.preventDefault();
               generate_schedules();

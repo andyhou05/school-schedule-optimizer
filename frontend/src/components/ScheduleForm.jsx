@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Box } from "@radix-ui/themes";
+import { useNavigate } from "react-router";
 import CourseForm from "./CourseForm";
 import PreferencesForm from "./PreferencesForm";
 
@@ -13,12 +14,13 @@ const ScheduleForm = () => {
   const [timeValue, setTimeValue] = useState("");
   const [dayOffValue, setDayOffValue] = useState("");
   const [intensive, setIntensive] = useState("");
+  const navigate = useNavigate();
 
   // These states are used for animation
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState("forward");
 
-  const sendRequest = async (breaks, time, dayOff, intensive) => {
+  const requestSchedules = async (breaks, time, dayOff, intensive) => {
     const payload = {
       courses: courses,
       specificCourses: specificCourses,
@@ -45,6 +47,7 @@ const ScheduleForm = () => {
 
       const data = await response.json();
       console.log(data);
+      navigate("/schedules");
     } catch (error) {
       console.log(error);
     }
@@ -66,7 +69,7 @@ const ScheduleForm = () => {
         : dayOffValue == 6
         ? "Fri."
         : "";
-    sendRequest(breaks, time, dayOff, intensive);
+    requestSchedules(breaks, time, dayOff, intensive);
   };
 
   return (
