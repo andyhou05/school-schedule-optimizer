@@ -52,55 +52,6 @@ const PreferencesForm = ({
   setUserPreferences,
   generate_schedules,
 }) => {
-  const setBreaks = (breaksValue) => {
-    breaksValue =
-      breaksValue == 2 ? "short" : breaksValue == 3 ? "regular" : "";
-    setUserPreferences((prev) => ({
-      ...prev,
-      preferences: {
-        dayOff: prev.preferences.dayOff,
-        time: prev.preferences.time,
-        breaks: breaksValue,
-        intensive: prev.preferences.intensive,
-      },
-    }));
-  };
-
-  const setTime = (timeValue) => {
-    setUserPreferences((prev) => ({
-      ...prev,
-      preferences: {
-        dayOff: prev.preferences.dayOff,
-        time: timeValue,
-        breaks: prev.preferences.breaks,
-        intensive: prev.preferences.intensive,
-      },
-    }));
-  };
-
-  const setDayOff = (dayOffValue) => {
-    setUserPreferences((prev) => ({
-      ...prev,
-      preferences: {
-        dayOff: dayOffValue,
-        time: prev.preferences.time,
-        breaks: prev.preferences.breaks,
-        intensive: prev.preferences.intensive,
-      },
-    }));
-  };
-
-  const setIntensive = (intensiveValue) => {
-    setUserPreferences((prev) => ({
-      ...prev,
-      preferences: {
-        dayOff: prev.preferences.dayOff,
-        time: prev.preferences.time,
-        breaks: prev.preferences.breaks,
-        intensive: intensiveValue,
-      },
-    }));
-  };
   return (
     <>
       <FormCard step={2} currentStep={step} direction={direction}>
@@ -127,7 +78,9 @@ const PreferencesForm = ({
               size="3"
               gap="9"
               items={["No Preferences", "Short Breaks", "Regular Breaks"]}
-              setSelectedValue={setBreaks}
+              API_values={["", "short", "regular"]}
+              name="breaks"
+              setUserPreferences={setUserPreferences}
             ></PreferenceRadioCards>
           </PreferenceItem>
           <PreferenceItem text="Class Time">
@@ -135,7 +88,9 @@ const PreferencesForm = ({
               size="3"
               gap="9"
               items={["No Preferences", "Morning Classes", "Evening Classes"]}
-              setSelectedValue={setTime}
+              API_values={["", "morning", "evening"]}
+              name="time"
+              setUserPreferences={setUserPreferences}
             ></PreferenceRadioCards>
           </PreferenceItem>
           <PreferenceItem text="Day Off">
@@ -150,7 +105,9 @@ const PreferencesForm = ({
                 "Thursday",
                 "Friday",
               ]}
-              setSelectedValue={setDayOff}
+              API_values={["", "Mon.", "Tue.", "Wed.", "Thu.", "Fri."]}
+              name="dayOff"
+              setUserPreferences={setUserPreferences}
             ></PreferenceRadioCards>
           </PreferenceItem>
           <PreferenceItem text="Intensive">
@@ -158,7 +115,10 @@ const PreferencesForm = ({
               ml="3"
               size="3"
               onCheckedChange={(e) => {
-                setIntensive(e);
+                setUserPreferences((prev) => ({
+                  ...prev,
+                  preferences: { ...prev.preferences, intensive: e },
+                }));
               }}
             ></Checkbox>
           </PreferenceItem>

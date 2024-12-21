@@ -25,7 +25,6 @@ const CourseForm = ({
   setDirection,
   inputCourses,
   setInputCourses,
-  userPreferences,
   setUserPreferences,
 }) => {
   const [input, setInput] = useState("");

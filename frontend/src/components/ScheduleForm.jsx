@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box } from "@radix-ui/themes";
 import { useNavigate } from "react-router";
 import CourseForm from "./CourseForm";
@@ -13,6 +13,7 @@ const ScheduleForm = () => {
     specificCourses: [],
     preferences: { dayOff: "", time: "", breaks: "", intensive: false },
   });
+
   const navigate = useNavigate();
 
   // These states are used for animation
@@ -50,7 +51,6 @@ const ScheduleForm = () => {
           setDirection={setDirection}
           inputCourses={inputCourses}
           setInputCourses={setInputCourses}
-          userPreferences={userPreferences}
           setUserPreferences={setUserPreferences}
         ></CourseForm>
         <PreferencesForm

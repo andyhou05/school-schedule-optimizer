@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 import { RadioCards, Text } from "@radix-ui/themes";
 
-const PreferenceRadioCards = ({ size, gap, items = [], setSelectedValue }) => {
-  const handleChange = (e) => {
+const PreferenceRadioCards = ({
+  size,
+  gap,
+  items,
+  API_values, // keys that match API params
+  name,
+  setUserPreferences,
+}) => {
+  const handleChange = (index) => {
     setUserPreferences((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      preferences: { ...prev.preferences, [name]: API_values[index - 1] },
     }));
   };
 
@@ -17,8 +24,7 @@ const PreferenceRadioCards = ({ size, gap, items = [], setSelectedValue }) => {
       size={size}
       gap={gap}
       columns={{ initial: "1", sm: `${items.length}` }}
-      name="myName"
-      onValueChange={(value) => setSelectedValue(value)}
+      onValueChange={(index) => handleChange(index)}
     >
       {items.map((item, index) => (
         <RadioCards.Item value={`${index + 1}`} key={index}>
