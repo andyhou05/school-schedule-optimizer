@@ -46,8 +46,7 @@ const ScheduleForm = () => {
       }
 
       const data = await response.json();
-      console.log(data);
-      navigate("/schedules");
+      navigate("/schedules", { state: data });
     } catch (error) {
       console.log(error);
     }
