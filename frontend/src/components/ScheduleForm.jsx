@@ -45,8 +45,9 @@ const ScheduleForm = () => {
   // Used to animate between form components
   const [animation, setAnimation] = useState({ step: 1, direction: "forward" });
 
-  const generateSchedules = async () => {
+  const generateSchedules = async (setIsLoading) => {
     try {
+      setIsLoading(true);
       const response = await fetch("http://127.0.0.1:5000/generate_schedule", {
         method: "POST",
         body: JSON.stringify(userInput),
@@ -61,6 +62,7 @@ const ScheduleForm = () => {
 
       const data = await response.json();
       navigate("/schedules", { state: data });
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }

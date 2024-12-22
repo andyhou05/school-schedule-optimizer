@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   Text,
   Flex,
@@ -47,6 +47,7 @@ const PreferenceItem = ({ children, text }) => {
 
 const PreferencesForm = ({ animation, setAnimation, generate_schedules }) => {
   const dispatch = useContext(DispatchUserInputContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <>
@@ -138,9 +139,10 @@ const PreferencesForm = ({ animation, setAnimation, generate_schedules }) => {
             size="3"
             style={{ position: "absolute", right: "32px" }}
             type="submit"
+            loading={isLoading}
             onClick={(e) => {
               e.preventDefault();
-              generate_schedules();
+              generate_schedules(setIsLoading);
             }}
           >
             Generate Schedules
