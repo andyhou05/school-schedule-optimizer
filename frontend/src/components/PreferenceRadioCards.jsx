@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { RadioCards, Text } from "@radix-ui/themes";
+import { UserInputContext } from "./ScheduleForm";
 
 const PreferenceRadioCards = ({
   size,
@@ -7,10 +8,11 @@ const PreferenceRadioCards = ({
   items,
   API_values, // keys that match API params
   name,
-  setUserPreferences,
 }) => {
+  const setUserInput = useContext(UserInputContext);
+
   const handleChange = (index) => {
-    setUserPreferences((prev) => ({
+    setUserInput((prev) => ({
       ...prev,
       preferences: { ...prev.preferences, [name]: API_values[index - 1] },
     }));

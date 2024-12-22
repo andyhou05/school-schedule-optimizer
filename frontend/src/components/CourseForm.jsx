@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import {
   Text,
   TextField,
@@ -16,6 +16,7 @@ import {
 import ScheduleToast from "./ScheduleToast";
 import CourseList from "./CourseList";
 import FormCard from "./FormCard";
+import { UserInputContext } from "./ScheduleForm";
 import "./styles.css";
 
 const CourseForm = ({
@@ -23,8 +24,9 @@ const CourseForm = ({
   setAnimation,
   inputCourses,
   setInputCourses,
-  setUserPreferences,
 }) => {
+  const setUserInput = useContext(UserInputContext);
+
   const [input, setInput] = useState("");
   const [toast, setToast] = useState({ open: false, type: "", message: "" });
   const [validSectionInput, setValidSectionInput] = useState(true);
@@ -50,7 +52,7 @@ const CourseForm = ({
           })
         : courses.push(course.id);
     });
-    setUserPreferences({
+    setUserInput({
       courses: courses,
       specificCourses: specificCourses,
       preferences: { dayOff: "", time: "", breaks: "", intensive: false },

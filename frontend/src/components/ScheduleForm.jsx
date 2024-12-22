@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, createContext, useContext } from "react";
 import { Box } from "@radix-ui/themes";
 import { useNavigate } from "react-router";
 import CourseForm from "./CourseForm";
 import PreferencesForm from "./PreferencesForm";
+
+export const UserInputContext = createContext();
 
 const ScheduleForm = () => {
   const navigate = useNavigate();
   const [inputCourses, setInputCourses] = useState([]); // This state is used to render the list items
 
   // Used for sending info to API
-  const [userPreferences, setUserPreferences] = useState({
+  const [userInput, setUserInput] = useState({
     courses: [],
     specificCourses: [],
     preferences: { dayOff: "", time: "", breaks: "", intensive: false },
@@ -22,7 +24,7 @@ const ScheduleForm = () => {
     try {
       const response = await fetch("http://127.0.0.1:5000/generate_schedule", {
         method: "POST",
-        body: JSON.stringify(userPreferences),
+        body: JSON.stringify(userInput),
         headers: {
           "Content-Type": "application/json",
         },
@@ -42,19 +44,19 @@ const ScheduleForm = () => {
   return (
     <Box height="100vh" overflow="hidden">
       <form style={{ overflow: "hidden" }}>
-        <CourseForm
-          animation={animation}
-          setAnimation={setAnimation}
-          inputCourses={inputCourses}
-          setInputCourses={setInputCourses}
-          setUserPreferences={setUserPreferences}
-        ></CourseForm>
-        <PreferencesForm
-          animation={animation}
-          setAnimation={setAnimation}
-          setUserPreferences={setUserPreferences}
-          generate_schedules={generateSchedules}
-        ></PreferencesForm>
+        <UserInputContext.Provider value={setUserInput}>
+          <CourseForm
+            animation={animation}
+            setAnimation={setAnimation}
+            setInputCourses={setInputCourses}
+            inputCourses={inputCourses}
+          ></CourseForm>
+          <PreferencesForm
+            animation={animation}
+            setAnimation={setAnimation}
+            generate_schedules={generateSchedules}
+          ></PreferencesForm>
+        </UserInputContext.Provider>
       </form>
     </Box>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import {
   Text,
   Flex,
@@ -17,6 +17,7 @@ import {
 } from "@radix-ui/react-icons";
 import FormCard from "./FormCard";
 import PreferenceRadioCards from "./PreferenceRadioCards";
+import { UserInputContext } from "./ScheduleForm";
 
 const PreferenceItem = ({ children, text }) => {
   return (
@@ -44,12 +45,9 @@ const PreferenceItem = ({ children, text }) => {
   );
 };
 
-const PreferencesForm = ({
-  animation,
-  setAnimation,
-  setUserPreferences,
-  generate_schedules,
-}) => {
+const PreferencesForm = ({ animation, setAnimation, generate_schedules }) => {
+  const setUserInput = useContext(UserInputContext);
+
   return (
     <>
       <FormCard
@@ -82,7 +80,6 @@ const PreferencesForm = ({
               items={["No Preferences", "Short Breaks", "Regular Breaks"]}
               API_values={["", "short", "regular"]}
               name="breaks"
-              setUserPreferences={setUserPreferences}
             ></PreferenceRadioCards>
           </PreferenceItem>
           <PreferenceItem text="Class Time">
@@ -92,7 +89,6 @@ const PreferencesForm = ({
               items={["No Preferences", "Morning Classes", "Evening Classes"]}
               API_values={["", "morning", "evening"]}
               name="time"
-              setUserPreferences={setUserPreferences}
             ></PreferenceRadioCards>
           </PreferenceItem>
           <PreferenceItem text="Day Off">
@@ -109,7 +105,6 @@ const PreferencesForm = ({
               ]}
               API_values={["", "Mon.", "Tue.", "Wed.", "Thu.", "Fri."]}
               name="dayOff"
-              setUserPreferences={setUserPreferences}
             ></PreferenceRadioCards>
           </PreferenceItem>
           <PreferenceItem text="Intensive">
@@ -117,7 +112,7 @@ const PreferencesForm = ({
               ml="3"
               size="3"
               onCheckedChange={(e) => {
-                setUserPreferences((prev) => ({
+                setUserInput((prev) => ({
                   ...prev,
                   preferences: { ...prev.preferences, intensive: e },
                 }));
