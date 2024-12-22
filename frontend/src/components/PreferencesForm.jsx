@@ -17,7 +17,7 @@ import {
 } from "@radix-ui/react-icons";
 import FormCard from "./FormCard";
 import PreferenceRadioCards from "./PreferenceRadioCards";
-import { UserInputContext } from "./ScheduleForm";
+import { DispatchUserInputContext, ACTIONS } from "./ScheduleForm";
 
 const PreferenceItem = ({ children, text }) => {
   return (
@@ -46,7 +46,7 @@ const PreferenceItem = ({ children, text }) => {
 };
 
 const PreferencesForm = ({ animation, setAnimation, generate_schedules }) => {
-  const setUserInput = useContext(UserInputContext);
+  const dispatch = useContext(DispatchUserInputContext);
 
   return (
     <>
@@ -112,10 +112,10 @@ const PreferencesForm = ({ animation, setAnimation, generate_schedules }) => {
               ml="3"
               size="3"
               onCheckedChange={(e) => {
-                setUserInput((prev) => ({
-                  ...prev,
-                  preferences: { ...prev.preferences, intensive: e },
-                }));
+                dispatch({
+                  type: ACTIONS.updatePreferences,
+                  payload: { updatedPreference: "intensive", value: e },
+                });
               }}
             ></Checkbox>
           </PreferenceItem>

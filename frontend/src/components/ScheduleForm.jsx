@@ -1,17 +1,42 @@
-import React, { useState, createContext, useContext } from "react";
+import React, { useState, createContext, useReducer } from "react";
 import { Box } from "@radix-ui/themes";
 import { useNavigate } from "react-router";
 import CourseForm from "./CourseForm";
 import PreferencesForm from "./PreferencesForm";
 
-export const UserInputContext = createContext();
+export const DispatchUserInputContext = createContext();
+
+export const ACTIONS = {
+  submitCourseForm: "submitCourseForm",
+  updatePreferences: "updatePreferences",
+};
+
+const reducer = (userInput, action) => {
+  switch (action.type) {
+    case ACTIONS.submitCourseForm:
+      return {
+        courses: action.payload.courses,
+        specificCourses: action.payload.specificCourses,
+        preferences: action.payload.preferences,
+      };
+
+    case ACTIONS.updatePreferences:
+      return {
+        ...userInput,
+        preferences: {
+          ...userInput.preferences,
+          [action.payload.updatedPreference]: action.payload.value,
+        },
+      };
+  }
+};
 
 const ScheduleForm = () => {
   const navigate = useNavigate();
   const [inputCourses, setInputCourses] = useState([]); // This state is used to render the list items
 
   // Used for sending info to API
-  const [userInput, setUserInput] = useState({
+  const [userInput, dispatch] = useReducer(reducer, {
     courses: [],
     specificCourses: [],
     preferences: { dayOff: "", time: "", breaks: "", intensive: false },
@@ -44,7 +69,7 @@ const ScheduleForm = () => {
   return (
     <Box height="100vh" overflow="hidden">
       <form style={{ overflow: "hidden" }}>
-        <UserInputContext.Provider value={setUserInput}>
+        <DispatchUserInputContext.Provider value={dispatch}>
           <CourseForm
             animation={animation}
             setAnimation={setAnimation}
@@ -56,7 +81,7 @@ const ScheduleForm = () => {
             setAnimation={setAnimation}
             generate_schedules={generateSchedules}
           ></PreferencesForm>
-        </UserInputContext.Provider>
+        </DispatchUserInputContext.Provider>
       </form>
     </Box>
   );

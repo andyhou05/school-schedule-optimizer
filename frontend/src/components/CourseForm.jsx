@@ -16,7 +16,7 @@ import {
 import ScheduleToast from "./ScheduleToast";
 import CourseList from "./CourseList";
 import FormCard from "./FormCard";
-import { UserInputContext } from "./ScheduleForm";
+import { DispatchUserInputContext, ACTIONS } from "./ScheduleForm";
 import "./styles.css";
 
 const CourseForm = ({
@@ -25,7 +25,7 @@ const CourseForm = ({
   inputCourses,
   setInputCourses,
 }) => {
-  const setUserInput = useContext(UserInputContext);
+  const dispatch = useContext(DispatchUserInputContext);
 
   const [input, setInput] = useState("");
   const [toast, setToast] = useState({ open: false, type: "", message: "" });
@@ -52,10 +52,13 @@ const CourseForm = ({
           })
         : courses.push(course.id);
     });
-    setUserInput({
-      courses: courses,
-      specificCourses: specificCourses,
-      preferences: { dayOff: "", time: "", breaks: "", intensive: false },
+    dispatch({
+      type: ACTIONS.submitCourseForm,
+      payload: {
+        courses: courses,
+        specificCourses: specificCourses,
+        preferences: { dayOff: "", time: "", breaks: "", intensive: false },
+      },
     });
   };
 
