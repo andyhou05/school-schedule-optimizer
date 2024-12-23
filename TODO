@@ -3,11 +3,11 @@ ESSENTIAL:
 - Preserve form state for user input
 - Rate My Teacher links clickable
 - Check for time errors on Course Form
-- Loader when generating schedules
 - Show not found page for 0 schedules
 - Button to go back
 - Change cell colors based on teacher rating
 - Add text to all tooltips
+- Add text saying request may take minutes
 
 CODE STRUCTURE:
 

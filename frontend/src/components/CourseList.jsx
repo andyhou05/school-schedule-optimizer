@@ -63,7 +63,7 @@ const CourseList = ({
   };
 
   const validateSection = (inputCourse) => {
-    return !inputCourse.section.length
+    return !inputCourse.section?.length
       ? true
       : coursesData.current.some(
           (course) =>

@@ -28,8 +28,8 @@ const CourseForm = ({
   const dispatch = useContext(DispatchUserInputContext);
 
   const [input, setInput] = useState("");
-  const [toast, setToast] = useState({ open: false, type: "", message: "" });
   const [validSectionInput, setValidSectionInput] = useState(true);
+  const [toast, setToast] = useState({ open: false, type: "", message: "" });
 
   const timerRef = useRef(0);
   const lastAddedCourse = useRef("");
@@ -45,7 +45,7 @@ const CourseForm = ({
     const specificCourses = [];
     const courses = [];
     inputCourses.forEach((course) => {
-      course.section.length > 0
+      course.section?.length > 0
         ? specificCourses.push({
             course_id: course.id,
             section: course.section,
@@ -106,6 +106,7 @@ const CourseForm = ({
   };
 
   useEffect(() => {
+    // Fetch course data from API
     fetchCourseData().then(
       (coursesArray) => (coursesData.current = coursesArray)
     );

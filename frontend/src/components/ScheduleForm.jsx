@@ -1,4 +1,4 @@
-import React, { useState, createContext, useReducer } from "react";
+import React, { useState, createContext, useReducer, useEffect } from "react";
 import { Box } from "@radix-ui/themes";
 import { useNavigate } from "react-router";
 import CourseForm from "./CourseForm";
@@ -33,17 +33,45 @@ const reducer = (userInput, action) => {
 
 const ScheduleForm = () => {
   const navigate = useNavigate();
-  const [inputCourses, setInputCourses] = useState([]); // This state is used to render the list items
+
+  // This state is used to render the list items
+  const [inputCourses, setInputCourses] = useState(
+    JSON.parse(window.sessionStorage.getItem("SCHEDULE_FORM"))?.inputCourses ??
+      []
+  );
 
   // Used for sending info to API
-  const [userInput, dispatch] = useReducer(reducer, {
-    courses: [],
-    specificCourses: [],
-    preferences: { dayOff: "", time: "", breaks: "", intensive: false },
-  });
+  const [userInput, dispatch] = useReducer(
+    reducer,
+    JSON.parse(window.sessionStorage.getItem("SCHEDULE_FORM"))?.userInput ?? {
+      courses: [],
+      specificCourses: [],
+      preferences: { dayOff: "", time: "", breaks: "", intensive: false },
+    }
+  );
 
   // Used to animate between form components
-  const [animation, setAnimation] = useState({ step: 1, direction: "forward" });
+  const [animation, setAnimation] = useState(
+    JSON.parse(window.sessionStorage.getItem("SCHEDULE_FORM"))?.animation ?? {
+      step: 1,
+      direction: "forward",
+    }
+  );
+
+  // Save component values in session
+  useEffect(() => {
+    window.sessionStorage.setItem(
+      "SCHEDULE_FORM",
+      JSON.stringify({
+        inputCourses: inputCourses.map((value) => ({
+          id: value.id,
+          section: "",
+        })),
+        userInput,
+        animation,
+      })
+    );
+  }, [inputCourses, userInput, animation]);
 
   const generateSchedules = async (setIsLoading) => {
     try {
