@@ -44,6 +44,7 @@ class Period(db.Model):
     day = db.Column(db.String(15), unique=False, nullable=False)
     time = db.Column(db.String(50), unique=False, nullable=False)
     intensive = db.Column(db.Boolean(), unique=False, nullable=False)
+    semester = db.Column(db.String(10), unique=False, nullable=False)
     
     def to_json(self):
         return {
@@ -55,7 +56,8 @@ class Period(db.Model):
             "teacherId":self.teacher_id,
             "day":self.day,
             "time":self.time,
-            "intensive":self.intensive
+            "intensive":self.intensive,
+            "semester": self.semester
         }
         
     def __repr__(self):

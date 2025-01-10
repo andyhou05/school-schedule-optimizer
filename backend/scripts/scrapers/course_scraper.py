@@ -13,7 +13,7 @@ from scripts.db_helper import connect_db
 from scripts.db_helper import add_entry
 from models import Period
 from models import Teacher
-from config import db
+from config import db, SEMESTER
 
 def split_general_info(input_string: str) -> list:
     """
@@ -158,7 +158,7 @@ def scrape_courses(driver: WebDriver, start_page: int = 1):
             general_info = split_general_info(general_course_list_info[i].text) # section, course ID, title, seats
             
             # Scroll down
-            driver.execute_script( f"window.scrollTo( 0, {(i + 1) * 75} )" )
+            driver.execute_script( f"window.scrollTo( 0, {(i + 1) * 50} )" )
             
             # Need to click class info to get teachers and time slots
             course_info_buttons[i].click()
@@ -190,7 +190,7 @@ def scrape_courses(driver: WebDriver, start_page: int = 1):
                 else:
                     teacher_id = teacher_query[0].to_json()['id']
                     
-                course = Period(section=general_info[0], course_id=general_info[1], name=general_info[2], seats=general_info[3], day=day, time=time_slot, teacher_id = teacher_id)
+                course = Period(section=general_info[0], course_id=general_info[1], name=general_info[2], seats=general_info[3], day=day, time=time_slot, teacher_id = teacher_id, semester=SEMESTER)
                 add_entry(session, course)
             
             # Close modal window
@@ -201,7 +201,7 @@ def scrape_courses(driver: WebDriver, start_page: int = 1):
         pages = driver.find_elements(By.XPATH, '//ul[@class="pagination"]/li/a')
         pages[-1].click()
     
-    def run_scraper():
-        driver = Driver(uc=True)
-        driver.get("https://vanierlivecourseschedule.powerappsportals.com/") # MAKE THE WINDOW LONG TO AVOID UNCLICKABLE ELEMENT
-        scrape_courses(driver, start_page=0)
+def run_scraper():
+    driver = Driver(uc=True)
+    driver.get("https://vanierlivecourseschedule.powerappsportals.com/") # MAKE THE WINDOW LONG TO AVOID UNCLICKABLE ELEMENT
+    scrape_courses(driver, start_page=1)

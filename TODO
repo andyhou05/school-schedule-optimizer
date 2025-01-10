@@ -1,5 +1,7 @@
 ESSENTIAL:
 
+- Winter 25 semester
+- Spots available
 - Preserve form state for user input
 - Rate My Teacher links clickable
 - Check for time errors on Course Form
@@ -13,6 +15,6 @@ CODE STRUCTURE:
 
 - Convert Start, End, Duration time on the backend
 - Put each component in its own folder
-- avoid antipatterns
+- avoid antipatterns, minimize inital load time
 - Remove useless server routes
 - Handle errors better

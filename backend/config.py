@@ -4,6 +4,7 @@ from flask_cors import CORS
 
 import os
 
+SEMESTER = "W25" # set to Fxx, Wxx, or Sxx (fall, winter, summer)
 
 app = Flask(__name__)
 CORS(app)

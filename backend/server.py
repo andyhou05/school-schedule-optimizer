@@ -117,6 +117,12 @@ def get_courses():
     json_courses = list(map(lambda x : x.to_json(), courses))
     return jsonify({"courses": json_courses}), 200
 
+@app.route("/courses/<semester>", methods=["GET"])
+def get_courses_semester(semester):
+    courses = Period.query.filter(Period.semester == semester).all()
+    json_courses = list(map(lambda x : x.to_json(), courses))
+    return jsonify({"courses": json_courses}), 200
+
 @app.route("/create_course", methods=["POST"])
 def create_course():
     section = request.json.get("section")
