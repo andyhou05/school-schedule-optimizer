@@ -186,6 +186,7 @@ def scrape_courses(driver: WebDriver, start_page: int = 1):
                 if len(teacher_query) == 0:
                     new_teacher = Teacher(name=teacher_name)
                     add_entry(session, new_teacher)
+                    print(f"page {page + 1 + start_page}")
                     teacher_id = new_teacher.id
                 else:
                     teacher_id = teacher_query[0].to_json()['id']
@@ -201,7 +202,7 @@ def scrape_courses(driver: WebDriver, start_page: int = 1):
         pages = driver.find_elements(By.XPATH, '//ul[@class="pagination"]/li/a')
         pages[-1].click()
     
-def run_scraper():
+def run_scraper(page: int = 1):
     driver = Driver(uc=True)
     driver.get("https://vanierlivecourseschedule.powerappsportals.com/") # MAKE THE WINDOW LONG TO AVOID UNCLICKABLE ELEMENT
-    scrape_courses(driver, start_page=1)
+    scrape_courses(driver, start_page=page)

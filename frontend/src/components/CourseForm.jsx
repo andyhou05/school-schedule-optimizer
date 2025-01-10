@@ -95,7 +95,7 @@ const CourseForm = ({
   // Fetch all existing courses for input validation
   const fetchCourseData = async () => {
     try {
-      const result = await fetch("http://127.0.0.1:5000/courses").then(
+      const result = await fetch("http://127.0.0.1:5000/courses/W25").then(
         (response) => response.json()
       );
       return result.courses || [];
