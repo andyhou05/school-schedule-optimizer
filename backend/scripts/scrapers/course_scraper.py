@@ -186,13 +186,13 @@ def scrape_courses(driver: WebDriver, start_page: int = 1):
                 if len(teacher_query) == 0:
                     new_teacher = Teacher(name=teacher_name)
                     add_entry(session, new_teacher)
-                    print(f"page {page + 1 + start_page}")
                     teacher_id = new_teacher.id
                 else:
                     teacher_id = teacher_query[0].to_json()['id']
                     
                 course = Period(section=general_info[0], course_id=general_info[1], name=general_info[2], seats=general_info[3], day=day, time=time_slot, teacher_id = teacher_id, semester=SEMESTER)
                 add_entry(session, course)
+                print(f"page {page + 1 + start_page}")
             
             # Close modal window
             driver.switch_to.default_content()

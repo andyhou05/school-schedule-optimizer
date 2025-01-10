@@ -39,5 +39,5 @@ if __name__ == "__main__":
     
     
     # COURSE SCRAPER
-    course_scraper.run_scraper(page=20)
+    course_scraper.run_scraper(page=38)
     
