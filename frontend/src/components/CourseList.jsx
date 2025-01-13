@@ -52,7 +52,7 @@ const CourseList = ({
 
       return newInputCourses;
     });
-  }, [section]);
+  }, [section, coursesData]);
 
   const handleDelete = (courseToDelete, index) => {
     setInputCourses(
@@ -76,7 +76,7 @@ const CourseList = ({
   const validateSection = (inputCourse) => {
     return !inputCourse.sectionValue?.length
       ? true
-      : coursesData.current.some(
+      : coursesData.some(
           (course) =>
             course.courseId == inputCourse.id &&
             course.section == inputCourse.sectionValue
@@ -151,11 +151,15 @@ const CourseList = ({
                     value={inputCourses[index].sectionInput}
                     style={{
                       outlineColor:
-                        section[index] && !validateSection(inputCourses[index])
+                        section[index] &&
+                        !validateSection(inputCourses[index]) &&
+                        coursesData.length
                           ? "var(--red-6)"
                           : "var(--slate-7)",
                       backgroundColor:
-                        section[index] && !validateSection(inputCourses[index])
+                        section[index] &&
+                        !validateSection(inputCourses[index]) &&
+                        coursesData.length
                           ? "var(--red-4)"
                           : "var(--slate-5)",
                       transition:

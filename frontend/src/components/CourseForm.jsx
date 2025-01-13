@@ -30,11 +30,11 @@ const CourseForm = ({
   const [input, setInput] = useState("");
   const [validSectionInput, setValidSectionInput] = useState(true);
   const [toast, setToast] = useState({ open: false, type: "", message: "" });
+  const [coursesData, setCoursesData] = useState([]);
 
   const timerRef = useRef(0);
   const lastAddedCourse = useRef("");
   const duplicateCourse = useRef("");
-  const coursesData = useRef([]);
   const lastToastMessage = useRef("");
   const lastToastType = useRef("");
 
@@ -108,9 +108,7 @@ const CourseForm = ({
 
   useEffect(() => {
     // Fetch course data from API
-    fetchCourseData().then(
-      (coursesArray) => (coursesData.current = coursesArray)
-    );
+    fetchCourseData().then((coursesArray) => setCoursesData(coursesArray));
   }, []);
 
   // Removes all white space and makes all characters upper case.
@@ -119,7 +117,7 @@ const CourseForm = ({
   };
 
   const validateCourseId = (id) => {
-    return coursesData.current.some((course) => course.courseId == id);
+    return coursesData.some((course) => course.courseId == id);
   };
 
   const onEnter = (e) => {
@@ -200,7 +198,7 @@ const CourseForm = ({
             style={{
               position: "absolute",
               bottom: "16px",
-              opacity: !validSectionInput ? "1" : "0",
+              opacity: !validSectionInput && coursesData.length ? "1" : "0",
               transition: "opacity 0.25s ease",
             }}
           >
@@ -216,7 +214,9 @@ const CourseForm = ({
           <Button
             size="3"
             variant="solid"
-            disabled={!inputCourses.length || !validSectionInput}
+            disabled={
+              !inputCourses.length || !validSectionInput || !coursesData.length
+            }
             style={{
               transition: "background-color 0.25s ease, color 0.25s ease",
               position: "absolute",
