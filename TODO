@@ -1,6 +1,6 @@
 ESSENTIAL:
 
-- Preserve form state for user input
+- Preserve form state for user input (section numbers, keep track of section value and section input)
 - Rate My Teacher links clickable
 - Check for time errors on Course Form
 - Show not found page for 0 schedules

@@ -45,10 +45,11 @@ const CourseForm = ({
     const specificCourses = [];
     const courses = [];
     inputCourses.forEach((course) => {
-      course.section?.length > 0
+      course.sectionInput?.length > 0
         ? specificCourses.push({
             course_id: course.id,
-            section: course.section,
+            sectionInput: course.sectionInput,
+            sectionValue: course.sectionValue,
           })
         : courses.push(course.id);
     });
@@ -135,7 +136,7 @@ const CourseForm = ({
       ) {
         setInputCourses([
           ...inputCourses,
-          { id: sanitizedCourseInput, section: "" },
+          { id: sanitizedCourseInput, sectionInput: "", sectionValue: "" },
         ]);
         showToast("add", sanitizedCourseInput);
       }

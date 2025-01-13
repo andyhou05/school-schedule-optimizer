@@ -65,7 +65,8 @@ const ScheduleForm = () => {
       JSON.stringify({
         inputCourses: inputCourses.map((value) => ({
           id: value.id,
-          section: "",
+          sectionInput: value.sectionInput,
+          sectionValue: value.sectionValue,
         })),
         userInput,
         animation,

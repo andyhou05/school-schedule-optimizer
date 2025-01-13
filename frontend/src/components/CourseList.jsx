@@ -19,7 +19,14 @@ const CourseList = ({
   showToast,
   coursesData,
 }) => {
-  const [sectionInput, setSectionInput] = useState([]);
+  const [section, setSection] = useState(
+    JSON.parse(
+      window.sessionStorage.getItem("SCHEDULE_FORM")
+    )?.inputCourses.map((course) => ({
+      input: course.sectionInput,
+      value: course.sectionValue,
+    })) ?? [{ input: "", value: "" }]
+  );
   const [sectionIndex, setSectionIndex] = useState(0);
 
   // Used to update state in CourseForm, ensures the update happens after rendering of this component
@@ -28,7 +35,11 @@ const CourseList = ({
     setInputCourses((prev) => {
       const newInputCourses = prev.map((course, currentIndex) => {
         return sectionIndex == currentIndex
-          ? { id: course.id, section: sectionInput[sectionIndex] }
+          ? {
+              id: course.id,
+              sectionInput: section[sectionIndex].input,
+              sectionValue: transformSectionInput(section[sectionIndex].value),
+            }
           : course;
       });
 
@@ -41,14 +52,14 @@ const CourseList = ({
 
       return newInputCourses;
     });
-  }, [sectionInput]);
+  }, [section]);
 
   const handleDelete = (courseToDelete, index) => {
     setInputCourses(
       inputCourses.filter((course) => course.id !== courseToDelete)
     );
     showToast("delete", courseToDelete);
-    setSectionInput((prev) => {
+    setSection((prev) => {
       const updatedSectionInput = [...prev].filter((_, i) => i !== index);
 
       // Update validity
@@ -63,24 +74,28 @@ const CourseList = ({
   };
 
   const validateSection = (inputCourse) => {
-    return !inputCourse.section?.length
+    return !inputCourse.sectionValue?.length
       ? true
       : coursesData.current.some(
           (course) =>
             course.courseId == inputCourse.id &&
-            course.section == inputCourse.section
+            course.section == inputCourse.sectionValue
         );
+  };
+
+  const transformSectionInput = (input = "") => {
+    return input.length >= 5 || input.length == 0
+      ? input
+      : "0".repeat(5 - input.length).concat(input);
   };
 
   const handleSectionInput = (value, index) => {
     setSectionIndex(index);
-    setSectionInput((prev) => {
+    setSection((prev) => {
       // Update the section input
       const updatedSectionInput = [...prev];
-      updatedSectionInput[index] =
-        value.length >= 5 || value.length == 0
-          ? value
-          : "0".repeat(5 - value.length).concat(value);
+      updatedSectionInput[index].input = value;
+      updatedSectionInput[index].value = transformSectionInput(value);
 
       return updatedSectionInput;
     });
@@ -133,15 +148,14 @@ const CourseList = ({
                     variant="soft"
                     id="section"
                     placeholder="00000"
+                    value={inputCourses[index].sectionInput}
                     style={{
                       outlineColor:
-                        sectionInput[index] &&
-                        !validateSection(inputCourses[index])
+                        section[index] && !validateSection(inputCourses[index])
                           ? "var(--red-6)"
                           : "var(--slate-7)",
                       backgroundColor:
-                        sectionInput[index] &&
-                        !validateSection(inputCourses[index])
+                        section[index] && !validateSection(inputCourses[index])
                           ? "var(--red-4)"
                           : "var(--slate-5)",
                       transition:
