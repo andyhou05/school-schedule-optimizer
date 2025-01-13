@@ -48,8 +48,7 @@ const CourseForm = ({
       course.sectionInput?.length > 0
         ? specificCourses.push({
             course_id: course.id,
-            sectionInput: course.sectionInput,
-            sectionValue: course.sectionValue,
+            section: course.sectionValue,
           })
         : courses.push(course.id);
     });

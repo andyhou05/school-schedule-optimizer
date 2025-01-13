@@ -5,6 +5,7 @@ ESSENTIAL:
 - Check for time errors on Course Form
 - Show not found page for 0 schedules
 - Button to go back
+- Remove duplicate periods in db
 - Change cell colors based on teacher rating
 - Add text to all tooltips
 - Add text saying request may take minutes

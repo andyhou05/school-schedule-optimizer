@@ -6,6 +6,7 @@ from functools import lru_cache
 from models import Period
 from models import TeacherRatings
 from scripts.schedule import scorer
+from config import SEMESTER
 
 @lru_cache()
 def time_to_int(time: str) -> int:
@@ -153,5 +154,5 @@ def add_specific_courses(specific_courses: list[dict], session: Session, total_n
     for course_dict in specific_courses:
         course_id = course_dict["course_id"]
         section = course_dict["section"]
-        periods.extend(session.query(Period).filter(Period.course_id == course_id, Period.section == section).all())
+        periods.extend(session.query(Period).filter(Period.course_id == course_id, Period.section == section, Period.semester == SEMESTER).all())
     return [{"periods": periods, "score": scorer.score_schedule(periods, len(specific_courses)/total_number_of_courses, preferences, session) }]
