@@ -4,57 +4,113 @@ import { useNavigate } from "react-router";
 import CourseForm from "./CourseForm";
 import PreferencesForm from "./PreferencesForm";
 
-export const DispatchUserInputContext = createContext();
+export const DispatchUserChoices = createContext();
+export const DispatchAnimationContext = createContext();
 
 export const ACTIONS = {
+  animationNext: "animationNext",
+  animationPrevious: "animationPrevious",
+
   submitCourseForm: "submitCourseForm",
   updatePreferences: "updatePreferences",
+  addCourse: "addCourse",
+  updateSection: "updateSection",
+  deleteCourse: "deleteCourse",
+  submitForm: "submitForm",
 };
 
-const reducer = (userInput, action) => {
+const userChoicesReducer = (userChoices, action) => {
+  // need to add to specific courses when submitting and validate everything
   switch (action.type) {
-    case ACTIONS.submitCourseForm:
+    case ACTIONS.addCourse:
       return {
-        courses: action.payload.courses,
-        specificCourses: action.payload.specificCourses,
-        preferences: action.payload.preferences,
+        ...userChoices,
+        courses: [...userChoices.courses, action.payload],
       };
 
-    case ACTIONS.updatePreferences:
+    case ACTIONS.deleteCourse:
       return {
-        ...userInput,
-        preferences: {
-          ...userInput.preferences,
-          [action.payload.updatedPreference]: action.payload.value,
-        },
+        ...userChoices,
+        courses: userChoices.courses.filter(
+          (course) => course.id !== action.payload
+        ),
       };
+
+    case ACTIONS.submitForm:
+      const specificCourses = [];
+      const courses = [];
+      const preferences = {
+        breaks: userChoices.preferences.breaks.value,
+        time: userChoices.preferences.time.value,
+        dayOff: userChoices.preferences.dayOff.value,
+        intensive: userChoices.preferences.intensive.value,
+      };
+
+      // Separate specifc and general courses
+      userChoices.courses.forEach((course) => {
+        course.sectionInput?.length > 0
+          ? specificCourses.push({
+              course_id: course.id,
+              section: course.sectionValue,
+            })
+          : courses.push(course.id);
+      });
+
+      return { courses, specificCourses, preferences };
+
+    case ACTIONS.updateSection:
+      return {
+        ...userChoices,
+        courses: userChoices.courses.map((course, index) =>
+          index == action.payload.index
+            ? {
+                id: course.id,
+                sectionInput: action.payload.input,
+                sectionValue: action.payload.value,
+              }
+            : course
+        ),
+      };
+  }
+};
+
+const animationReducer = (animation, action) => {
+  switch (action.type) {
+    case ACTIONS.animationNext:
+      return { step: animation.step + 1, direction: "forward" };
+
+    case ACTIONS.animationPrevious:
+      return { step: animation.step - 1, direction: "backward" };
   }
 };
 
 const ScheduleForm = () => {
   const navigate = useNavigate();
 
-  // This state is used to render the list items
-  const [inputCourses, setInputCourses] = useState(
-    JSON.parse(window.sessionStorage.getItem("SCHEDULE_FORM"))?.inputCourses ??
-      []
-  );
-
-  // Used for sending info to API
-  const [userInput, dispatch] = useReducer(
-    reducer,
-    JSON.parse(window.sessionStorage.getItem("SCHEDULE_FORM"))?.userInput ?? {
-      courses: [],
-      specificCourses: [],
-      preferences: { dayOff: "", time: "", breaks: "", intensive: false },
-    }
-  );
+  // Used for sending info to API (TODO)
 
   // Used to animate between form components
-  const [animation, setAnimation] = useState(
+  const [animation, animationDispatch] = useReducer(
+    animationReducer,
     JSON.parse(window.sessionStorage.getItem("SCHEDULE_FORM"))?.animation ?? {
       step: 1,
       direction: "forward",
+    }
+  );
+
+  // This state is used to render the list items
+  const [userChoices, userChoicesDispatch] = useReducer(
+    userChoicesReducer,
+    JSON.parse(window.sessionStorage.getItem("SCHEDULE_FORM"))?.userChoices ?? {
+      courses: [], // { id: "", sectionInput: "", sectionValue: "" }
+      preferences: [
+        {
+          breaks: { input: "0", value: "" },
+          time: { input: "0", value: "" },
+          dayOff: { input: "0", value: "" },
+          intensive: { input: "false", value: "" },
+        },
+      ],
     }
   );
 
@@ -63,16 +119,18 @@ const ScheduleForm = () => {
     window.sessionStorage.setItem(
       "SCHEDULE_FORM",
       JSON.stringify({
-        inputCourses: inputCourses.map((value) => ({
-          id: value.id,
-          sectionInput: value.sectionInput,
-          sectionValue: value.sectionValue,
-        })),
-        userInput,
+        userChoices: {
+          courses: userChoices.courses.map((value) => ({
+            id: value.id,
+            sectionInput: value.sectionInput,
+            sectionValue: value.sectionValue,
+          })),
+          preferences: userChoices.preferences,
+        },
         animation,
       })
     );
-  }, [inputCourses, userInput, animation]);
+  }, [userChoices, animation]);
 
   const generateSchedules = async (setIsLoading) => {
     try {
@@ -100,19 +158,18 @@ const ScheduleForm = () => {
   return (
     <Box height="100vh" overflow="hidden">
       <form style={{ overflow: "hidden" }}>
-        <DispatchUserInputContext.Provider value={dispatch}>
-          <CourseForm
-            animation={animation}
-            setAnimation={setAnimation}
-            setInputCourses={setInputCourses}
-            inputCourses={inputCourses}
-          ></CourseForm>
-          <PreferencesForm
-            animation={animation}
-            setAnimation={setAnimation}
-            generate_schedules={generateSchedules}
-          ></PreferencesForm>
-        </DispatchUserInputContext.Provider>
+        <DispatchUserChoices.Provider value={userChoicesDispatch}>
+          <DispatchAnimationContext.Provider value={animationDispatch}>
+            <CourseForm
+              animation={animation}
+              userChoices={userChoices}
+            ></CourseForm>
+            <PreferencesForm
+              animation={animation}
+              generate_schedules={generateSchedules}
+            ></PreferencesForm>
+          </DispatchAnimationContext.Provider>
+        </DispatchUserChoices.Provider>
       </form>
     </Box>
   );

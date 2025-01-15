@@ -17,7 +17,11 @@ import {
 } from "@radix-ui/react-icons";
 import FormCard from "./FormCard";
 import PreferenceRadioCards from "./PreferenceRadioCards";
-import { DispatchUserInputContext, ACTIONS } from "./ScheduleForm";
+import {
+  DispatchUserChoices,
+  DispatchAnimationContext,
+  ACTIONS,
+} from "./ScheduleForm";
 
 const PreferenceItem = ({ children, text }) => {
   return (
@@ -45,8 +49,9 @@ const PreferenceItem = ({ children, text }) => {
   );
 };
 
-const PreferencesForm = ({ animation, setAnimation, generate_schedules }) => {
-  const dispatch = useContext(DispatchUserInputContext);
+const PreferencesForm = ({ animation, generate_schedules }) => {
+  const userChoicesDispatch = useContext(DispatchUserChoices);
+  const animationDispatch = useContext(DispatchAnimationContext);
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -113,7 +118,7 @@ const PreferencesForm = ({ animation, setAnimation, generate_schedules }) => {
               ml="3"
               size="3"
               onCheckedChange={(e) => {
-                dispatch({
+                userChoicesDispatch({
                   type: ACTIONS.updatePreferences,
                   payload: { updatedPreference: "intensive", value: e },
                 });
@@ -127,10 +132,7 @@ const PreferencesForm = ({ animation, setAnimation, generate_schedules }) => {
             style={{ position: "absolute", left: "32px" }}
             onClick={(e) => {
               e.preventDefault();
-              setAnimation((prev) => ({
-                step: prev.step - 1,
-                direction: "backward",
-              }));
+              animationDispatch({ type: ACTIONS.animationPrevious });
             }}
           >
             Go back

@@ -16,16 +16,16 @@ import {
 import ScheduleToast from "./ScheduleToast";
 import CourseList from "./CourseList";
 import FormCard from "./FormCard";
-import { DispatchUserInputContext, ACTIONS } from "./ScheduleForm";
+import {
+  DispatchUserChoices,
+  DispatchAnimationContext,
+  ACTIONS,
+} from "./ScheduleForm";
 import "./styles.css";
 
-const CourseForm = ({
-  animation,
-  setAnimation,
-  inputCourses,
-  setInputCourses,
-}) => {
-  const dispatch = useContext(DispatchUserInputContext);
+const CourseForm = ({ animation, userChoices }) => {
+  const userChoicesDispatch = useContext(DispatchUserChoices);
+  const animationDispatch = useContext(DispatchAnimationContext);
 
   const [input, setInput] = useState("");
   const [validSectionInput, setValidSectionInput] = useState(true);
@@ -40,26 +40,7 @@ const CourseForm = ({
 
   const onSubmit = (e) => {
     e.preventDefault();
-    setAnimation((prev) => ({ step: prev.step + 1, direction: "forward" }));
-
-    const specificCourses = [];
-    const courses = [];
-    inputCourses.forEach((course) => {
-      course.sectionInput?.length > 0
-        ? specificCourses.push({
-            course_id: course.id,
-            section: course.sectionValue,
-          })
-        : courses.push(course.id);
-    });
-    dispatch({
-      type: ACTIONS.submitCourseForm,
-      payload: {
-        courses: courses,
-        specificCourses: specificCourses,
-        preferences: { dayOff: "", time: "", breaks: "", intensive: false },
-      },
-    });
+    animationDispatch({ type: ACTIONS.animationNext });
   };
 
   const showToast = (type, sanitizedInput = "") => {
@@ -128,19 +109,25 @@ const CourseForm = ({
       // Valid input
       if (
         validateCourseId(sanitizedCourseInput) &&
-        !inputCourses.some((course) => course.id == sanitizedCourseInput) &&
+        !userChoices.courses.some(
+          (course) => course.id == sanitizedCourseInput
+        ) &&
         input.trim() != ""
       ) {
-        setInputCourses([
-          ...inputCourses,
-          { id: sanitizedCourseInput, sectionInput: "", sectionValue: "" },
-        ]);
+        userChoicesDispatch({
+          type: ACTIONS.addCourse,
+          payload: {
+            id: sanitizedCourseInput,
+            sectionInput: "",
+            sectionValue: "",
+          },
+        });
         showToast("add", sanitizedCourseInput);
       }
 
       // Duplicate input
       else if (
-        inputCourses.some((course) => course.id == sanitizedCourseInput)
+        userChoices.courses.some((course) => course.id == sanitizedCourseInput)
       ) {
         showToast("duplicate", sanitizedCourseInput);
       }
@@ -183,8 +170,7 @@ const CourseForm = ({
         >
           <ScrollArea type="auto" scrollbars="vertical">
             <CourseList
-              inputCourses={inputCourses}
-              setInputCourses={setInputCourses}
+              userChoices={userChoices}
               setValidSectionInput={setValidSectionInput}
               showToast={showToast}
               coursesData={coursesData}
@@ -197,7 +183,10 @@ const CourseForm = ({
             style={{
               position: "absolute",
               bottom: "16px",
-              opacity: !validSectionInput && coursesData.length ? "1" : "0",
+              opacity:
+                !validSectionInput && coursesData.length && userChoices.length
+                  ? "1"
+                  : "0",
               transition: "opacity 0.25s ease",
             }}
           >
@@ -214,7 +203,9 @@ const CourseForm = ({
             size="3"
             variant="solid"
             disabled={
-              !inputCourses.length || !validSectionInput || !coursesData.length
+              !userChoices.courses.length ||
+              !validSectionInput ||
+              !coursesData.length
             }
             style={{
               transition: "background-color 0.25s ease, color 0.25s ease",

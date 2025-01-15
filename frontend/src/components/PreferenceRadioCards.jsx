@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { RadioCards, Text } from "@radix-ui/themes";
-import { DispatchUserInputContext, ACTIONS } from "./ScheduleForm";
+import { DispatchUserChoices, ACTIONS } from "./ScheduleForm";
 
 const PreferenceRadioCards = ({
   size,
@@ -9,10 +9,10 @@ const PreferenceRadioCards = ({
   API_values, // keys that match API params
   name,
 }) => {
-  const dispatch = useContext(DispatchUserInputContext);
+  const userChoicesDispatch = useContext(DispatchUserChoices);
 
   const handleChange = (index) => {
-    dispatch({
+    userChoicesDispatch({
       type: ACTIONS.updatePreferences,
       payload: { updatedPreference: name, value: API_values[index - 1] },
     });

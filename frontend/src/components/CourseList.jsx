@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Text,
   TextField,
@@ -11,75 +11,73 @@ import {
   Separator,
 } from "@radix-ui/themes";
 import { Cross1Icon } from "@radix-ui/react-icons";
+import { DispatchUserChoices, ACTIONS } from "./ScheduleForm";
 
 const CourseList = ({
-  inputCourses,
-  setInputCourses,
+  userChoices,
   setValidSectionInput,
   showToast,
   coursesData,
 }) => {
   const [section, setSection] = useState(
-    JSON.parse(
-      window.sessionStorage.getItem("SCHEDULE_FORM")
-    )?.inputCourses.map((course) => ({
+    userChoices.courses.map((course) => ({
       input: course.sectionInput,
       value: course.sectionValue,
-    })) ?? [{ input: "", value: "" }]
+    })) // { input: "", value: "" }
   );
   const [sectionIndex, setSectionIndex] = useState(0);
 
-  // Used to update state in CourseForm, ensures the update happens after rendering of this component
+  const userChoicesDispatch = useContext(DispatchUserChoices);
+
   useEffect(() => {
-    // Update section value in course object
-    setInputCourses((prev) => {
-      const newInputCourses = prev.map((course, currentIndex) => {
-        return sectionIndex == currentIndex
-          ? {
-              id: course.id,
-              sectionInput: section[sectionIndex].input,
-              sectionValue: transformSectionInput(section[sectionIndex].value),
-            }
-          : course;
-      });
+    if (userChoices.courses.length > section.length) {
+      setSection((prev) => [...prev, { input: "", value: "" }]);
+    }
+  }, [userChoices.courses]);
 
-      // Update validity
-      setValidSectionInput(
-        newInputCourses.every((course) => {
-          return validateSection(course);
-        })
-      );
-
-      return newInputCourses;
-    });
+  useEffect(() => {
+    // Update validity
+    setValidSectionInput(
+      userChoices.courses.every((course) => {
+        return validateSection(course);
+      })
+    );
   }, [section, coursesData]);
 
   const handleDelete = (courseToDelete, index) => {
-    setInputCourses(
-      inputCourses.filter((course) => course.id !== courseToDelete)
-    );
+    setSection((prev) => {
+      const updatedSectionInput = [...prev].filter((_, i) => i !== index);
+      return updatedSectionInput;
+    });
+
+    userChoicesDispatch({
+      type: ACTIONS.deleteCourse,
+      payload: courseToDelete,
+    });
     showToast("delete", courseToDelete);
+    /*
     setSection((prev) => {
       const updatedSectionInput = [...prev].filter((_, i) => i !== index);
 
       // Update validity
       setValidSectionInput(
-        inputCourses.every((course) => {
+        userChoices.courses.every((course) => {
           return validateSection(course);
         })
       );
 
       return updatedSectionInput;
     });
+    */
   };
 
-  const validateSection = (inputCourse) => {
-    return !inputCourse.sectionValue?.length
+  const validateSection = (courseInput) => {
+    return !courseInput.sectionValue?.length
       ? true
       : coursesData.some(
           (course) =>
-            course.courseId == inputCourse.id &&
-            course.section == inputCourse.sectionValue
+            course.courseId == courseInput.id &&
+            course.section == courseInput.sectionValue
         );
   };
 
@@ -92,18 +90,25 @@ const CourseList = ({
   const handleSectionInput = (value, index) => {
     setSectionIndex(index);
     setSection((prev) => {
-      // Update the section input
-      const updatedSectionInput = [...prev];
-      updatedSectionInput[index].input = value;
-      updatedSectionInput[index].value = transformSectionInput(value);
+      const updatedSection = [...prev];
+      updatedSection[index].input = value;
+      updatedSection[index].value = transformSectionInput(value);
+      userChoicesDispatch({
+        type: ACTIONS.updateSection,
+        payload: {
+          input: updatedSection[index].input,
+          value: updatedSection[index].value,
+          index: index,
+        },
+      });
 
-      return updatedSectionInput;
+      return updatedSection;
     });
   };
 
   return (
     <DataList.Root orientation="vertical">
-      {inputCourses.map((course, index) => (
+      {userChoices.courses.map((course, index) => (
         <DataList.Item key={course.id}>
           <Flex justify="center" align="center" py="3">
             <Card>
@@ -148,17 +153,17 @@ const CourseList = ({
                     variant="soft"
                     id="section"
                     placeholder="00000"
-                    value={inputCourses[index].sectionInput}
+                    value={userChoices.courses[index].sectionInput}
                     style={{
                       outlineColor:
                         section[index] &&
-                        !validateSection(inputCourses[index]) &&
+                        !validateSection(userChoices.courses[index]) &&
                         coursesData.length
                           ? "var(--red-6)"
                           : "var(--slate-7)",
                       backgroundColor:
                         section[index] &&
-                        !validateSection(inputCourses[index]) &&
+                        !validateSection(userChoices.courses[index]) &&
                         coursesData.length
                           ? "var(--red-4)"
                           : "var(--slate-5)",

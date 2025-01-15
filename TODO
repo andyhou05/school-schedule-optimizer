@@ -1,5 +1,6 @@
 ESSENTIAL:
 
+- Clean codebase (remove userInput and use reducer for inputCourses instead, update userInput on form submission, folders components, change inputCourses to userChoices...)
 - Preserve form state for user input (section numbers, keep track of section value and section input)
 - Rate My Teacher links clickable
 - Check for time errors on Course Form
