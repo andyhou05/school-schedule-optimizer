@@ -87,8 +87,6 @@ const animationReducer = (animation, action) => {
 const ScheduleForm = () => {
   const navigate = useNavigate();
 
-  // Used for sending info to API (TODO)
-
   // Used to animate between form components
   const [animation, animationDispatch] = useReducer(
     animationReducer,

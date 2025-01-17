@@ -23,25 +23,36 @@ const CourseList = ({
     userChoices.courses.map((course) => ({
       input: course.sectionInput,
       value: course.sectionValue,
-    })) // { input: "", value: "" }
+    }))
   );
   const [sectionIndex, setSectionIndex] = useState(0);
 
   const userChoicesDispatch = useContext(DispatchUserChoices);
 
   useEffect(() => {
+    // Initialize the section value and input whenever user enters a new course
     if (userChoices.courses.length > section.length) {
       setSection((prev) => [...prev, { input: "", value: "" }]);
     }
-  }, [userChoices.courses]);
 
-  useEffect(() => {
-    // Update validity
+    // Update validity when there section input changes
     setValidSectionInput(
       userChoices.courses.every((course) => {
         return validateSection(course);
       })
     );
+  }, [userChoices.courses]);
+
+  useEffect(() => {
+    // Change userChoices state in useEffect to avoid 'Cannot update component while rendering other component'
+    userChoicesDispatch({
+      type: ACTIONS.updateSection,
+      payload: {
+        input: section[sectionIndex]?.input,
+        value: section[sectionIndex]?.value,
+        index: sectionIndex,
+      },
+    });
   }, [section, coursesData]);
 
   const handleDelete = (courseToDelete, index) => {
@@ -55,20 +66,6 @@ const CourseList = ({
       payload: courseToDelete,
     });
     showToast("delete", courseToDelete);
-    /*
-    setSection((prev) => {
-      const updatedSectionInput = [...prev].filter((_, i) => i !== index);
-
-      // Update validity
-      setValidSectionInput(
-        userChoices.courses.every((course) => {
-          return validateSection(course);
-        })
-      );
-
-      return updatedSectionInput;
-    });
-    */
   };
 
   const validateSection = (courseInput) => {
@@ -87,20 +84,12 @@ const CourseList = ({
       : "0".repeat(5 - input.length).concat(input);
   };
 
-  const handleSectionInput = (value, index) => {
+  const handleSectionInput = (input, index) => {
     setSectionIndex(index);
     setSection((prev) => {
       const updatedSection = [...prev];
-      updatedSection[index].input = value;
-      updatedSection[index].value = transformSectionInput(value);
-      userChoicesDispatch({
-        type: ACTIONS.updateSection,
-        payload: {
-          input: updatedSection[index].input,
-          value: updatedSection[index].value,
-          index: index,
-        },
-      });
+      updatedSection[index].input = input;
+      updatedSection[index].value = transformSectionInput(input);
 
       return updatedSection;
     });

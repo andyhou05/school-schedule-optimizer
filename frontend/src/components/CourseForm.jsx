@@ -184,7 +184,9 @@ const CourseForm = ({ animation, userChoices }) => {
               position: "absolute",
               bottom: "16px",
               opacity:
-                !validSectionInput && coursesData.length && userChoices.length
+                !validSectionInput &&
+                coursesData.length &&
+                userChoices.courses.length
                   ? "1"
                   : "0",
               transition: "opacity 0.25s ease",
