@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Flex, Em, Tooltip, Link, Text, IconButton } from "@radix-ui/themes";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
-import "./styles.css";
+import "../styles/styles.css";
 
 const ScheduleGrid = ({ coursesData, teacherRatingsData, scheduleScore }) => {
   const columnHeaders = [

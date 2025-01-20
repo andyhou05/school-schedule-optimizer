@@ -13,18 +13,17 @@ import {
   CrossCircledIcon,
   ExclamationTriangleIcon,
 } from "@radix-ui/react-icons";
-import ScheduleToast from "./ScheduleToast";
-import CourseList from "./CourseList";
-import FormCard from "./FormCard";
-import {
-  DispatchUserChoices,
-  DispatchAnimationContext,
-  ACTIONS,
-} from "./ScheduleForm";
-import "./styles.css";
+
+import ScheduleToast from "../Notifications/ScheduleToast";
+import CourseList from "./CourseListItem";
+import FormCard from "../../Layout/FormCard";
+import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
+import { DispatchAnimationContext } from "../../Context/AnimationProvider";
+import ACTIONS from "../../Context/Reducer/Actions";
+import "../../styles/styles.css";
 
 const CourseForm = ({ animation, userChoices }) => {
-  const userChoicesDispatch = useContext(DispatchUserChoices);
+  const userChoicesDispatch = useContext(DispatchUserChoicesContext);
   const animationDispatch = useContext(DispatchAnimationContext);
 
   const [input, setInput] = useState("");
@@ -32,7 +31,8 @@ const CourseForm = ({ animation, userChoices }) => {
   const [toast, setToast] = useState({ open: false, type: "", message: "" });
   const [coursesData, setCoursesData] = useState([]);
 
-  const timerRef = useRef(0);
+  // Refs used for toast notification messages
+  const timerRef = useRef(0); // Used to clearTimeout
   const lastAddedCourse = useRef("");
   const duplicateCourse = useRef("");
   const lastToastMessage = useRef("");
@@ -44,7 +44,7 @@ const CourseForm = ({ animation, userChoices }) => {
   };
 
   const showToast = (type, sanitizedInput = "") => {
-    // Set toast to closed state but keep old toast state during close animation
+    // Set toast to closed state but keep old toast state during close animation, prevents the toast to change while closing
     setToast({
       open: false,
       type: lastToastType.current,

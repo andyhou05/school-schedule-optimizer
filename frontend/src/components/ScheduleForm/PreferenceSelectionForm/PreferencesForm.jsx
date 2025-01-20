@@ -15,13 +15,12 @@ import {
   QuestionMarkCircledIcon,
   InfoCircledIcon,
 } from "@radix-ui/react-icons";
-import FormCard from "./FormCard";
+
+import FormCard from "../../Layout/FormCard";
 import PreferenceRadioCards from "./PreferenceRadioCards";
-import {
-  DispatchUserChoices,
-  DispatchAnimationContext,
-  ACTIONS,
-} from "./ScheduleForm";
+import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
+import { DispatchAnimationContext } from "../../Context/AnimationProvider";
+import ACTIONS from "../../Context/Reducer/Actions";
 
 const PreferenceItem = ({ children, text }) => {
   return (
@@ -50,7 +49,7 @@ const PreferenceItem = ({ children, text }) => {
 };
 
 const PreferencesForm = ({ animation, generate_schedules }) => {
-  const userChoicesDispatch = useContext(DispatchUserChoices);
+  const userChoicesDispatch = useContext(DispatchUserChoicesContext);
   const animationDispatch = useContext(DispatchAnimationContext);
   const [isLoading, setIsLoading] = useState(false);
 

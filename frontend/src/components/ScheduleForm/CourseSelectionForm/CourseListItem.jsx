@@ -11,7 +11,9 @@ import {
   Separator,
 } from "@radix-ui/themes";
 import { Cross1Icon } from "@radix-ui/react-icons";
-import { DispatchUserChoices, ACTIONS } from "./ScheduleForm";
+
+import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
+import ACTIONS from "../../Context/Reducer/Actions";
 
 const CourseList = ({
   userChoices,
@@ -27,7 +29,7 @@ const CourseList = ({
   );
   const [sectionIndex, setSectionIndex] = useState(0);
 
-  const userChoicesDispatch = useContext(DispatchUserChoices);
+  const userChoicesDispatch = useContext(DispatchUserChoicesContext);
 
   useEffect(() => {
     // Initialize the section value and input whenever user enters a new course

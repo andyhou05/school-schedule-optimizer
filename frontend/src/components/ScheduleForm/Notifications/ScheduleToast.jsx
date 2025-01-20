@@ -1,7 +1,7 @@
 import React from "react";
 import * as Toast from "@radix-ui/react-toast";
 import { Flex, Box } from "@radix-ui/themes";
-import "./styles.css";
+import "../../styles/styles.css";
 
 const ScheduleToast = ({
   title,
