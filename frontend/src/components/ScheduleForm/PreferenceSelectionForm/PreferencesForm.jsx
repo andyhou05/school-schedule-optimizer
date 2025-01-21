@@ -18,7 +18,10 @@ import {
 
 import FormCard from "../../Layout/FormCard";
 import PreferenceRadioCards from "./PreferenceRadioCards";
-import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
+import {
+  DispatchUserChoicesContext,
+  UserChoicesContext,
+} from "../../Context/UserChoicesProvider";
 import { DispatchAnimationContext } from "../../Context/AnimationProvider";
 import ACTIONS from "../../Context/Reducer/Actions";
 
@@ -50,6 +53,7 @@ const PreferenceItem = ({ children, text }) => {
 
 const PreferencesForm = ({ animation, generate_schedules }) => {
   const userChoicesDispatch = useContext(DispatchUserChoicesContext);
+  const userChoices = useContext(UserChoicesContext);
   const animationDispatch = useContext(DispatchAnimationContext);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -115,11 +119,16 @@ const PreferencesForm = ({ animation, generate_schedules }) => {
           <PreferenceItem text="Intensive">
             <Checkbox
               ml="3"
+              defaultChecked={userChoices.preferences.intensive.value ?? false}
               size="3"
               onCheckedChange={(e) => {
                 userChoicesDispatch({
                   type: ACTIONS.updatePreferences,
-                  payload: { updatedPreference: "intensive", value: e },
+                  payload: {
+                    updatedPreference: "intensive",
+                    value: e,
+                    index: 0,
+                  },
                 });
               }}
             ></Checkbox>

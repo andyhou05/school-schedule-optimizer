@@ -11,14 +11,12 @@ export const UserChoicesProvider = ({ children }) => {
     userChoicesReducer,
     JSON.parse(window.sessionStorage.getItem("SCHEDULE_FORM"))?.userChoices ?? {
       courses: [], // { id: "", sectionInput: "", sectionValue: "" }
-      preferences: [
-        {
-          breaks: { input: "0", value: "" },
-          time: { input: "0", value: "" },
-          dayOff: { input: "0", value: "" },
-          intensive: { input: "false", value: "" },
-        },
-      ],
+      preferences: {
+        breaks: { input: "1", value: "" },
+        time: { input: "1", value: "" },
+        dayOff: { input: "1", value: "" },
+        intensive: { input: "false", value: "" },
+      },
     }
   );
   return (

@@ -52,8 +52,13 @@ const userChoicesReducer = (userChoices, action) => {
           ),
         };
       case ACTIONS.updatePreferences:
-        
-        return userChoices;
+        const updatedPreference = action.payload.updatedPreference;
+        const value = action.payload.value;
+        const index = action.payload.index
+        return {
+          ...userChoices,
+          preferences: {...userChoices.preferences, [updatedPreference]: {input: String(updatedPreference == "intensive" ? value : index), value: value}}
+        };
     }
   };
 

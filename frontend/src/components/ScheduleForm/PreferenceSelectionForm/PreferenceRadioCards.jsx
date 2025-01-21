@@ -1,6 +1,9 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { RadioCards, Text } from "@radix-ui/themes";
-import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
+import {
+  DispatchUserChoicesContext,
+  UserChoicesContext,
+} from "../../Context/UserChoicesProvider";
 import ACTIONS from "../../Context/Reducer/Actions";
 
 const PreferenceRadioCards = ({
@@ -11,6 +14,7 @@ const PreferenceRadioCards = ({
   name,
 }) => {
   const userChoicesDispatch = useContext(DispatchUserChoicesContext);
+  const userChoices = useContext(UserChoicesContext);
 
   const handleChange = (index) => {
     userChoicesDispatch({
@@ -18,14 +22,14 @@ const PreferenceRadioCards = ({
       payload: {
         updatedPreference: name,
         value: API_values[index - 1],
-        index: index - 1,
+        index: index,
       },
     });
   };
 
   return (
     <RadioCards.Root
-      defaultValue="1"
+      defaultValue={userChoices.preferences[name].input ?? "1"}
       ml="6"
       variant="classic"
       size={size}
