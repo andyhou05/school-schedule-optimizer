@@ -6,7 +6,6 @@ const ACTIONS = {
     addCourse: "addCourse",
     updateSection: "updateSection",
     deleteCourse: "deleteCourse",
-    submitForm: "submitForm",
   };
 
   export default ACTIONS

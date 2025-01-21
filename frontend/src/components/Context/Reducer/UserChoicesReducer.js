@@ -16,28 +16,6 @@ const userChoicesReducer = (userChoices, action) => {
           ),
         };
   
-      case ACTIONS.submitForm:
-        const specificCourses = [];
-        const courses = [];
-        const preferences = {
-          breaks: userChoices.preferences.breaks.value,
-          time: userChoices.preferences.time.value,
-          dayOff: userChoices.preferences.dayOff.value,
-          intensive: userChoices.preferences.intensive.value,
-        };
-  
-        // Separate specifc and general courses
-        userChoices.courses.forEach((course) => {
-          course.sectionInput?.length > 0
-            ? specificCourses.push({
-                course_id: course.id,
-                section: course.sectionValue,
-              })
-            : courses.push(course.id);
-        });
-  
-        return { courses, specificCourses, preferences };
-  
       case ACTIONS.updateSection:
         return {
           ...userChoices,

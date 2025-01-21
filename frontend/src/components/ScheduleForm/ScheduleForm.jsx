@@ -34,12 +34,36 @@ const ScheduleForm = () => {
     );
   }, [userChoices, animation]);
 
+  const getFormatedUserChoices = () => {
+    // Properly format the data to send it to API
+    const specificCourses = [];
+    const courses = [];
+    const preferences = {
+      breaks: userChoices.preferences.breaks.value,
+      time: userChoices.preferences.time.value,
+      dayOff: userChoices.preferences.dayOff.value,
+      intensive: userChoices.preferences.intensive.value,
+    };
+
+    // Separate specifc and general courses
+    userChoices.courses.forEach((course) => {
+      course.sectionInput?.length > 0
+        ? specificCourses.push({
+            course_id: course.id,
+            section: course.sectionValue,
+          })
+        : courses.push(course.id);
+    });
+
+    return { courses, specificCourses, preferences };
+  };
+
   const generateSchedules = async (setIsLoading) => {
     try {
       setIsLoading(true);
       const response = await fetch("http://127.0.0.1:5000/generate_schedule", {
         method: "POST",
-        body: JSON.stringify(userInput),
+        body: JSON.stringify(getFormatedUserChoices()),
         headers: {
           "Content-Type": "application/json",
         },
