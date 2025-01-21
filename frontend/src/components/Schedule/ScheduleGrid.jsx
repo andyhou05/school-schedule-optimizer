@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Flex, Em, Tooltip, Link, Text, IconButton } from "@radix-ui/themes";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
+
+import CourseCell from "./CourseCell";
 import "../styles/styles.css";
 
 const ScheduleGrid = ({ coursesData, teacherRatingsData, scheduleScore }) => {
@@ -93,53 +95,19 @@ const ScheduleGrid = ({ coursesData, teacherRatingsData, scheduleScore }) => {
 
                 {/* Course cells */}
                 {Array.from({ length: 7 }, (_, column) => {
-                  const courseForCell = courses.find(
+                  const courseCellInformation = courses.find(
                     (course) =>
                       daysIndexMap[course.day] === column + 1 &&
                       course.start === row
                   );
 
-                  if (courseForCell) {
+                  if (courseCellInformation) {
                     return (
-                      <td
+                      <CourseCell
                         key={`${row}-${column}`}
-                        className="course-cell"
-                        rowSpan={courseForCell.duration}
-                      >
-                        <Flex direction="column">
-                          <Text size="2" weight="medium">
-                            <Em>{courseForCell.name}</Em>
-                          </Text>
-                          <Text
-                            style={{ fontSize: "10px" }}
-                          >{`${courseForCell.courseId} sec. ${courseForCell.section}`}</Text>
-                          <br></br>
-                          <Text size="1">
-                            <Em>
-                              <Link
-                                href="#"
-                                weight="medium"
-                                style={{ color: "blue" }}
-                                onClick={(e) => e.preventDefault()}
-                              >
-                                {`${
-                                  teacherRatingsData[courseForCell.teacherId]
-                                    .name
-                                }: ${
-                                  teacherRatingsData[courseForCell.teacherId]
-                                    .avgRating
-                                    ? `${
-                                        teacherRatingsData[
-                                          courseForCell.teacherId
-                                        ].avgRating
-                                      }%`
-                                    : "N/A"
-                                }`}
-                              </Link>
-                            </Em>
-                          </Text>
-                        </Flex>
-                      </td>
+                        courseCellInformation={courseCellInformation}
+                        teacherRatingsData={teacherRatingsData}
+                      ></CourseCell>
                     );
                   }
 
