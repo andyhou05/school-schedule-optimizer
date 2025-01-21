@@ -15,38 +15,21 @@ import { Cross1Icon } from "@radix-ui/react-icons";
 import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
 import ACTIONS from "../../Context/Reducer/Actions";
 
-const CourseList = ({
+const CourseListItem = ({
   userChoices,
-  setValidSectionInput,
   showToast,
   coursesData,
+  section,
+  setSection,
+  validateSection,
 }) => {
-  const [section, setSection] = useState(
-    userChoices.courses.map((course) => ({
-      input: course.sectionInput,
-      value: course.sectionValue,
-    }))
-  );
   const [sectionIndex, setSectionIndex] = useState(0);
 
   const userChoicesDispatch = useContext(DispatchUserChoicesContext);
 
   useEffect(() => {
-    // Initialize the section value and input whenever user enters a new course
-    if (userChoices.courses.length > section.length) {
-      setSection((prev) => [...prev, { input: "", value: "" }]);
-    }
-
-    // Update validity when there section input changes
-    setValidSectionInput(
-      userChoices.courses.every((course) => {
-        return validateSection(course);
-      })
-    );
-  }, [userChoices.courses]);
-
-  useEffect(() => {
     // Change userChoices state in useEffect to avoid 'Cannot update component while rendering other component'
+    // (Do not put this code in the handleSectionInput method)
     userChoicesDispatch({
       type: ACTIONS.updateSection,
       payload: {
@@ -68,16 +51,6 @@ const CourseList = ({
       payload: courseToDelete,
     });
     showToast("delete", courseToDelete);
-  };
-
-  const validateSection = (courseInput) => {
-    return !courseInput.sectionValue?.length
-      ? true
-      : coursesData.some(
-          (course) =>
-            course.courseId == courseInput.id &&
-            course.section == courseInput.sectionValue
-        );
   };
 
   const transformSectionInput = (input = "") => {
@@ -175,4 +148,4 @@ const CourseList = ({
   );
 };
 
-export default CourseList;
+export default CourseListItem;

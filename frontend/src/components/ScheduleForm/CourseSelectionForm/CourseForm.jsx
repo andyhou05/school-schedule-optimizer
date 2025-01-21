@@ -15,7 +15,7 @@ import {
 } from "@radix-ui/react-icons";
 
 import ScheduleToast from "../Notifications/ScheduleToast";
-import CourseList from "./CourseListItem";
+import CourseListItem from "./CourseListItem";
 import FormCard from "../../Layout/FormCard";
 import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
 import { DispatchAnimationContext } from "../../Context/AnimationProvider";
@@ -27,6 +27,12 @@ const CourseForm = ({ animation, userChoices }) => {
   const animationDispatch = useContext(DispatchAnimationContext);
 
   const [input, setInput] = useState("");
+  const [section, setSection] = useState(
+    userChoices.courses.map((course) => ({
+      input: course.sectionInput,
+      value: course.sectionValue,
+    }))
+  );
   const [validSectionInput, setValidSectionInput] = useState(true);
   const [toast, setToast] = useState({ open: false, type: "", message: "" });
   const [coursesData, setCoursesData] = useState([]);
@@ -38,9 +44,33 @@ const CourseForm = ({ animation, userChoices }) => {
   const lastToastMessage = useRef("");
   const lastToastType = useRef("");
 
+  useEffect(() => {
+    // Fetch course data from API
+    fetchCourseData().then((coursesArray) => setCoursesData(coursesArray));
+  }, []);
+
+  useEffect(() => {
+    // Update validity when the section/course input changes
+    setValidSectionInput(
+      userChoices.courses.every((course) => {
+        return validateSection(course);
+      })
+    );
+  }, [userChoices.courses]);
+
   const onSubmit = (e) => {
     e.preventDefault();
     animationDispatch({ type: ACTIONS.animationNext });
+  };
+
+  const validateSection = (courseInput) => {
+    return !courseInput.sectionValue?.length
+      ? true
+      : coursesData.some(
+          (course) =>
+            course.courseId == courseInput.id &&
+            course.section == courseInput.sectionValue
+        );
   };
 
   const showToast = (type, sanitizedInput = "") => {
@@ -86,11 +116,6 @@ const CourseForm = ({ animation, userChoices }) => {
     }
   };
 
-  useEffect(() => {
-    // Fetch course data from API
-    fetchCourseData().then((coursesArray) => setCoursesData(coursesArray));
-  }, []);
-
   // Removes all white space and makes all characters upper case.
   const sanitizeInput = (input = "") => {
     return input.replace(/\s/g, "").toUpperCase();
@@ -122,6 +147,9 @@ const CourseForm = ({ animation, userChoices }) => {
             sectionValue: "",
           },
         });
+
+        // Initialize the section value and input whenever user enters a new course
+        setSection((prev) => [...prev, { input: "", value: "" }]);
         showToast("add", sanitizedCourseInput);
       }
 
@@ -169,12 +197,14 @@ const CourseForm = ({ animation, userChoices }) => {
           pb="100px"
         >
           <ScrollArea type="auto" scrollbars="vertical">
-            <CourseList
+            <CourseListItem
               userChoices={userChoices}
-              setValidSectionInput={setValidSectionInput}
               showToast={showToast}
               coursesData={coursesData}
-            ></CourseList>
+              section={section}
+              setSection={setSection}
+              validateSection={validateSection}
+            ></CourseListItem>
           </ScrollArea>
 
           <Callout.Root
