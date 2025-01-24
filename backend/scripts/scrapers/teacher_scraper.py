@@ -5,6 +5,7 @@ from seleniumbase import Driver
 from thefuzz import process
 
 import math
+import time
 
 from scripts.db_helper import connect_db
 from scripts.db_helper import add_entry
@@ -135,11 +136,13 @@ def match_teacher_id(teacher_to_match: TeacherRatings, names: list[str], thresho
         
         # Link teacher_id
         teacher_to_match.teacher_id = new_teacher.id
+        teacher_to_match.teacher_id_accuracy = 100
         session.commit()
     else:
         # Link teacher_id
         teacher_id = session.query(Teacher).filter(Teacher.name == match[0])[0].to_json()['id']
         teacher_to_match.teacher_id = teacher_id
+        teacher_to_match.teacher_id_accuracy = match[1]
         session.commit()
         print(f"Saved {teacher_name} to match {match[0]} with a score of {match[1]}")
     
@@ -156,24 +159,27 @@ def match_all_teacher_id():
             print(f"Saved {teacher_rating.to_json()['name']} to match {match[0]} with a score of {match[1]}")
             
     
-def scrape_teachers(driver: WebDriver) -> None:
+def scrape_teachers(driver: WebDriver, start_page: int = 1) -> None:
     """
     Scrapes a ratemyteacher.com school page for every teacher and their corresponding rating, if a teacher doesnt have a rating it will be None
     Works for any school directory in montreal, https://ratemyteachers.com/ca/quebec/montreal/school-name
 
     Args:
         driver (WebDriver): Selenium WebDriver, it must follow the ratemyteachers link of the school
+        start_page (int, optional): Optional starting page number. Defaults to 1.
     """
     
     # Find the total number of pages of teachers
-    pages = scrape_no_pages(driver)
+    number_of_pages = scrape_no_pages(driver)
     
     # Connect to db
     session = connect_db()
     
-    for i in range(1, pages):
+    school_url = driver.current_url
+    
+    for i in range(start_page, number_of_pages + 1):
         # Go through all the pages
-        driver.get(f"{driver.current_url}/page/{i}")
+        driver.get(f"{school_url}/page/{i}")
         teacher_links = scrape_teacher_links(driver)
         
         for link in teacher_links:
@@ -187,7 +193,6 @@ def scrape_teachers(driver: WebDriver) -> None:
                 
             # Add to to TeacherRatings table
             new_teacher_rating = TeacherRatings(name=name, rating=rating, link=link)
-            add_entry(session, TeacherRatings(name=name, rating=rating, link=link))
             
             # Load all the saved teachers in Teacher table (Teacher contains no duplicate teachers as opposed to TeacherRatings)
             saved_teachers = session.query(Teacher).all()
@@ -195,9 +200,13 @@ def scrape_teachers(driver: WebDriver) -> None:
             
             # We need to match the teacher_id (foreign key) in TeacherRatings to the appropriate id in Teacher
             match_teacher_id(new_teacher_rating, saved_teachers_names, threshold=85)
+            
+            add_entry(session, new_teacher_rating)
+            
+            
                 
         """
-        IMPORTANT: We need to manually change the teacher_id in the teacher_ratings table for some entries since thefuzz doesn't always score correctly
+        IMPORTANT: We need to manually change the teacher_id in the teacher_ratings table for some entries since fuzzy matching doesn't always score correctly
         To view the entries, enter this SQL query:
         
         SELECT 
@@ -228,7 +237,7 @@ def scrape_teachers(driver: WebDriver) -> None:
         After that, we will create new entries in Teacher table with the new null values in teacher_id
         """
         
-    def run_scraper():
-        driver = Driver(uc=True)
-        driver.get("https://ratemyteachers.com/ca/quebec/montreal/vanier-college")
-        scrape_teachers(driver)
+def run_scraper(start_page: int = 1):
+    driver = Driver(uc=True)
+    driver.get("https://ratemyteachers.com/ca/quebec/montreal/vanier-college")
+    scrape_teachers(driver, start_page=start_page)

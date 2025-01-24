@@ -14,7 +14,7 @@ def connect_db() -> Session:
     """
     # Environment variables
     password = os.environ["MYSQL_PASSWORD"]
-    host = os.environ["MOCKER_HOST"]
+    host = "localhost:3309"
     user = os.environ["MOCKER_USER"]
     db_name = os.environ["MOCKER_DB_NAME"]
     

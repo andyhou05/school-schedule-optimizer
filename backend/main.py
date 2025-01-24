@@ -34,10 +34,10 @@ if __name__ == "__main__":
     
     
     # TEACHER SCRAPER
-    # teacher_scraper.run_scraper()
+    teacher_scraper.run_scraper(start_page=47)
     
     
     
     # COURSE SCRAPER
-    course_scraper.run_scraper(page=38)
+    #course_scraper.run_scraper(page=38)
     

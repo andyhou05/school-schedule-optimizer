@@ -3,6 +3,7 @@ from config import db
 class Teacher(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), unique=True, nullable=True)
+    avg_rating = db.Column(db.Float, unique=False, nullable=True)
     
     def to_json(self):
         return{
