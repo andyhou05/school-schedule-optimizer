@@ -1,0 +1,3 @@
+We need to create an SSH tunnel from port 3309 (3306 doesnt work for some reason) to the EC2 instance that can connect to the RDS.
+
+ssh -i "schedules-key.pem" -f -N -L 3309:database-schedules.cniqmm02ygph.us-east-2.rds.amazonaws.com:3306 ubuntu@ec2-3-149-242-188.us-east-2.compute.amazonaws.com -v

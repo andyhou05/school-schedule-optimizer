@@ -1,10 +1,10 @@
 import { Flex, Em, Link, Text } from "@radix-ui/themes";
 import "../styles/styles.css";
 
-const CourseCell = ({ key, courseCellInformation, teacherRatingsData }) => {
+const CourseCell = ({ keyProp, courseCellInformation, teacherRatingsData }) => {
   return (
     <td
-      key={key}
+      key={keyProp}
       className="course-cell"
       rowSpan={courseCellInformation.duration}
     >
@@ -22,7 +22,10 @@ const CourseCell = ({ key, courseCellInformation, teacherRatingsData }) => {
               href="#"
               weight="medium"
               style={{ color: "blue" }}
-              onClick={(e) => e.preventDefault()}
+              onClick={(e) => {
+                console.log(keyProp);
+                e.preventDefault();
+              }}
             >
               {`${teacherRatingsData[courseCellInformation.teacherId].name}: ${
                 teacherRatingsData[courseCellInformation.teacherId].avgRating

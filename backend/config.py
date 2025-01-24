@@ -10,7 +10,7 @@ app = Flask(__name__)
 CORS(app)
 
 password = os.environ.get("MYSQL_PASSWORD")
-host = os.environ["MOCKER_HOST"]
+host = "localhost:3309"
 user = os.environ["MOCKER_USER"]
 db_name = os.environ["MOCKER_DB_NAME"]
 
