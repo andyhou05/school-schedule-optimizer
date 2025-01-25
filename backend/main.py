@@ -34,7 +34,8 @@ if __name__ == "__main__":
     
     
     # TEACHER SCRAPER
-    teacher_scraper.run_scraper(start_page=47)
+    #teacher_scraper.run_scraper(start_page=47)
+    teacher_scraper.match_all_teacher_id()
     
     
     

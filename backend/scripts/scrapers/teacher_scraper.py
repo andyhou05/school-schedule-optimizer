@@ -113,9 +113,9 @@ def scrape_name_rating(driver: WebDriver) -> tuple:
         
     return (name, rating)
 
-def match_teacher_id(teacher_to_match: TeacherRatings, names: list[str], threshold: int) -> None:
+def check_existing_teacher(teacher_to_match: TeacherRatings, names: list[str], threshold: int) -> None:
     """
-    Matches the teacher_id of teacher_to_match (which is a foreign key) to the id in Teacher table.
+    Check if a teacher with similar name already exists in Teacher table.
 
     Args:
         teacher_to_match (TeacherRatings): The TeacherRatings instance whose teacher_id we need to match.
@@ -129,24 +129,12 @@ def match_teacher_id(teacher_to_match: TeacherRatings, names: list[str], thresho
     
     match = process.extractOne(teacher_name, names)
     if match is None or float(match[1]) < threshold:
-        
         # If there is no match or does not pass the threshold, add a new teacher to Teacher table
         new_teacher = Teacher(name=teacher_name)
         add_entry(session, new_teacher)
-        
-        # Link teacher_id
-        teacher_to_match.teacher_id = new_teacher.id
-        teacher_to_match.teacher_id_accuracy = 100
         session.commit()
-    else:
-        # Link teacher_id
-        teacher_id = session.query(Teacher).filter(Teacher.name == match[0])[0].to_json()['id']
-        teacher_to_match.teacher_id = teacher_id
-        teacher_to_match.teacher_id_accuracy = match[1]
-        session.commit()
-        print(f"Saved {teacher_name} to match {match[0]} with a score of {match[1]}")
-    
-def match_all_teacher_id():
+            
+def match_all_teacher_id(): #change this
     session = connect_db()
     teacher_ratings = session.query(TeacherRatings).all()
     teacher_names = [teacher.to_json()['name'] for teacher in session.query(Teacher).all()]
@@ -199,23 +187,26 @@ def scrape_teachers(driver: WebDriver, start_page: int = 1) -> None:
             saved_teachers_names = [teacher.to_json()["name"] for teacher in saved_teachers]
             
             # We need to match the teacher_id (foreign key) in TeacherRatings to the appropriate id in Teacher
-            match_teacher_id(new_teacher_rating, saved_teachers_names, threshold=85)
+            check_existing_teacher(new_teacher_rating, saved_teachers_names, threshold=85)
             
             add_entry(session, new_teacher_rating)
             
             
                 
         """
-        IMPORTANT: We need to manually change the teacher_id in the teacher_ratings table for some entries since fuzzy matching doesn't always score correctly
+        IMPORTANT: We will manually update the Teacher table to make sure the names are consistent
+        
+        After we will match all the teacher_rating ids and teacher ids by running match_all_teacher_id()
+        
+        Then we need to manually change the teacher_id in the teacher_ratings table for some entries since fuzzy matching doesn't always score correctly
         To view the entries, enter this SQL query:
         
         SELECT 
             teacher_ratings.id, 
-            teacher_ratings.name, 
-            teacher_ratings.rating, 
-            teacher_ratings.teacher_id,
-            teacher.id,
-            teacher.name
+            teacher_ratings.name as teacher_ratings_name, 
+            teacher.name as teacher_name,
+            teacher_ratings.teacher_id_accuracy,
+            teacher_ratings.teacher_id
         FROM 
             teacher_ratings
         INNER JOIN 
@@ -225,8 +216,10 @@ def scrape_teachers(driver: WebDriver, start_page: int = 1) -> None:
                 SELECT teacher_id
                 FROM teacher_ratings
                 GROUP BY teacher_id
-                HAVING COUNT(*) > 1
+                HAVING COUNT(*) > 1 
+                AND teacher_ratings.teacher_id_accuracy < 100
             );
+            
             
         To change the teacher_id to null, the following:
         
