@@ -3,9 +3,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from seleniumbase import Driver
 from thefuzz import process
+from thefuzz import fuzz
 
 import math
-import time
 
 from scripts.db_helper import connect_db
 from scripts.db_helper import add_entry
@@ -127,19 +127,24 @@ def check_existing_teacher(teacher_to_match: TeacherRatings, names: list[str], t
     teacher_name = teacher_to_match.name
     session = connect_db()
     
-    match = process.extractOne(teacher_name, names)
+    match = process.extractOne(teacher_name, names, scorer=fuzz.token_set_ratio)
     if match is None or float(match[1]) < threshold:
         # If there is no match or does not pass the threshold, add a new teacher to Teacher table
         new_teacher = Teacher(name=teacher_name)
         add_entry(session, new_teacher)
         session.commit()
+    else:
+        teacher_to_match.teacher_id = session.query(Teacher).filter(Teacher.name == match[0])[0].to_json()['id']
+        teacher_to_match.teacher_id_accuracy = match[1]
+        session.commit()
+        print(f"Saved {teacher_to_match.to_json()['name']} to match {match[0]} with a score of {match[1]}")
             
 def match_all_teacher_id(): #change this
     session = connect_db()
     teacher_ratings = session.query(TeacherRatings).all()
     teacher_names = [teacher.to_json()['name'] for teacher in session.query(Teacher).all()]
     for teacher_rating in teacher_ratings:
-        match = process.extractOne(teacher_rating.to_json()['name'], teacher_names)
+        match = process.extractOne(teacher_rating.to_json()['name'], teacher_names, scorer=fuzz.token_set_ratio)
         if float(match[1]) > 85:
             teacher_rating.teacher_id = session.query(Teacher).filter(Teacher.name == match[0])[0].to_json()['id']
             teacher_rating.teacher_id_accuracy = match[1]
@@ -178,6 +183,8 @@ def scrape_teachers(driver: WebDriver, start_page: int = 1) -> None:
             
             # Scrape the teacher's name and rating
             name, rating = scrape_name_rating(driver)
+            if rating is None:
+                continue
                 
             # Add to to TeacherRatings table
             new_teacher_rating = TeacherRatings(name=name, rating=rating, link=link)
