@@ -132,6 +132,8 @@ def check_existing_teacher(teacher_to_match: TeacherRatings, names: list[str], t
         # If there is no match or does not pass the threshold, add a new teacher to Teacher table
         new_teacher = Teacher(name=teacher_name)
         add_entry(session, new_teacher)
+        teacher_to_match.teacher_id = new_teacher.id
+        teacher_to_match.teacher_id_accuracy = 100
         session.commit()
     else:
         teacher_to_match.teacher_id = session.query(Teacher).filter(Teacher.name == match[0])[0].to_json()['id']
@@ -139,7 +141,11 @@ def check_existing_teacher(teacher_to_match: TeacherRatings, names: list[str], t
         session.commit()
         print(f"Saved {teacher_to_match.to_json()['name']} to match {match[0]} with a score of {match[1]}")
             
-def match_all_teacher_id(): #change this
+def match_all_teacher_id():
+    """
+    Matches all TeacherRatings teacher_id with its corresponding id from Teacher
+    """
+    
     session = connect_db()
     teacher_ratings = session.query(TeacherRatings).all()
     teacher_names = [teacher.to_json()['name'] for teacher in session.query(Teacher).all()]

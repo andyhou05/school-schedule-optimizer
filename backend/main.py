@@ -34,9 +34,8 @@ if __name__ == "__main__":
     
     
     # TEACHER SCRAPER
-    teacher_scraper.run_scraper(start_page=1)
-    # Fix Teacher table before running
-    #teacher_scraper.match_all_teacher_id()
+    #teacher_scraper.run_scraper(start_page=1)
+    teacher_scraper.match_all_teacher_id() # Fix Teacher table before running
     
     
     
