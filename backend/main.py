@@ -1,4 +1,5 @@
-from scripts.scrapers import teacher_scraper
+from scripts.scrapers import rate_my_teachers_scraper
+from scripts.scrapers import rate_my_professors_scraper
 from scripts.scrapers import course_scraper
 from scripts.schedule import generator
 from scripts.schedule import scorer
@@ -35,7 +36,9 @@ if __name__ == "__main__":
     
     # TEACHER SCRAPER
     #teacher_scraper.run_scraper(start_page=1)
-    teacher_scraper.match_all_teacher_id() # Fix Teacher table before running
+    #rate_my_teachers_scraper.match_all_teacher_id() # Fix Teacher table before running
+    
+    rate_my_professors_scraper.run_scraper()
     
     
     

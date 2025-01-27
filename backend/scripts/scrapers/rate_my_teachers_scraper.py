@@ -158,7 +158,7 @@ def match_all_teacher_id():
             print(f"Saved {teacher_rating.to_json()['name']} to match {match[0]} with a score of {match[1]}")
             
     
-def scrape_teachers(driver: WebDriver, start_page: int = 1) -> None:
+def scrape_rate_my_teachers(driver: WebDriver, start_page: int = 1) -> None:
     """
     Scrapes a ratemyteacher.com school page for every teacher and their corresponding rating, if a teacher doesnt have a rating it will be None
     Works for any school directory in montreal, https://ratemyteachers.com/ca/quebec/montreal/school-name
@@ -246,4 +246,4 @@ def scrape_teachers(driver: WebDriver, start_page: int = 1) -> None:
 def run_scraper(start_page: int = 1):
     driver = Driver(uc=True)
     driver.get("https://ratemyteachers.com/ca/quebec/montreal/vanier-college")
-    scrape_teachers(driver, start_page=start_page)
+    scrape_rate_my_teachers(driver, start_page=start_page)
