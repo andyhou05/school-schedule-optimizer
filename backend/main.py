@@ -1,5 +1,5 @@
-from scripts.scrapers import rate_my_teachers_scraper
-from scripts.scrapers import rate_my_professors_scraper
+from scripts.scrapers.teachers import rate_my_teachers_scraper
+from scripts.scrapers.teachers import rate_my_professors_scraper
 from scripts.scrapers import course_scraper
 from scripts.schedule import generator
 from scripts.schedule import scorer

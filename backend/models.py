@@ -18,7 +18,7 @@ class TeacherRatings(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     teacher_id = db.Column(db.Integer, db.ForeignKey("teacher.id"), nullable=True)
     teacher_id_accuracy = db.Column(db.Float, unique=False, nullable=True)
-    name = db.Column(db.String(150), unique=True, nullable=True)
+    name = db.Column(db.String(150), unique=False, nullable=True)
     rating = db.Column(db.Float, unique=False, nullable=True)
     link = db.Column(db.String(150), unique=True, nullable=True)
     
