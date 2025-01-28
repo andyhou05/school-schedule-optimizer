@@ -5,16 +5,12 @@ from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from seleniumbase import Driver
-from thefuzz import process
-from thefuzz import fuzz
 
-import math
 import time
 
 from scripts.scrapers.teachers import helper
 from scripts.db_helper import connect_db
 from scripts.db_helper import add_entry
-from models import Teacher
 from models import TeacherRatings
 
 def scrape_info(driver: WebDriver) -> list[tuple]:

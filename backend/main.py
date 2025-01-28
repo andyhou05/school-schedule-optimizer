@@ -33,15 +33,14 @@ if __name__ == "__main__":
     #teacher_scraper.match_all_teacher_id()
     
     
+    # COURSE SCRAPER (ALWAYS START WITH THIS)
+    course_scraper.run_scraper(link="https://vanierlivecourseschedule.powerappsportals.com/", page=10)
     
     # TEACHER SCRAPER
     #teacher_scraper.run_scraper(start_page=1)
     #rate_my_teachers_scraper.match_all_teacher_id() # Fix Teacher table before running
-    
-    rate_my_professors_scraper.run_scraper()
-    
+    #rate_my_professors_scraper.run_scraper()
     
     
-    # COURSE SCRAPER
-    #course_scraper.run_scraper(page=38)
+    
     
