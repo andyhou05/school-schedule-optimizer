@@ -34,6 +34,7 @@ def scrape_info(driver: WebDriver) -> list[tuple]:
     return professor_info_list
 
 def scrape_rate_my_professors(driver: WebDriver) -> None:
+    driver.maximize_window()
     # Connect to db
     session = connect_db()
     

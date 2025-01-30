@@ -27,6 +27,9 @@ def check_existing_teacher(teacher_to_match: TeacherRatings, threshold: int) -> 
         teacher_to_match.teacher_id_accuracy = match[1]
         session.commit()
         print(f"Saved {teacher_to_match.to_json()['name']} to match {match[0]} with a score of {match[1]}")
+        return True
+
+    return False
             
 def match_all_teacher_id():
     """
