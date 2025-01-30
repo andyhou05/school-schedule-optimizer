@@ -128,8 +128,8 @@ def scrape_courses(driver: WebDriver, link: str, start_page: int = 1):
     # Go to page we want to start at
     current_page = 1
     while current_page != start_page:
-        driver.execute_script( f"window.scrollTo( 0, document.body.scrollHeight )" )
         time.sleep(1)
+        driver.execute_script( f"window.scrollTo( 0, document.body.scrollHeight )" )
         min_difference = float("inf")
         page_numbers = driver.find_elements(By.XPATH, '//ul[@class="pagination"]/li/a')
         best_page = page_numbers[1]
