@@ -25,7 +25,7 @@ def generate_schedule(requested_course_ids: list[str], preferences: dict, specif
     session = connect_db()
     
     schedules = [{"periods": [], "score": 0}] if len(specific_courses) == 0 else schedule_helper.add_specific_courses(specific_courses, session, len(requested_course_ids) + len(specific_courses), preferences)
-    periods = session.query(Period).filter(Period.course_id.in_(requested_course_ids), Period.semester == SEMESTER, Period.seats > 0).all()
+    periods = session.query(Period).filter(Period.course_id.in_(requested_course_ids), Period.semester == SEMESTER).all() # add Period.seats > 0 for deployment
     
     # Filter courses by user intensive preference
     possible_courses = list(group.group_periods(periods).values())
