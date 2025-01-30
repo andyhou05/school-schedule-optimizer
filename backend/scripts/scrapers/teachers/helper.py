@@ -5,7 +5,7 @@ from scripts.db_helper import connect_db
 from models import Teacher
 from models import TeacherRatings
 
-def check_existing_teacher(teacher_to_match: TeacherRatings, threshold: int) -> None:
+def check_existing_teacher(teacher_to_match: TeacherRatings, threshold: int) -> bool:
     """
     Check if a teacher with similar name already exists in Teacher table.
 

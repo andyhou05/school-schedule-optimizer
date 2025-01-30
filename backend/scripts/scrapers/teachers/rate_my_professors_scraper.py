@@ -48,8 +48,9 @@ def scrape_rate_my_professors(driver: WebDriver) -> None:
             professor_info_list = scrape_info(driver)
             for professor in professor_info_list:
                 new_teacher_rating = TeacherRatings(rating = professor[0], name = professor[1], link = professor[2])
-                helper.check_existing_teacher(new_teacher_rating, 85)
-                add_entry(session, new_teacher_rating)
+                add_new_rating = helper.check_existing_teacher(new_teacher_rating, 85)
+                if add_new_rating:
+                    add_entry(session, new_teacher_rating)
             break
     
 def run_scraper():

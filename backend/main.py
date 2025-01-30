@@ -37,9 +37,9 @@ if __name__ == "__main__":
     #course_scraper.run_scraper(link="https://vanierlivecourseschedule.powerappsportals.com/", page=17)
     
     # TEACHER SCRAPER
-    rate_my_teachers_scraper.run_scraper(start_page=48)
+    #rate_my_teachers_scraper.run_scraper(start_page=48)
     #rate_my_teachers_scraper.match_all_teacher_id() # Fix Teacher table before running
-    #rate_my_professors_scraper.run_scraper()
+    rate_my_professors_scraper.run_scraper()
     
     
     
