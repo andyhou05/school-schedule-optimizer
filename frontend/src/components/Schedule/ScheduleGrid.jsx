@@ -104,7 +104,7 @@ const ScheduleGrid = ({ coursesData, teacherRatingsData, scheduleScore }) => {
                   if (courseCellInformation) {
                     return (
                       <CourseCell
-                        keyProp={`${row}-${column}`}
+                        key={`${row}-${column}`}
                         courseCellInformation={courseCellInformation}
                         teacherRatingsData={teacherRatingsData}
                       ></CourseCell>
