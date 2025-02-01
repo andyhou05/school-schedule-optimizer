@@ -12,7 +12,7 @@ def generate_schedule(requested_course_ids: list[str], preferences: dict, specif
      to every current schedule and keeps the 'n_result' schedules with the highest scores for the next course iteration.
 
     Args:
-        requested_classes (list[str]): List of course ids the user wants to have.
+        requested_course_ids (list[str]): List of course ids the user wants to have.
         preferences (dict): User preferences for schedule generation, can include dayOff (Mon., Tue., etc.), time (morning, evening), and breaks (short, regular). If the user has no preferences, an empty dict can be used as input.
         specific_courses (list[dict]): List of dictionnaries ({"course_id": , "section":}) containing a course with a specific section number.
         n_results (int, optional): Number of schedules generated. Defaults to 5.

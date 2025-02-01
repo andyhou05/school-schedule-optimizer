@@ -138,6 +138,7 @@ def scrape_courses(driver: WebDriver, link: str, start_page: int = 1):
                 current_difference = abs(start_page - int(page_number.text))
                 if min_difference > current_difference:
                     best_page = page_number
+      
                     min_difference = current_difference
             except:
                 continue
@@ -224,15 +225,21 @@ def run_scraper(link: str, page: int = 1):
 
 
     """
+    To check for dupe entries
     WITH CTE AS (
     SELECT 
-        id,
-        ROW_NUMBER() OVER (PARTITION BY id, section, name, teacher_id, day, time, semester ORDER BY id) AS row_num
+        course_id,
+        ROW_NUMBER() OVER (PARTITION BY course_id, section, name, teacher_id, day, time, semester ORDER BY course_id) AS row_num
     FROM period
     )
     SELECT * FROM period
     WHERE id IN (
         SELECT id FROM CTE WHERE row_num > 1
     );
+    
+    To check for number of courses
+    SELECT course_id, section, name, semester, COUNT(*) as count
+    FROM period
+    GROUP BY course_id, section, name, semester
 
     """
