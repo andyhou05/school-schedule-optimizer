@@ -71,7 +71,7 @@ def scrape_rate_my_teachers(driver: WebDriver, start_page: int = 1) -> None:
         driver (WebDriver): Selenium WebDriver, it must follow the ratemyteachers link of the school
         start_page (int, optional): Optional starting page number. Defaults to 1.
     """
-    
+    driver.maximize_window()
     # Find the total number of pages of teachers
     number_of_pages = scrape_no_pages(driver)
     
@@ -100,9 +100,10 @@ def scrape_rate_my_teachers(driver: WebDriver, start_page: int = 1) -> None:
             new_teacher_rating = TeacherRatings(name=name, rating=rating, link=link)
             
             # We need to match the teacher_id (foreign key) in TeacherRatings to the appropriate id in Teacher
-            helper.check_existing_teacher(new_teacher_rating, 85)
+            add_new_rating = helper.check_existing_teacher(new_teacher_rating, 85)
             
-            add_entry(session, new_teacher_rating)
+            if add_new_rating:
+                add_entry(session, new_teacher_rating)
             
             
                 

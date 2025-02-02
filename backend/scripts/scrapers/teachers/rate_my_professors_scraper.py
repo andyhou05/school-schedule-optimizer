@@ -1,20 +1,14 @@
 from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from seleniumbase import Driver
-from thefuzz import process
-from thefuzz import fuzz
 
-import math
 import time
 
 from scripts.scrapers.teachers import helper
 from scripts.db_helper import connect_db
 from scripts.db_helper import add_entry
-from models import Teacher
 from models import TeacherRatings
 
 def scrape_info(driver: WebDriver) -> list[tuple]:
@@ -40,6 +34,7 @@ def scrape_info(driver: WebDriver) -> list[tuple]:
     return professor_info_list
 
 def scrape_rate_my_professors(driver: WebDriver) -> None:
+    driver.maximize_window()
     # Connect to db
     session = connect_db()
     
@@ -53,8 +48,9 @@ def scrape_rate_my_professors(driver: WebDriver) -> None:
             professor_info_list = scrape_info(driver)
             for professor in professor_info_list:
                 new_teacher_rating = TeacherRatings(rating = professor[0], name = professor[1], link = professor[2])
-                helper.check_existing_teacher(new_teacher_rating, 85)
-                add_entry(session, new_teacher_rating)
+                add_new_rating = helper.check_existing_teacher(new_teacher_rating, 85)
+                if add_new_rating:
+                    add_entry(session, new_teacher_rating)
             break
     
 def run_scraper():

@@ -12,7 +12,7 @@ def generate_schedule(requested_course_ids: list[str], preferences: dict, specif
      to every current schedule and keeps the 'n_result' schedules with the highest scores for the next course iteration.
 
     Args:
-        requested_classes (list[str]): List of course ids the user wants to have.
+        requested_course_ids (list[str]): List of course ids the user wants to have.
         preferences (dict): User preferences for schedule generation, can include dayOff (Mon., Tue., etc.), time (morning, evening), and breaks (short, regular). If the user has no preferences, an empty dict can be used as input.
         specific_courses (list[dict]): List of dictionnaries ({"course_id": , "section":}) containing a course with a specific section number.
         n_results (int, optional): Number of schedules generated. Defaults to 5.
@@ -25,7 +25,7 @@ def generate_schedule(requested_course_ids: list[str], preferences: dict, specif
     session = connect_db()
     
     schedules = [{"periods": [], "score": 0}] if len(specific_courses) == 0 else schedule_helper.add_specific_courses(specific_courses, session, len(requested_course_ids) + len(specific_courses), preferences)
-    periods = session.query(Period).filter(Period.course_id.in_(requested_course_ids), Period.semester == SEMESTER, Period.seats > 0).all()
+    periods = session.query(Period).filter(Period.course_id.in_(requested_course_ids), Period.semester == SEMESTER).all() # add Period.seats > 0 for deployment
     
     # Filter courses by user intensive preference
     possible_courses = list(group.group_periods(periods).values())

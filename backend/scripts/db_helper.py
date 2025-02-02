@@ -32,9 +32,9 @@ def add_entry(session: Session, entry: Model) -> None:
         entry (Model): Entry that we want to add to the Model object's table.
     """
     try:
+        print(f"Added {entry}\n") # Log message to console
         session.add(entry)
         session.commit()
-        print(f"Added {entry}\n") # Log message to console
     except Exception as e:
         print(f"Unable to add to table: {e}\n")
         session.rollback()
