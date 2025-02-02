@@ -87,6 +87,25 @@ def scrape_no_pages(driver: WebDriver) -> int:
     pages = driver.find_elements(By.XPATH, '//ul[@class="pagination"]/li/a')
     return int(pages[-2].text)
 
+def convert_time_block(class_time: str) -> list[int]:
+    """ Converts a class time xx:xx - xx:xx into a list of time blocks.
+
+    Args:
+        time (str): The time of the course whose time we want to convert.
+
+    Returns:
+        list[int]: List of times [start, end].
+    """
+    start_end_times = class_time.split(" - ")
+    time_blocks = []
+    for time in start_end_times:
+        hour, minutes = time.strip().split(":")
+        time_block = (int(hour) - 8) * 2
+        if minutes == "30":
+            time_block += 1
+        time_blocks.append(time_block)
+    return time_blocks
+
 def match_teacher_id(teacher_name: str, course: Period, names: list[str], session: Session) -> None:
     """
     Matches the teacher_id of teacher_to_match (which is a foreign key) to the id in Teacher table.
@@ -183,6 +202,7 @@ def scrape_courses(driver: WebDriver, link: str, start_page: int = 1):
                         print("There was an issure getting the class day.")
                     try:
                         time_slot = periods[0].find_elements(By.XPATH, '//td[@data-attribute="vit_time"]')[j].text
+                        start_time, end_time = convert_time_block(time_slot)
                     except:
                         print("There was an issue getting the class time.")
                     teacher_query = session.query(Teacher).filter(Teacher.name == teacher_name).all()
@@ -196,7 +216,18 @@ def scrape_courses(driver: WebDriver, link: str, start_page: int = 1):
                         
                     current_page = page + start_page
                     print(f"page {current_page}")
-                    course = Period(section=general_info[0], course_id=general_info[1], name=general_info[2], seats=general_info[3], day=day, time=time_slot, teacher_id = teacher_id, intensive = "intensive" in general_info[2].lower(), page_number = current_page, semester=SEMESTER)
+                    course = Period(section=general_info[0], 
+                                    course_id=general_info[1], 
+                                    name=general_info[2], 
+                                    seats=general_info[3], 
+                                    day=day, 
+                                    time=time_slot, 
+                                    teacher_id = teacher_id, 
+                                    intensive = "intensive" in general_info[2].lower(), 
+                                    page_number = current_page, 
+                                    start_time = start_time,
+                                    end_time = end_time,
+                                    semester=SEMESTER)
                     add_entry(session, course)
                 
                 # Close modal window

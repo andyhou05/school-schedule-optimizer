@@ -24,7 +24,7 @@ if __name__ == "__main__":
     #courses = ["603-101-MA", "345-102-MQ", "109-101-MQ", "201-NYB-05", "203-SN1-RE", "202-SN1-RE"]
     courses = ["109-101-MQ"]
     #preferences = {"day off": "Mon.", "breaks":" regular", "time": "morning"}
-    print(generator.generate_schedule(courses, {}, []))
+    #print(generator.generate_schedule(courses, {}, []))
     
     # SCHEDULE HELPER TESTS
     #print(schedule_helper.add_specific_courses(specific_courses=[{"course_id": "603-101-MA", "section": "00021"}], session=session, total_number_of_courses=1, preferences={}))
@@ -40,6 +40,8 @@ if __name__ == "__main__":
     #rate_my_teachers_scraper.run_scraper(start_page=48)
     #rate_my_teachers_scraper.match_all_teacher_id() # Fix Teacher table before running
     #rate_my_professors_scraper.run_scraper()
+    
+    print(course_scraper.convert_time_block("10:00 - 12:00"))
     
     
     
