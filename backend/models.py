@@ -45,6 +45,8 @@ class Period(db.Model):
     day = db.Column(db.String(15), unique=False, nullable=False)
     time = db.Column(db.String(50), unique=False, nullable=False)
     intensive = db.Column(db.Boolean(), unique=False, nullable=False)
+    start_time = db.Column(db.Integer, unique=False, nullable=True)
+    end_time = db.Column(db.Integer, unique=False, nullable=True)
     semester = db.Column(db.String(10), unique=False, nullable=False)
     
     def to_json(self):
@@ -58,6 +60,8 @@ class Period(db.Model):
             "day":self.day,
             "time":self.time,
             "intensive":self.intensive,
+            "startTime": self.start_time,
+            "endTime": self.end_time,
             "semester": self.semester
         }
         
