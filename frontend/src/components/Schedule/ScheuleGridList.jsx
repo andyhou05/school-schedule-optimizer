@@ -14,7 +14,7 @@ const ScheduleGridList = () => {
   }, []);
 
   return (
-    <Flex direction="column" height="500vh">
+    <Flex direction="column">
       {data?.schedules.map((schedule, index) => (
         <ScheduleGrid
           key={index}

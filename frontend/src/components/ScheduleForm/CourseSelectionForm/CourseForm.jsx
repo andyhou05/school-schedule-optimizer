@@ -15,7 +15,7 @@ import {
 } from "@radix-ui/react-icons";
 
 import ScheduleToast from "../Notifications/ScheduleToast";
-import CourseListItem from "./CourseListItem";
+import CourseList from "./CourseList";
 import FormCard from "../../Layout/FormCard";
 import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
 import { DispatchAnimationContext } from "../../Context/AnimationProvider";
@@ -197,14 +197,14 @@ const CourseForm = ({ animation, userChoices }) => {
           pb="100px"
         >
           <ScrollArea type="auto" scrollbars="vertical">
-            <CourseListItem
+            <CourseList
               userChoices={userChoices}
               showToast={showToast}
               coursesData={coursesData}
               section={section}
               setSection={setSection}
               validateSection={validateSection}
-            ></CourseListItem>
+            ></CourseList>
           </ScrollArea>
 
           <Callout.Root

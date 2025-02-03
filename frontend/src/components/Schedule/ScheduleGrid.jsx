@@ -70,6 +70,8 @@ const ScheduleGrid = ({ coursesData, teacherRatingsData, scheduleScore }) => {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
+        marginTop: "10%",
+        marginBottom: "10%",
       }}
     >
       <table className="schedule-grid">

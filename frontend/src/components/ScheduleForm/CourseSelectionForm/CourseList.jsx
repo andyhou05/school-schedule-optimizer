@@ -15,7 +15,7 @@ import { Cross1Icon } from "@radix-ui/react-icons";
 import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
 import ACTIONS from "../../Context/Reducer/Actions";
 
-const CourseListItem = ({
+const CourseList = ({
   userChoices,
   showToast,
   coursesData,
@@ -148,4 +148,4 @@ const CourseListItem = ({
   );
 };
 
-export default CourseListItem;
+export default CourseList;

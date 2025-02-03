@@ -172,6 +172,14 @@ def delete_course(id):
     
     return jsonify({"message":"Course deleted"}), 200
 
+# Route to check for time conflicts
+@app.route("/check_conflicts", methods=["POST"])
+def check_conflicts():
+    data = request.get_json()
+    courses = data.get("courses")
+    
+    
+
 # Route to generate schedule
 @app.route("/generate_schedule", methods=["POST"])
 def generate_schedules():
