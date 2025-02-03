@@ -2,7 +2,7 @@ import React, { useEffect, useContext } from "react";
 import { useNavigate } from "react-router";
 import { Box } from "@radix-ui/themes";
 
-import CourseForm from "./CourseSelectionForm/CourseForm";
+import CourseSelectionForm from "./CourseSelectionForm/CourseSelectionForm";
 import PreferencesForm from "./PreferenceSelectionForm/PreferencesForm";
 import { UserChoicesContext } from "../Context/UserChoicesProvider";
 import { AnimationContext } from "../Context/AnimationProvider";
@@ -84,10 +84,10 @@ const ScheduleForm = () => {
   return (
     <Box height="100vh" overflow="hidden">
       <form style={{ overflow: "hidden" }}>
-        <CourseForm
+        <CourseSelectionForm
           animation={animation}
           userChoices={userChoices}
-        ></CourseForm>
+        ></CourseSelectionForm>
         <PreferencesForm
           animation={animation}
           generate_schedules={generateSchedules}

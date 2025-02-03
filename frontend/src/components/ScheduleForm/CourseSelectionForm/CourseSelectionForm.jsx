@@ -1,30 +1,21 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
-import {
-  Text,
-  TextField,
-  Box,
-  Flex,
-  Button,
-  ScrollArea,
-  Callout,
-} from "@radix-ui/themes";
-import {
-  CheckCircledIcon,
-  CrossCircledIcon,
-  ExclamationTriangleIcon,
-} from "@radix-ui/react-icons";
+import React, { useState, useEffect, useContext } from "react";
+import { Box, Button } from "@radix-ui/themes";
+import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
 
 import ScheduleToast from "../Notifications/ScheduleToast";
-import CourseList from "./CourseList";
 import CourseInput from "./CourseInput";
+import CourseSelectionContainer from "./CourseSelectionContainer";
 import FormCard from "../../Layout/FormCard";
+
 import useToast from "../../Hooks/useToast";
 import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
+import { UserChoicesContext } from "../../Context/UserChoicesProvider";
 import { DispatchAnimationContext } from "../../Context/AnimationProvider";
 import ACTIONS from "../../Context/Reducer/Actions";
 import "../../styles/styles.css";
 
-const CourseForm = ({ animation, userChoices }) => {
+const CourseSelectionForm = ({ animation }) => {
+  const userChoices = useContext(UserChoicesContext);
   const userChoicesDispatch = useContext(DispatchUserChoicesContext);
   const animationDispatch = useContext(DispatchAnimationContext);
 
@@ -145,48 +136,14 @@ const CourseForm = ({ animation, userChoices }) => {
           setInput={setInput}
           onEnter={onEnter}
         ></CourseInput>
-        <Flex
-          width="120vh"
-          height="60vh"
-          position="relative"
-          justify="center"
-          p="60px"
-          pb="100px"
-        >
-          <ScrollArea type="auto" scrollbars="vertical">
-            <CourseList
-              userChoices={userChoices}
-              showToast={showToast}
-              coursesData={coursesData}
-              section={section}
-              setSection={setSection}
-              validateSection={validateSection}
-            ></CourseList>
-          </ScrollArea>
-
-          <Callout.Root
-            color="red"
-            role="alert"
-            style={{
-              position: "absolute",
-              bottom: "16px",
-              opacity:
-                !validSectionInput &&
-                coursesData.length &&
-                userChoices.courses.length
-                  ? "1"
-                  : "0",
-              transition: "opacity 0.25s ease",
-            }}
-          >
-            <Callout.Icon>
-              <ExclamationTriangleIcon />
-            </Callout.Icon>
-            <Callout.Text>
-              Please enter valid section numbers before continuing.
-            </Callout.Text>
-          </Callout.Root>
-        </Flex>
+        <CourseSelectionContainer
+          showToast={showToast}
+          coursesData={coursesData}
+          section={section}
+          setSection={setSection}
+          validateSection={validateSection}
+          validSectionInput={validSectionInput}
+        ></CourseSelectionContainer>
         <Box position="absolute" bottom="32px" height="4vh" width="60vw">
           <Button
             size="3"
@@ -229,4 +186,4 @@ const CourseForm = ({ animation, userChoices }) => {
   );
 };
 
-export default CourseForm;
+export default CourseSelectionForm;
