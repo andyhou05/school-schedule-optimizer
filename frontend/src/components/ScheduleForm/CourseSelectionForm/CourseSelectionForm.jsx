@@ -6,6 +6,7 @@ import ScheduleToast from "../Notifications/ScheduleToast";
 import CourseInput from "./CourseInput";
 import CourseSelectionContainer from "./CourseSelectionContainer";
 import FormCard from "../../Layout/FormCard";
+import CoursesCallout from "../Notifications/CoursesCallout";
 
 import useToast from "../../Hooks/useToast";
 import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
@@ -142,8 +143,12 @@ const CourseSelectionForm = ({ animation }) => {
           section={section}
           setSection={setSection}
           validateSection={validateSection}
-          validSectionInput={validSectionInput}
-        ></CourseSelectionContainer>
+        >
+          <CoursesCallout
+            validSectionInput={validSectionInput}
+            coursesData={coursesData}
+          ></CoursesCallout>
+        </CourseSelectionContainer>
         <Box position="absolute" bottom="32px" height="4vh" width="60vw">
           <Button
             size="3"

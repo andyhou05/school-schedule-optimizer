@@ -1,18 +1,17 @@
 import React from "react";
 import { useContext } from "react";
-import { ScrollArea, Flex, Callout } from "@radix-ui/themes";
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { ScrollArea, Flex } from "@radix-ui/themes";
 
 import CourseList from "./CourseList";
 import { UserChoicesContext } from "../../Context/UserChoicesProvider";
 
 const CourseSelectionContainer = ({
+  children,
   showToast,
   coursesData,
   section,
   setSection,
   validateSection,
-  validSectionInput,
 }) => {
   const userChoices = useContext(UserChoicesContext);
   return (
@@ -35,29 +34,7 @@ const CourseSelectionContainer = ({
         />
       </ScrollArea>
 
-      {/* Callout for invalid sections */}
-      <Callout.Root
-        color="red"
-        role="alert"
-        style={{
-          position: "absolute",
-          bottom: "16px",
-          opacity:
-            !validSectionInput &&
-            coursesData.length &&
-            userChoices.courses.length
-              ? "1"
-              : "0",
-          transition: "opacity 0.25s ease",
-        }}
-      >
-        <Callout.Icon>
-          <ExclamationTriangleIcon />
-        </Callout.Icon>
-        <Callout.Text>
-          Please enter valid section numbers before continuing.
-        </Callout.Text>
-      </Callout.Root>
+      {children}
     </Flex>
   );
 };
