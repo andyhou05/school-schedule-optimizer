@@ -1,5 +1,5 @@
 import React from "react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Text, TextField, Flex } from "@radix-ui/themes";
 import { CoursesDataContext } from "../../Context/CoursesDataProvider";
 import { UserChoicesContext } from "../../Context/UserChoicesProvider";
@@ -7,10 +7,12 @@ import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
 import * as utils from "./utils";
 import ACTIONS from "../../Context/Reducer/Actions";
 
-const CourseInput = ({ input, setInput, setSection, showToast }) => {
+const CourseInput = ({ setSection, showToast }) => {
   const coursesData = useContext(CoursesDataContext);
   const userChoices = useContext(UserChoicesContext);
   const userChoicesDispatch = useContext(DispatchUserChoicesContext);
+
+  const [input, setInput] = useState("");
 
   const onEnter = (e) => {
     if (e.key === "Enter") {

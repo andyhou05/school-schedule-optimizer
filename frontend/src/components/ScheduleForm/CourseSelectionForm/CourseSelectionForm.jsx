@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
 
+// Components
 import ScheduleToast from "../Notifications/ScheduleToast";
 import CourseInput from "./CourseInput";
 import CourseSelectionContainer from "./CourseSelectionContainer";
@@ -12,18 +13,14 @@ import useToast from "../../Hooks/useToast";
 import { CoursesDataContext } from "../../Context/CoursesDataProvider";
 import { SetCoursesDataContext } from "../../Context/CoursesDataProvider";
 import { UserChoicesContext } from "../../Context/UserChoicesProvider";
-import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
 import * as utils from "./utils";
-import ACTIONS from "../../Context/Reducer/Actions";
 import "../../styles/styles.css";
 
 const CourseSelectionForm = ({ animation }) => {
   const userChoices = useContext(UserChoicesContext);
-  const userChoicesDispatch = useContext(DispatchUserChoicesContext);
   const coursesData = useContext(CoursesDataContext);
   const setCoursesData = useContext(SetCoursesDataContext);
 
-  const [input, setInput] = useState("");
   const [section, setSection] = useState(
     userChoices.courses.map((course) => ({
       input: course.sectionInput,
@@ -55,12 +52,7 @@ const CourseSelectionForm = ({ animation }) => {
         currentStep={animation.step}
         direction={animation.direction}
       >
-        <CourseInput
-          input={input}
-          setInput={setInput}
-          setSection={setSection}
-          showToast={showToast}
-        />
+        <CourseInput setSection={setSection} showToast={showToast} />
         <CourseSelectionContainer
           showToast={showToast}
           section={section}
