@@ -12,11 +12,10 @@ const CourseCell = ({ courseCellInformation, teacherRatingsData }) => {
         <Text
           style={{ fontSize: "10px" }}
         >{`${courseCellInformation.courseId} sec. ${courseCellInformation.section}`}</Text>
-        <br></br>
         <TeacherDialog
           teacher={teacherRatingsData[courseCellInformation.teacherId]}
         >
-          <Button variant="outline" style={{ height: "100%" }}>
+          <Button variant="outline" style={{ height: "100%", marginTop: "5%" }}>
             <Text weight="medium" style={{ color: "blue" }}>
               <Em>
                 {`${

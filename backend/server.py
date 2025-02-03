@@ -1,4 +1,5 @@
 from flask import request, jsonify
+from sqlalchemy import and_
 
 from scripts.schedule.generator import generate_schedule
 from models import Period
@@ -177,7 +178,23 @@ def delete_course(id):
 def check_conflicts():
     data = request.get_json()
     courses = data.get("courses")
+    conflicts = []
+    periods = [
+        db.session.query(Period)
+        .filter(and_(Period.course_id == course.course_id, Period.section == course.section))
+        .all()
+        for course in courses
+    ].sort(key = lambda c: c["day", c["start_time"]]) # Query from db and sort by day and time
     
+    for i in range(len(courses)):
+        for j in range(i + 1, len(courses)):
+            if periods[i].day != periods[j].day:
+                break
+            if periods[i].end_time > periods[j].start_time:
+                # We don't need to check periods[i].start_time < periods[j].end_time since the periods are sorted by time as well
+                conflicts.append(periods[i], periods[j])
+    
+    return jsonify({"conflicts": conflicts}), 200
     
 
 # Route to generate schedule
