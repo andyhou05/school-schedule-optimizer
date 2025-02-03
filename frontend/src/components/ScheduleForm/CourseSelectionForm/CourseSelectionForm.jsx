@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Box, Button } from "@radix-ui/themes";
 import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
 
 import ScheduleToast from "../Notifications/ScheduleToast";
@@ -7,20 +6,19 @@ import CourseInput from "./CourseInput";
 import CourseSelectionContainer from "./CourseSelectionContainer";
 import FormCard from "../../Layout/FormCard";
 import CoursesCallout from "../Notifications/CoursesCallout";
+import SubmitButton from "./SubmitButton";
 
 import useToast from "../../Hooks/useToast";
 import { CoursesDataContext } from "../../Context/CoursesDataProvider";
 import { SetCoursesDataContext } from "../../Context/CoursesDataProvider";
 import { UserChoicesContext } from "../../Context/UserChoicesProvider";
 import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
-import { DispatchAnimationContext } from "../../Context/AnimationProvider";
 import ACTIONS from "../../Context/Reducer/Actions";
 import "../../styles/styles.css";
 
 const CourseSelectionForm = ({ animation }) => {
   const userChoices = useContext(UserChoicesContext);
   const userChoicesDispatch = useContext(DispatchUserChoicesContext);
-  const animationDispatch = useContext(DispatchAnimationContext);
   const coursesData = useContext(CoursesDataContext);
   const setCoursesData = useContext(SetCoursesDataContext);
 
@@ -47,11 +45,6 @@ const CourseSelectionForm = ({ animation }) => {
       })
     );
   }, [userChoices.courses]);
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    animationDispatch({ type: ACTIONS.animationNext });
-  };
 
   const validateSection = (courseInput) => {
     return !courseInput.sectionValue?.length
@@ -135,40 +128,22 @@ const CourseSelectionForm = ({ animation }) => {
         currentStep={animation.step}
         direction={animation.direction}
       >
-        <CourseInput
-          input={input}
-          setInput={setInput}
-          onEnter={onEnter}
-        ></CourseInput>
+        <CourseInput input={input} setInput={setInput} onEnter={onEnter} />
         <CourseSelectionContainer
           showToast={showToast}
           section={section}
           setSection={setSection}
           validateSection={validateSection}
         >
-          <CoursesCallout
-            validSectionInput={validSectionInput}
-          ></CoursesCallout>
+          <CoursesCallout validSectionInput={validSectionInput} />
         </CourseSelectionContainer>
-        <Box position="absolute" bottom="32px" height="4vh" width="60vw">
-          <Button
-            size="3"
-            variant="solid"
-            disabled={
-              !userChoices.courses.length ||
-              !validSectionInput ||
-              !coursesData.length
-            }
-            style={{
-              transition: "background-color 0.25s ease, color 0.25s ease",
-              position: "absolute",
-              right: "32px",
-            }}
-            onClick={onSubmit}
-          >
-            Continue
-          </Button>
-        </Box>
+        <SubmitButton
+          disabled={
+            !userChoices.courses.length ||
+            !validSectionInput ||
+            !coursesData.length
+          }
+        />
       </FormCard>
       <ScheduleToast
         title={
@@ -187,7 +162,7 @@ const CourseSelectionForm = ({ animation }) => {
         color={
           toast.type === "add" || toast.type === "delete" ? "lightgreen" : "red"
         }
-      ></ScheduleToast>
+      />
     </>
   );
 };

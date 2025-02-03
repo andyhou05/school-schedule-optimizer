@@ -13,12 +13,12 @@ import {
 import { Cross1Icon } from "@radix-ui/react-icons";
 
 import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
+import { CoursesDataContext } from "../../Context/CoursesDataProvider";
 import ACTIONS from "../../Context/Reducer/Actions";
 
 const CourseList = ({
   userChoices,
   showToast,
-  coursesData,
   section,
   setSection,
   validateSection,
@@ -26,6 +26,7 @@ const CourseList = ({
   const [sectionIndex, setSectionIndex] = useState(0);
 
   const userChoicesDispatch = useContext(DispatchUserChoicesContext);
+  const coursesData = useContext(CoursesDataContext);
 
   useEffect(() => {
     // Change userChoices state in useEffect to avoid 'Cannot update component while rendering other component'
