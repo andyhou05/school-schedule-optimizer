@@ -17,6 +17,7 @@ import {
 import ScheduleToast from "../Notifications/ScheduleToast";
 import CourseList from "./CourseList";
 import FormCard from "../../Layout/FormCard";
+import useToast from "../../Hooks/useToast";
 import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
 import { DispatchAnimationContext } from "../../Context/AnimationProvider";
 import ACTIONS from "../../Context/Reducer/Actions";
@@ -34,15 +35,8 @@ const CourseForm = ({ animation, userChoices }) => {
     }))
   );
   const [validSectionInput, setValidSectionInput] = useState(true);
-  const [toast, setToast] = useState({ open: false, type: "", message: "" });
+  const { toast, setToast, showToast } = useToast();
   const [coursesData, setCoursesData] = useState([]);
-
-  // Refs used for toast notification messages
-  const timerRef = useRef(0); // Used to clearTimeout
-  const lastAddedCourse = useRef("");
-  const duplicateCourse = useRef("");
-  const lastToastMessage = useRef("");
-  const lastToastType = useRef("");
 
   useEffect(() => {
     // Fetch course data from API
@@ -71,36 +65,6 @@ const CourseForm = ({ animation, userChoices }) => {
             course.courseId == courseInput.id &&
             course.section == courseInput.sectionValue
         );
-  };
-
-  const showToast = (type, sanitizedInput = "") => {
-    // Set toast to closed state but keep old toast state during close animation, prevents the toast to change while closing
-    setToast({
-      open: false,
-      type: lastToastType.current,
-      message: lastToastMessage.current,
-    });
-    clearTimeout(timerRef.current);
-    setTimeout(() => {
-      lastToastType.current = type;
-      switch (type) {
-        case "add":
-          lastAddedCourse.current = sanitizedInput;
-          lastToastMessage.current = `${lastAddedCourse.current} has been added`;
-          break;
-        case "delete":
-          lastToastMessage.current = `${sanitizedInput} has been deleted`;
-          break;
-        case "duplicate":
-          duplicateCourse.current = sanitizedInput;
-          lastToastMessage.current = `${duplicateCourse.current} is already added`;
-          break;
-        case "invalid":
-          lastToastMessage.current = "Invalid course code, try again";
-          break;
-      }
-      setToast({ open: true, type, message: lastToastMessage.current });
-    }, 50);
   };
 
   // Fetch all existing courses for input validation
