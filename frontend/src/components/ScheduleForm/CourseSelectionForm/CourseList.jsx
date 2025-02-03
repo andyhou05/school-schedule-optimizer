@@ -14,15 +14,10 @@ import { Cross1Icon } from "@radix-ui/react-icons";
 
 import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
 import { CoursesDataContext } from "../../Context/CoursesDataProvider";
+import * as utils from "./utils";
 import ACTIONS from "../../Context/Reducer/Actions";
 
-const CourseList = ({
-  userChoices,
-  showToast,
-  section,
-  setSection,
-  validateSection,
-}) => {
+const CourseList = ({ userChoices, showToast, section, setSection }) => {
   const [sectionIndex, setSectionIndex] = useState(0);
 
   const userChoicesDispatch = useContext(DispatchUserChoicesContext);
@@ -122,13 +117,19 @@ const CourseList = ({
                     style={{
                       outlineColor:
                         section[index] &&
-                        !validateSection(userChoices.courses[index]) &&
+                        !utils.validateSection(
+                          coursesData,
+                          userChoices.courses[index]
+                        ) &&
                         coursesData.length
                           ? "var(--red-6)"
                           : "var(--slate-7)",
                       backgroundColor:
                         section[index] &&
-                        !validateSection(userChoices.courses[index]) &&
+                        !utils.validateSection(
+                          coursesData,
+                          userChoices.courses[index]
+                        ) &&
                         coursesData.length
                           ? "var(--red-4)"
                           : "var(--slate-5)",

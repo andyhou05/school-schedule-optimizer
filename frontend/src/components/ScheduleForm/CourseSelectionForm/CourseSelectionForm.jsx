@@ -13,6 +13,7 @@ import { CoursesDataContext } from "../../Context/CoursesDataProvider";
 import { SetCoursesDataContext } from "../../Context/CoursesDataProvider";
 import { UserChoicesContext } from "../../Context/UserChoicesProvider";
 import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
+import * as utils from "./utils";
 import ACTIONS from "../../Context/Reducer/Actions";
 import "../../styles/styles.css";
 
@@ -41,20 +42,10 @@ const CourseSelectionForm = ({ animation }) => {
     // Update validity when the section/course input changes
     setValidSectionInput(
       userChoices.courses.every((course) => {
-        return validateSection(course);
+        return utils.validateSection(coursesData, course);
       })
     );
   }, [userChoices.courses]);
-
-  const validateSection = (courseInput) => {
-    return !courseInput.sectionValue?.length
-      ? true
-      : coursesData.some(
-          (course) =>
-            course.courseId == courseInput.id &&
-            course.section == courseInput.sectionValue
-        );
-  };
 
   // Fetch all existing courses for input validation
   const fetchCourseData = async () => {
@@ -133,7 +124,6 @@ const CourseSelectionForm = ({ animation }) => {
           showToast={showToast}
           section={section}
           setSection={setSection}
-          validateSection={validateSection}
         >
           <CoursesCallout validSectionInput={validSectionInput} />
         </CourseSelectionContainer>

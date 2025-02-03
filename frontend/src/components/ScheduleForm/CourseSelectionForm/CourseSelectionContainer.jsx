@@ -10,7 +10,6 @@ const CourseSelectionContainer = ({
   showToast,
   section,
   setSection,
-  validateSection,
 }) => {
   const userChoices = useContext(UserChoicesContext);
   return (
@@ -28,7 +27,6 @@ const CourseSelectionContainer = ({
           showToast={showToast}
           section={section}
           setSection={setSection}
-          validateSection={validateSection}
         />
       </ScrollArea>
 
