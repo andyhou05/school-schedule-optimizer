@@ -20,3 +20,12 @@ export const fetchCourseData = async () => {
     return [];
   }
 };
+
+  // Removes all white space and makes all characters upper case.
+export const sanitizeInput = (input = "") => {
+    return input.replace(/\s/g, "").toUpperCase();
+  };
+
+export const validateCourseId = (coursesData, id) => {
+    return coursesData.some((course) => course.courseId == id);
+  };

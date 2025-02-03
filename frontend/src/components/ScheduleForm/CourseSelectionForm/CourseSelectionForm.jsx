@@ -48,24 +48,15 @@ const CourseSelectionForm = ({ animation }) => {
     );
   }, [userChoices.courses]);
 
-  // Removes all white space and makes all characters upper case.
-  const sanitizeInput = (input = "") => {
-    return input.replace(/\s/g, "").toUpperCase();
-  };
-
-  const validateCourseId = (id) => {
-    return coursesData.some((course) => course.courseId == id);
-  };
-
   const onEnter = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
       // Capitalize all letters and remove white space
-      const sanitizedCourseInput = sanitizeInput(input);
+      const sanitizedCourseInput = utils.sanitizeInput(input);
 
       // Valid input
       if (
-        validateCourseId(sanitizedCourseInput) &&
+        utils.validateCourseId(coursesData, sanitizedCourseInput) &&
         !userChoices.courses.some(
           (course) => course.id == sanitizedCourseInput
         ) &&
