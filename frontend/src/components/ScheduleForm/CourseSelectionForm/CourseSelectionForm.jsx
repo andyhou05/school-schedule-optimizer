@@ -34,8 +34,9 @@ const CourseSelectionForm = ({ animation }) => {
   const { toast, setToast, showToast } = useToast();
 
   useEffect(() => {
-    // Fetch course data from API
-    fetchCourseData().then((coursesArray) => setCoursesData(coursesArray));
+    utils
+      .fetchCourseData()
+      .then((coursesArray) => setCoursesData(coursesArray));
   }, []);
 
   useEffect(() => {
@@ -46,19 +47,6 @@ const CourseSelectionForm = ({ animation }) => {
       })
     );
   }, [userChoices.courses]);
-
-  // Fetch all existing courses for input validation
-  const fetchCourseData = async () => {
-    try {
-      const result = await fetch("http://127.0.0.1:5000/courses/W25").then(
-        (response) => response.json()
-      );
-      return result.courses || [];
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      return [];
-    }
-  };
 
   // Removes all white space and makes all characters upper case.
   const sanitizeInput = (input = "") => {
