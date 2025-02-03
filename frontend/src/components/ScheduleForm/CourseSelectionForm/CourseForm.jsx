@@ -16,6 +16,7 @@ import {
 
 import ScheduleToast from "../Notifications/ScheduleToast";
 import CourseList from "./CourseList";
+import CourseInput from "./CourseInput";
 import FormCard from "../../Layout/FormCard";
 import useToast from "../../Hooks/useToast";
 import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
@@ -139,19 +140,11 @@ const CourseForm = ({ animation, userChoices }) => {
         currentStep={animation.step}
         direction={animation.direction}
       >
-        <Flex width="400px" direction="column" gap="4" m="auto" mt="50px">
-          <Text align="center" size="5">
-            Enter Course ID
-          </Text>
-          <TextField.Root
-            aria-label="courseInput"
-            size="3"
-            onKeyDown={onEnter}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="e.g. 603-101-MA"
-            value={input}
-          ></TextField.Root>
-        </Flex>
+        <CourseInput
+          input={input}
+          setInput={setInput}
+          onEnter={onEnter}
+        ></CourseInput>
         <Flex
           width="120vh"
           height="60vh"
