@@ -48,49 +48,6 @@ const CourseSelectionForm = ({ animation }) => {
     );
   }, [userChoices.courses]);
 
-  const onEnter = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      // Capitalize all letters and remove white space
-      const sanitizedCourseInput = utils.sanitizeInput(input);
-
-      // Valid input
-      if (
-        utils.validateCourseId(coursesData, sanitizedCourseInput) &&
-        !userChoices.courses.some(
-          (course) => course.id == sanitizedCourseInput
-        ) &&
-        input.trim() != ""
-      ) {
-        userChoicesDispatch({
-          type: ACTIONS.addCourse,
-          payload: {
-            id: sanitizedCourseInput,
-            sectionInput: "",
-            sectionValue: "",
-          },
-        });
-
-        // Initialize the section value and input whenever user enters a new course
-        setSection((prev) => [...prev, { input: "", value: "" }]);
-        showToast("add", sanitizedCourseInput);
-      }
-
-      // Duplicate input
-      else if (
-        userChoices.courses.some((course) => course.id == sanitizedCourseInput)
-      ) {
-        showToast("duplicate", sanitizedCourseInput);
-      }
-
-      // Invalid input
-      else {
-        showToast("invalid");
-      }
-      setInput("");
-    }
-  };
-
   return (
     <>
       <FormCard
@@ -98,7 +55,12 @@ const CourseSelectionForm = ({ animation }) => {
         currentStep={animation.step}
         direction={animation.direction}
       >
-        <CourseInput input={input} setInput={setInput} onEnter={onEnter} />
+        <CourseInput
+          input={input}
+          setInput={setInput}
+          setSection={setSection}
+          showToast={showToast}
+        />
         <CourseSelectionContainer
           showToast={showToast}
           section={section}
