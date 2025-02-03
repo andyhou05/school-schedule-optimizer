@@ -4,9 +4,11 @@ import { Callout } from "@radix-ui/themes";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
 import { UserChoicesContext } from "../../Context/UserChoicesProvider";
+import { CoursesDataContext } from "../../Context/CoursesDataProvider";
 
-const CoursesCallout = ({ validSectionInput, coursesData }) => {
+const CoursesCallout = ({ validSectionInput }) => {
   const userChoices = useContext(UserChoicesContext);
+  const coursesData = useContext(CoursesDataContext);
   return (
     <Callout.Root
       color="red"

@@ -4,16 +4,17 @@ import { ScrollArea, Flex } from "@radix-ui/themes";
 
 import CourseList from "./CourseList";
 import { UserChoicesContext } from "../../Context/UserChoicesProvider";
+import { CoursesDataContext } from "../../Context/CoursesDataProvider";
 
 const CourseSelectionContainer = ({
   children,
   showToast,
-  coursesData,
   section,
   setSection,
   validateSection,
 }) => {
   const userChoices = useContext(UserChoicesContext);
+  const coursesData = useContext(CoursesDataContext);
   return (
     <Flex
       width="120vh"

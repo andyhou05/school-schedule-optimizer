@@ -9,8 +9,10 @@ import FormCard from "../../Layout/FormCard";
 import CoursesCallout from "../Notifications/CoursesCallout";
 
 import useToast from "../../Hooks/useToast";
-import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
+import { CoursesDataContext } from "../../Context/CoursesDataProvider";
+import { SetCoursesDataContext } from "../../Context/CoursesDataProvider";
 import { UserChoicesContext } from "../../Context/UserChoicesProvider";
+import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
 import { DispatchAnimationContext } from "../../Context/AnimationProvider";
 import ACTIONS from "../../Context/Reducer/Actions";
 import "../../styles/styles.css";
@@ -19,6 +21,8 @@ const CourseSelectionForm = ({ animation }) => {
   const userChoices = useContext(UserChoicesContext);
   const userChoicesDispatch = useContext(DispatchUserChoicesContext);
   const animationDispatch = useContext(DispatchAnimationContext);
+  const coursesData = useContext(CoursesDataContext);
+  const setCoursesData = useContext(SetCoursesDataContext);
 
   const [input, setInput] = useState("");
   const [section, setSection] = useState(
@@ -29,7 +33,6 @@ const CourseSelectionForm = ({ animation }) => {
   );
   const [validSectionInput, setValidSectionInput] = useState(true);
   const { toast, setToast, showToast } = useToast();
-  const [coursesData, setCoursesData] = useState([]);
 
   useEffect(() => {
     // Fetch course data from API
@@ -139,14 +142,12 @@ const CourseSelectionForm = ({ animation }) => {
         ></CourseInput>
         <CourseSelectionContainer
           showToast={showToast}
-          coursesData={coursesData}
           section={section}
           setSection={setSection}
           validateSection={validateSection}
         >
           <CoursesCallout
             validSectionInput={validSectionInput}
-            coursesData={coursesData}
           ></CoursesCallout>
         </CourseSelectionContainer>
         <Box position="absolute" bottom="32px" height="4vh" width="60vw">
