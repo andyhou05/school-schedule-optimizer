@@ -28,6 +28,7 @@ const CourseSelectionForm = ({ animation }) => {
     }))
   );
   const [validSectionInput, setValidSectionInput] = useState(true);
+  const [conflicts, setConflicts] = useState([]);
   const { toast, setToast, showToast } = useToast();
 
   useEffect(() => {

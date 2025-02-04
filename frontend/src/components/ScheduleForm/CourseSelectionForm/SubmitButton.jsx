@@ -3,14 +3,24 @@ import { useContext } from "react";
 import { Button, Box } from "@radix-ui/themes";
 
 import { DispatchAnimationContext } from "../../Context/AnimationProvider";
+import { UserChoicesContext } from "../../Context/UserChoicesProvider";
+import * as utils from "./utils";
 import ACTIONS from "../../Context/Reducer/Actions";
 
 const SubmitButton = ({ disabled }) => {
   const animationDispatch = useContext(DispatchAnimationContext);
+  const userChoices = useContext(UserChoicesContext);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    animationDispatch({ type: ACTIONS.animationNext });
+    const conflictsResponse = await utils.checkConflicts(
+      utils.groupSpecificCourses(userChoices.courses)
+    );
+    if (conflictsResponse.conflicts.length) {
+      console.log(conflictsResponse);
+    } else {
+      animationDispatch({ type: ACTIONS.animationNext });
+    }
   };
 
   return (
