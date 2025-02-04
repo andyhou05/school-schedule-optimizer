@@ -90,7 +90,7 @@ const ScheduleForm = () => {
         ></CourseSelectionForm>
         <PreferencesForm
           animation={animation}
-          generate_schedules={generateSchedules}
+          generateSchedules={generateSchedules}
         ></PreferencesForm>
       </form>
     </Box>

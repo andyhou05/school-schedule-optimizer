@@ -61,13 +61,7 @@ const CourseSelectionForm = ({ animation }) => {
         >
           <CoursesCallout validSectionInput={validSectionInput} />
         </CourseSelectionContainer>
-        <SubmitButton
-          disabled={
-            !userChoices.courses.length ||
-            !validSectionInput ||
-            !coursesData.length
-          }
-        />
+        <SubmitButton validSectionInput={validSectionInput} />
       </FormCard>
       <ScheduleToast
         title={

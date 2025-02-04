@@ -1,20 +1,25 @@
 import React from "react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Button, Box } from "@radix-ui/themes";
 
 import { DispatchAnimationContext } from "../../Context/AnimationProvider";
 import { UserChoicesContext } from "../../Context/UserChoicesProvider";
+import { CoursesDataContext } from "../../Context/CoursesDataProvider";
 import * as utils from "./utils";
 import ACTIONS from "../../Context/Reducer/Actions";
 
-const SubmitButton = ({ disabled }) => {
+const SubmitButton = ({ validSectionInput }) => {
   const animationDispatch = useContext(DispatchAnimationContext);
   const userChoices = useContext(UserChoicesContext);
+  const coursesData = useContext(CoursesDataContext);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (e) => {
     e.preventDefault();
     const conflictsResponse = await utils.checkConflicts(
-      utils.groupSpecificCourses(userChoices.courses)
+      utils.groupSpecificCourses(userChoices.courses),
+      setIsLoading
     );
     if (conflictsResponse.conflicts.length) {
       console.log(conflictsResponse);
@@ -28,7 +33,14 @@ const SubmitButton = ({ disabled }) => {
       <Button
         size="3"
         variant="solid"
-        disabled={disabled}
+        type="submit"
+        disabled={
+          !userChoices.courses.length ||
+          !validSectionInput ||
+          !coursesData.length ||
+          isLoading
+        }
+        loading={isLoading}
         style={{
           transition: "background-color 0.25s ease, color 0.25s ease",
           position: "absolute",

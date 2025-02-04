@@ -43,8 +43,9 @@ export const groupSpecificCourses = (courses) => {
   return { courses: specificCourses };
 };
 
-export const checkConflicts = async (courses) => {
+export const checkConflicts = async (courses, setIsLoading) => {
   try {
+    setIsLoading(true);
     const result = await fetch("http://127.0.0.1:5000/check_conflicts", {
       method: "POST",
       body: JSON.stringify(courses),
@@ -58,6 +59,7 @@ export const checkConflicts = async (courses) => {
     }
 
     const data = await result.json();
+    setIsLoading(false);
     return data;
   } catch (error) {
     console.log(error);

@@ -51,7 +51,7 @@ const PreferenceItem = ({ children, text }) => {
   );
 };
 
-const PreferencesForm = ({ animation, generate_schedules }) => {
+const PreferencesForm = ({ animation, generateSchedules }) => {
   const userChoicesDispatch = useContext(DispatchUserChoicesContext);
   const userChoices = useContext(UserChoicesContext);
   const animationDispatch = useContext(DispatchAnimationContext);
@@ -152,7 +152,7 @@ const PreferencesForm = ({ animation, generate_schedules }) => {
             loading={isLoading}
             onClick={(e) => {
               e.preventDefault();
-              generate_schedules(setIsLoading);
+              generateSchedules(setIsLoading);
             }}
           >
             Generate Schedules
