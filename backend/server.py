@@ -1,5 +1,6 @@
 from flask import request, jsonify
 from sqlalchemy import and_
+from sqlalchemy import tuple_
 
 from scripts.schedule.generator import generate_schedule
 from models import Period
@@ -177,26 +178,37 @@ def delete_course(id):
 @app.route("/check_conflicts", methods=["POST"])
 def check_conflicts():
     data = request.get_json()
-    courses = data.get("courses")
+    courses = data.get("courses", [])
+    
+    # Get all course IDs and sections
+    course_filters = [(course["courseId"], course["section"]) for course in courses]
+
+    # Query all relevant periods in one go and sort in the DB
+    periods = db.session.query(Period).filter(
+        tuple_(Period.course_id, Period.section).in_(course_filters)
+    ).order_by(Period.day, Period.start_time).all()
+
     conflicts = []
-    periods = []
-    for course in courses:
-        periods += db.session.query(Period).filter(and_(Period.course_id == course["courseId"], Period.section == course["section"])).all()
+    pairs = set()
     
-    periods = sorted(periods, key=lambda p: (p.day, p.start_time)) # Query from db and sort by day and time
-    
-    
+    # Check for overlapping periods
     for i in range(len(periods)):
         for j in range(i + 1, len(periods)):
             if periods[i].day != periods[j].day:
-                continue
+                break  # Since they are sorted by day, no need to continue
+            
             if periods[i].end_time > periods[j].start_time:
-                # We don't need to check periods[i].start_time < periods[j].end_time since the periods are sorted by time as well
                 conflicts.append([periods[i], periods[j]])
+                pairs.add((
+                    (periods[i].course_id, periods[i].section),
+                    (periods[j].course_id, periods[j].section)
+                ))
     
     json_conflicts = [[period.to_json() for period in conflict_periods] for conflict_periods in conflicts]
+    json_pairs = [[{"courseId": course[0], "section": course[1]} for course in pair] for pair in pairs]
     
-    return jsonify({"conflicts": json_conflicts}), 200
+    return jsonify({"conflicts": json_conflicts, "pairs": json_pairs}), 200
+
     
 
 # Route to generate schedule

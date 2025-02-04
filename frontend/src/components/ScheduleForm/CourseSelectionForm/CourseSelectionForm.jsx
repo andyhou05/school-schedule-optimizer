@@ -61,7 +61,11 @@ const CourseSelectionForm = ({ animation }) => {
         >
           <CoursesCallout validSectionInput={validSectionInput} />
         </CourseSelectionContainer>
-        <SubmitButton validSectionInput={validSectionInput} />
+        <SubmitButton
+          validSectionInput={validSectionInput}
+          conflicts={conflicts}
+          setConflicts={setConflicts}
+        />
       </FormCard>
       <ScheduleToast
         title={
