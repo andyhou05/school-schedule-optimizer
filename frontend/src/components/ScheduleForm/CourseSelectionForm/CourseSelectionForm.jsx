@@ -42,9 +42,13 @@ const CourseSelectionForm = ({ animation }) => {
     setValidSectionInput(
       userChoices.courses.every((course) => {
         return utils.validateSection(coursesData, course);
-      })
+      }) && !utils.checkConflicts(conflicts, userChoices.courses)
     );
   }, [userChoices.courses]);
+
+  useEffect(() => {
+    setValidSectionInput(false);
+  }, [conflicts]);
 
   return (
     <>

@@ -43,7 +43,20 @@ export const groupSpecificCourses = (courses) => {
   return { courses: specificCourses };
 };
 
-export const checkConflicts = async (courses, setIsLoading) => {
+export const checkConflicts = (conflicts, inputCourses) => {
+  if (!conflicts.pairs) return false;
+
+  const courseSet = new Set(
+    inputCourses.map((c) => `${c.id}-${c.sectionValue}`)
+  );
+  return conflicts.pairs.some(
+    ([course1, course2]) =>
+      courseSet.has(`${course1.courseId}-${course1.section}`) &&
+      courseSet.has(`${course2.courseId}-${course2.section}`)
+  );
+};
+
+export const sendConflictsCheck = async (courses, setIsLoading) => {
   try {
     setIsLoading(true);
     const result = await fetch("http://127.0.0.1:5000/check_conflicts", {

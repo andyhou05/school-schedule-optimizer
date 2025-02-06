@@ -17,12 +17,12 @@ const SubmitButton = ({ validSectionInput, conflicts, setConflicts }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const conflictsResponse = await utils.checkConflicts(
+    const conflictsResponse = await utils.sendConflictsCheck(
       utils.groupSpecificCourses(userChoices.courses),
       setIsLoading
     );
     if (conflictsResponse.conflicts.length) {
-      setConflicts(conflictsResponse.conflicts);
+      setConflicts(conflictsResponse);
     } else {
       animationDispatch({ type: ACTIONS.animationNext });
     }
