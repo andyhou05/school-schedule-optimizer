@@ -3,10 +3,10 @@ import { useContext } from "react";
 import { Callout } from "@radix-ui/themes";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 
-import { UserChoicesContext } from "../../Context/UserChoicesProvider";
-import { CoursesDataContext } from "../../Context/CoursesDataProvider";
+import { UserChoicesContext } from "../../../Context/UserChoicesProvider";
+import { CoursesDataContext } from "../../../Context/CoursesDataProvider";
 
-const CoursesCallout = ({ validSectionInput }) => {
+const CalloutTemplate = ({ condition, text }) => {
   const userChoices = useContext(UserChoicesContext);
   const coursesData = useContext(CoursesDataContext);
   return (
@@ -17,7 +17,7 @@ const CoursesCallout = ({ validSectionInput }) => {
         position: "absolute",
         bottom: "16px",
         opacity:
-          !validSectionInput && coursesData.length && userChoices.courses.length
+          condition && coursesData.length && userChoices.courses.length
             ? "1"
             : "0",
         transition: "opacity 0.25s ease",
@@ -26,10 +26,8 @@ const CoursesCallout = ({ validSectionInput }) => {
       <Callout.Icon>
         <ExclamationTriangleIcon />
       </Callout.Icon>
-      <Callout.Text>
-        Please enter valid section numbers before continuing.
-      </Callout.Text>
+      <Callout.Text>{text}</Callout.Text>
     </Callout.Root>
   );
 };
-export default CoursesCallout;
+export default CalloutTemplate;

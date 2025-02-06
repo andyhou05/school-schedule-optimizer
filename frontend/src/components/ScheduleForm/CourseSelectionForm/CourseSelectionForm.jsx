@@ -7,6 +7,7 @@ import CourseInput from "./CourseInput";
 import CourseSelectionContainer from "./CourseSelectionContainer";
 import FormCard from "../../Layout/FormCard";
 import CoursesCallout from "../Notifications/CoursesCallout";
+import ConflictsCallout from "../Notifications/Callouts/ConflictsCallout";
 import SubmitButton from "./SubmitButton";
 
 import useToast from "../../Hooks/useToast";
@@ -28,6 +29,7 @@ const CourseSelectionForm = ({ animation }) => {
     }))
   );
   const [validSectionInput, setValidSectionInput] = useState(true);
+  const [inputHasConflicts, setInputHasConflicts] = useState(false);
   const [conflicts, setConflicts] = useState([]);
   const { toast, setToast, showToast } = useToast();
 
@@ -42,12 +44,13 @@ const CourseSelectionForm = ({ animation }) => {
     setValidSectionInput(
       userChoices.courses.every((course) => {
         return utils.validateSection(coursesData, course);
-      }) && !utils.checkConflicts(conflicts, userChoices.courses)
+      })
     );
+    setInputHasConflicts(utils.checkConflicts(conflicts, userChoices.courses));
   }, [userChoices.courses]);
 
   useEffect(() => {
-    setValidSectionInput(false);
+    setInputHasConflicts(true);
   }, [conflicts]);
 
   return (
@@ -64,6 +67,7 @@ const CourseSelectionForm = ({ animation }) => {
           setSection={setSection}
         >
           <CoursesCallout validSectionInput={validSectionInput} />
+          <ConflictsCallout inputHasConflicts={inputHasConflicts} />
         </CourseSelectionContainer>
         <SubmitButton
           validSectionInput={validSectionInput}
