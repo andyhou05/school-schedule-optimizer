@@ -11,6 +11,7 @@ import {
   Separator,
 } from "@radix-ui/themes";
 import { Cross1Icon } from "@radix-ui/react-icons";
+import { motion, AnimatePresence } from "framer-motion";
 
 import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
 import { CoursesDataContext } from "../../Context/CoursesDataProvider";
@@ -68,84 +69,96 @@ const CourseList = ({ userChoices, showToast, section, setSection }) => {
 
   return (
     <DataList.Root orientation="vertical">
-      {userChoices.courses.map((course, index) => (
-        <DataList.Item key={course.id}>
-          <Flex justify="center" align="center" py="3">
-            <Card>
-              <Flex
-                width="80vh"
-                height="7vh"
-                direction="row"
-                gap="5"
-                align="center"
-              >
-                <Box pl="4">
-                  <IconButton
-                    size="2"
-                    variant="outline"
-                    color="red"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleDelete(course.id, index);
-                    }}
+      <AnimatePresence mode="popLayout">
+        {userChoices.courses.map((course, index) => (
+          <motion.li
+            key={course.id}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }} // Moves up and fades out
+            transition={{ duration: 0.4 }}
+            layout // Ensures smooth movement of other elements
+            style={{ listStyle: "none" }}
+          >
+            <DataList.Item key={course.id}>
+              <Flex justify="center" align="center" py="3">
+                <Card>
+                  <Flex
+                    width="80vh"
+                    height="7vh"
+                    direction="row"
+                    gap="5"
+                    align="center"
                   >
-                    <Cross1Icon></Cross1Icon>
-                  </IconButton>
-                </Box>
-                <DataList.Value key={course.id}>
-                  <Text weight="medium" size="4">
-                    {course.id}
-                  </Text>
-                </DataList.Value>
-                <Flex
-                  position="absolute"
-                  right="5vh"
-                  direction="row"
-                  align="center"
-                  gap="4"
-                >
-                  <Separator orientation="vertical" size="2" />
-                  <Text size="3" as="label" htmlFor="section">
-                    <Em>Section (optional)</Em>
-                  </Text>
-                  <TextField.Root
-                    inputMode="numeric"
-                    variant="soft"
-                    id="section"
-                    placeholder="00000"
-                    value={userChoices.courses[index].sectionInput}
-                    style={{
-                      outlineColor:
-                        section[index] &&
-                        !utils.validateSection(
-                          coursesData,
-                          userChoices.courses[index]
-                        ) &&
-                        coursesData.length
-                          ? "var(--red-6)"
-                          : "var(--slate-7)",
-                      backgroundColor:
-                        section[index] &&
-                        !utils.validateSection(
-                          coursesData,
-                          userChoices.courses[index]
-                        ) &&
-                        coursesData.length
-                          ? "var(--red-4)"
-                          : "var(--slate-5)",
-                      transition:
-                        "outline-color 0.5s ease, background-color 0.5s ease",
-                    }}
-                    onChange={(e) => {
-                      handleSectionInput(e.target.value, index);
-                    }}
-                  ></TextField.Root>
-                </Flex>
+                    <Box pl="4">
+                      <IconButton
+                        size="2"
+                        variant="outline"
+                        color="red"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleDelete(course.id, index);
+                        }}
+                      >
+                        <Cross1Icon></Cross1Icon>
+                      </IconButton>
+                    </Box>
+                    <DataList.Value key={course.id}>
+                      <Text weight="medium" size="4">
+                        {course.id}
+                      </Text>
+                    </DataList.Value>
+                    <Flex
+                      position="absolute"
+                      right="5vh"
+                      direction="row"
+                      align="center"
+                      gap="4"
+                    >
+                      <Separator orientation="vertical" size="2" />
+                      <Text size="3" as="label" htmlFor="section">
+                        <Em>Section (optional)</Em>
+                      </Text>
+                      <TextField.Root
+                        inputMode="numeric"
+                        variant="soft"
+                        id="section"
+                        placeholder="00000"
+                        value={userChoices.courses[index].sectionInput}
+                        style={{
+                          outlineColor:
+                            section[index] &&
+                            !utils.validateSection(
+                              coursesData,
+                              userChoices.courses[index]
+                            ) &&
+                            coursesData.length
+                              ? "var(--red-6)"
+                              : "var(--slate-7)",
+                          backgroundColor:
+                            section[index] &&
+                            !utils.validateSection(
+                              coursesData,
+                              userChoices.courses[index]
+                            ) &&
+                            coursesData.length
+                              ? "var(--red-4)"
+                              : "var(--slate-5)",
+                          transition:
+                            "outline-color 0.5s ease, background-color 0.5s ease",
+                        }}
+                        onChange={(e) => {
+                          handleSectionInput(e.target.value, index);
+                        }}
+                      ></TextField.Root>
+                    </Flex>
+                  </Flex>
+                </Card>
               </Flex>
-            </Card>
-          </Flex>
-        </DataList.Item>
-      ))}
+            </DataList.Item>
+          </motion.li>
+        ))}
+      </AnimatePresence>
     </DataList.Root>
   );
 };

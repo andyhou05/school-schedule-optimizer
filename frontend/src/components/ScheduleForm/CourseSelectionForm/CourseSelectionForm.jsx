@@ -6,7 +6,7 @@ import ScheduleToast from "../Notifications/ScheduleToast";
 import CourseInput from "./CourseInput";
 import CourseSelectionContainer from "./CourseSelectionContainer";
 import FormCard from "../../Layout/FormCard";
-import CoursesCallout from "../Notifications/CoursesCallout";
+import CoursesCallout from "../Notifications/Callouts/CoursesCallout";
 import ConflictsCallout from "../Notifications/Callouts/ConflictsCallout";
 import SubmitButton from "./SubmitButton";
 
