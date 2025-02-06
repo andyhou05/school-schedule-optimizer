@@ -1,10 +1,9 @@
 import React from "react";
 import CalloutTemplate from "./CalloutTemplate";
 
-const CoursesCallout = ({ validSectionInput }) => {
+const CoursesCallout = () => {
   return (
     <CalloutTemplate
-      condition={!validSectionInput}
       text={"Please enter valid section numbers before continuing."}
     ></CalloutTemplate>
   );

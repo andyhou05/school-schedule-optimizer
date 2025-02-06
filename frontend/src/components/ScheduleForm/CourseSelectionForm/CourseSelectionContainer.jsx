@@ -15,11 +15,12 @@ const CourseSelectionContainer = ({
   return (
     <Flex
       width="120vh"
-      height="60vh"
+      height="50vh"
       position="relative"
       justify="center"
-      p="60px"
-      pb="100px"
+      p="4"
+      pt="4"
+      pb="4"
     >
       <ScrollArea type="auto" scrollbars="vertical">
         <CourseList

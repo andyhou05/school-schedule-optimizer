@@ -14,12 +14,13 @@ const FormCard = ({ children, step, currentStep, direction }) => {
   };
 
   return (
-    <Flex width="100%" height="100vh" align="center" justify="center">
+    <Flex height="100vh" align="center" justify="center">
       <Card
         className={getClassName()}
         style={{
           boxShadow: "var(--shadow-4)",
           transition: "transform 0.5s ease-in-out",
+          height: "80vh",
         }}
       >
         <Box width="60vw" m="auto" mt="50px">
