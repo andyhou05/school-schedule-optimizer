@@ -69,7 +69,10 @@ const CourseSelectionForm = ({ animation }) => {
           section={section}
           setSection={setSection}
         >
-          <CalloutContainer />
+          <CalloutContainer
+            validSectionInput={validSectionInput}
+            inputHasConflicts={inputHasConflicts}
+          />
         </CourseSelectionContainer>
         <SubmitButton
           validSectionInput={validSectionInput}

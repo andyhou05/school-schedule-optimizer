@@ -1,24 +1,31 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Flex } from "@radix-ui/themes";
 import { motion, AnimatePresence } from "framer-motion";
 
-import CoursesCallout from "../Notifications/Callouts/CoursesCallout";
-import ConflictsCallout from "../Notifications/Callouts/ConflictsCallout";
+import CoursesCallout from "./CoursesCallout";
+import ConflictsCallout from "./ConflictsCallout";
+import { CoursesDataContext } from "../../../Context/CoursesDataProvider";
+import { UserChoicesContext } from "../../../Context/UserChoicesProvider";
 
-const CalloutDiv = () => {
+const CalloutDiv = React.forwardRef(({ children, keyProp }, ref) => {
   return (
     <motion.div
-      key="validSectionInput"
+      key={keyProp}
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.3 }}
       layout
-    ></motion.div>
+      ref={ref}
+    >
+      {children}
+    </motion.div>
   );
-};
+});
 
-const CalloutContainer = () => {
+const CalloutContainer = ({ validSectionInput, inputHasConflicts }) => {
+  const coursesData = useContext(CoursesDataContext);
+  const userChoices = useContext(UserChoicesContext);
   return (
     <Flex
       direction={"column"}
@@ -34,17 +41,17 @@ const CalloutContainer = () => {
     >
       <AnimatePresence mode="popLayout">
         {!validSectionInput &&
-          coursesData.length &&
-          userChoices.courses.length && (
-            <CalloutDiv>
+          coursesData?.length &&
+          userChoices?.courses?.length && (
+            <CalloutDiv key={validSectionInput}>
               <CoursesCallout />
             </CalloutDiv>
           )}
 
         {inputHasConflicts &&
-          coursesData.length &&
-          userChoices.courses.length && (
-            <CalloutDiv>
+          coursesData?.length &&
+          userChoices?.courses?.length && (
+            <CalloutDiv key={inputHasConflicts}>
               <ConflictsCallout />
             </CalloutDiv>
           )}
