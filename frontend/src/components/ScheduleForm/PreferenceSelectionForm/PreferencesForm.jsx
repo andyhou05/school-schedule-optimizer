@@ -18,6 +18,7 @@ import {
 
 import FormCard from "../../Layout/FormCard";
 import PreferenceRadioCards from "./PreferenceRadioCards";
+import InfoButton from "../InfoButton/InfoButton";
 import {
   DispatchUserChoicesContext,
   UserChoicesContext,
@@ -69,16 +70,7 @@ const PreferencesForm = ({ animation, generateSchedules }) => {
             Preferences
           </Heading>
           <Tooltip delayDuration={150}>
-            <IconButton
-              radius="full"
-              color="gray"
-              mt="2"
-              variant="ghost"
-              size="1"
-              onClick={(e) => e.preventDefault()}
-            >
-              <InfoCircledIcon height="20px" width="20px"></InfoCircledIcon>
-            </IconButton>
+            <InfoButton mt="2" />
           </Tooltip>
         </Flex>
         <Flex height="60vh" direction="column" gap="9" pt="5" ml="7">

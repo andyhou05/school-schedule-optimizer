@@ -3,6 +3,7 @@ import { Flex, Em, Tooltip, Link, Text, IconButton } from "@radix-ui/themes";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 
 import CourseCell from "./CourseCell";
+import InfoButton from "../ScheduleForm/InfoButton/InfoButton";
 import "../styles/styles.css";
 
 const ScheduleGrid = ({ coursesData, teacherRatingsData, scheduleScore }) => {
@@ -124,16 +125,7 @@ const ScheduleGrid = ({ coursesData, teacherRatingsData, scheduleScore }) => {
       </table>
       <Flex gap="2" align="center" height="5%">
         <Tooltip delayDuration={150}>
-          <IconButton
-            radius="full"
-            color="gray"
-            mt="0"
-            variant="ghost"
-            size="1"
-            onClick={(e) => e.preventDefault()}
-          >
-            <InfoCircledIcon height="22px" width="22px"></InfoCircledIcon>
-          </IconButton>
+          <InfoButton />
         </Tooltip>
         <Text size="6">
           <Em>Schedule Score:</Em>
