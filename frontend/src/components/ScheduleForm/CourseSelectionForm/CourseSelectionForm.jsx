@@ -7,6 +7,7 @@ import ScheduleToast from "../Notifications/ScheduleToast";
 import CourseInput from "./CourseInput";
 import CourseSelectionContainer from "./CourseSelectionContainer";
 import FormCard from "../../Layout/FormCard";
+import CalloutContainer from "../Notifications/Callouts/CalloutContainer";
 import CoursesCallout from "../Notifications/Callouts/CoursesCallout";
 import ConflictsCallout from "../Notifications/Callouts/ConflictsCallout";
 import SubmitButton from "./SubmitButton";
@@ -68,50 +69,7 @@ const CourseSelectionForm = ({ animation }) => {
           section={section}
           setSection={setSection}
         >
-          <Flex
-            direction={"column"}
-            gap="3"
-            pt="4"
-            style={{
-              width: "40%",
-              height: "20%",
-              position: "absolute",
-              bottom: "-21%",
-              justifyContent: "center",
-            }}
-          >
-            <AnimatePresence mode="popLayout">
-              {!validSectionInput &&
-                coursesData.length &&
-                userChoices.courses.length && (
-                  <motion.div
-                    key="validSectionInput"
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3 }}
-                    layout
-                  >
-                    <CoursesCallout />
-                  </motion.div>
-                )}
-
-              {inputHasConflicts &&
-                coursesData.length &&
-                userChoices.courses.length && (
-                  <motion.div
-                    key="inputHasConflicts"
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3 }}
-                    layout
-                  >
-                    <ConflictsCallout />
-                  </motion.div>
-                )}
-            </AnimatePresence>
-          </Flex>
+          <CalloutContainer />
         </CourseSelectionContainer>
         <SubmitButton
           validSectionInput={validSectionInput}
