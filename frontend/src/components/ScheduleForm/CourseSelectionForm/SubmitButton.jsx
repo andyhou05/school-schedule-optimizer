@@ -39,7 +39,7 @@ const SubmitButton = ({ validSectionInput, conflicts, setConflicts }) => {
           !validSectionInput ||
           !coursesData.length ||
           isLoading ||
-          conflicts?.pairs?.length
+          !conflicts?.pairs?.length
         }
         loading={isLoading}
         style={{
