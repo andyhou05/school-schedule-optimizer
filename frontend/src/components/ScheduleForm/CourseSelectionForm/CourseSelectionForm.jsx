@@ -8,8 +8,6 @@ import CourseInput from "./CourseInput";
 import CourseSelectionContainer from "./CourseSelectionContainer";
 import FormCard from "../../Layout/FormCard";
 import CalloutContainer from "../Notifications/Callouts/CalloutContainer";
-import CoursesCallout from "../Notifications/Callouts/CoursesCallout";
-import ConflictsCallout from "../Notifications/Callouts/ConflictsCallout";
 import SubmitButton from "./SubmitButton";
 
 import useToast from "../../Hooks/useToast";
@@ -18,7 +16,6 @@ import { SetCoursesDataContext } from "../../Context/CoursesDataProvider";
 import { UserChoicesContext } from "../../Context/UserChoicesProvider";
 import * as utils from "./utils";
 import "../../styles/styles.css";
-import { Flex } from "@radix-ui/themes";
 
 const CourseSelectionForm = ({ animation }) => {
   const userChoices = useContext(UserChoicesContext);
