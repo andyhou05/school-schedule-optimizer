@@ -1,6 +1,6 @@
 import React from "react";
 import CalloutTemplate from "../CalloutTemplate";
-import ConflictsDialog from "./ConflictsDialog";
+import ConflictsDialog from "./ConflictsDialog/ConflictsDialog";
 import InfoButton from "../../../InfoButton/InfoButton";
 
 const ConflictsCallout = () => {
