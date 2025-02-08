@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
-import { motion, AnimatePresence } from "framer-motion";
 
 // Components
 import ScheduleToast from "../Notifications/ScheduleToast";
@@ -14,6 +13,7 @@ import useToast from "../../Hooks/useToast";
 import { CoursesDataContext } from "../../Context/CoursesDataProvider";
 import { SetCoursesDataContext } from "../../Context/CoursesDataProvider";
 import { UserChoicesContext } from "../../Context/UserChoicesProvider";
+import { ConflictsContext } from "../../Context/ConflictsProvider";
 import * as utils from "./utils";
 import "../../styles/styles.css";
 
@@ -21,6 +21,7 @@ const CourseSelectionForm = ({ animation }) => {
   const userChoices = useContext(UserChoicesContext);
   const coursesData = useContext(CoursesDataContext);
   const setCoursesData = useContext(SetCoursesDataContext);
+  const conflicts = useContext(ConflictsContext);
 
   const [section, setSection] = useState(
     userChoices.courses.map((course) => ({
@@ -30,7 +31,6 @@ const CourseSelectionForm = ({ animation }) => {
   );
   const [validSectionInput, setValidSectionInput] = useState(true);
   const [inputHasConflicts, setInputHasConflicts] = useState(false);
-  const [conflicts, setConflicts] = useState([]);
   const { toast, setToast, showToast } = useToast();
 
   useEffect(() => {
@@ -75,7 +75,6 @@ const CourseSelectionForm = ({ animation }) => {
         </CourseSelectionContainer>
         <SubmitButton
           validSectionInput={validSectionInput}
-          setConflicts={setConflicts}
           inputHasConflicts={inputHasConflicts}
         />
       </FormCard>

@@ -7,7 +7,9 @@ const ConflictsDialog = ({ children }) => {
 
       <Dialog.Content>
         <Dialog.Title>Conflicts</Dialog.Title>
-        <Dialog.Description>Courses</Dialog.Description>
+        <Dialog.Description>
+          There are time conflicts with the following courses:
+        </Dialog.Description>
       </Dialog.Content>
     </Dialog.Root>
   );

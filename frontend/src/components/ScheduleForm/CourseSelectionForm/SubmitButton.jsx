@@ -5,17 +5,15 @@ import { Button, Box } from "@radix-ui/themes";
 import { DispatchAnimationContext } from "../../Context/AnimationProvider";
 import { UserChoicesContext } from "../../Context/UserChoicesProvider";
 import { CoursesDataContext } from "../../Context/CoursesDataProvider";
+import { SetConflictsContext } from "../../Context/ConflictsProvider";
 import * as utils from "./utils";
 import ACTIONS from "../../Context/Reducer/Actions";
 
-const SubmitButton = ({
-  validSectionInput,
-  setConflicts,
-  inputHasConflicts,
-}) => {
+const SubmitButton = ({ validSectionInput, inputHasConflicts }) => {
   const animationDispatch = useContext(DispatchAnimationContext);
   const userChoices = useContext(UserChoicesContext);
   const coursesData = useContext(CoursesDataContext);
+  const setConflicts = useContext(SetConflictsContext);
 
   const [isLoading, setIsLoading] = useState(false);
 
