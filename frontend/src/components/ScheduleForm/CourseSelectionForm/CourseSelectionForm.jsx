@@ -50,7 +50,9 @@ const CourseSelectionForm = ({ animation }) => {
   }, [userChoices.courses]);
 
   useEffect(() => {
-    setInputHasConflicts(true);
+    if (conflicts?.pairs?.length > 0) {
+      setInputHasConflicts(true);
+    }
   }, [conflicts]);
 
   return (
