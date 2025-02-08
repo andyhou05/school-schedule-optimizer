@@ -33,29 +33,28 @@ const SubmitButton = ({
   };
 
   return (
-    <Box position="absolute" bottom="32px" height="4vh" width="60vw">
-      <Button
-        size="3"
-        variant="solid"
-        type="submit"
-        disabled={
-          !userChoices.courses.length ||
-          !validSectionInput ||
-          !coursesData.length ||
-          isLoading ||
-          inputHasConflicts
-        }
-        loading={isLoading}
-        style={{
-          transition: "background-color 0.25s ease, color 0.25s ease",
-          position: "absolute",
-          right: "32px",
-        }}
-        onClick={onSubmit}
-      >
-        Continue
-      </Button>
-    </Box>
+    <Button
+      size="3"
+      variant="solid"
+      type="submit"
+      disabled={
+        !userChoices.courses.length ||
+        !validSectionInput ||
+        !coursesData.length ||
+        isLoading ||
+        inputHasConflicts
+      }
+      loading={isLoading}
+      style={{
+        transition: "background-color 0.25s ease, color 0.25s ease",
+        position: "absolute",
+        right: "4%",
+        bottom: "3%",
+      }}
+      onClick={onSubmit}
+    >
+      Continue
+    </Button>
   );
 };
 
