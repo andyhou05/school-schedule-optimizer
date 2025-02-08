@@ -8,9 +8,9 @@ const InfoButton = React.forwardRef(
       <IconButton
         radius="full"
         color="gray"
-        mt={mt}
         variant="ghost"
         size="1"
+        mt={mt}
         onClick={onClick}
         ref={ref}
       >

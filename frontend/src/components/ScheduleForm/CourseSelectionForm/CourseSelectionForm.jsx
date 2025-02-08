@@ -76,8 +76,8 @@ const CourseSelectionForm = ({ animation }) => {
         </CourseSelectionContainer>
         <SubmitButton
           validSectionInput={validSectionInput}
-          conflicts={conflicts}
           setConflicts={setConflicts}
+          inputHasConflicts={inputHasConflicts}
         />
       </FormCard>
       <ScheduleToast

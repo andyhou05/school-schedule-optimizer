@@ -8,7 +8,11 @@ import { CoursesDataContext } from "../../Context/CoursesDataProvider";
 import * as utils from "./utils";
 import ACTIONS from "../../Context/Reducer/Actions";
 
-const SubmitButton = ({ validSectionInput, conflicts, setConflicts }) => {
+const SubmitButton = ({
+  validSectionInput,
+  setConflicts,
+  inputHasConflicts,
+}) => {
   const animationDispatch = useContext(DispatchAnimationContext);
   const userChoices = useContext(UserChoicesContext);
   const coursesData = useContext(CoursesDataContext);
@@ -39,7 +43,7 @@ const SubmitButton = ({ validSectionInput, conflicts, setConflicts }) => {
           !validSectionInput ||
           !coursesData.length ||
           isLoading ||
-          !conflicts?.pairs?.length
+          inputHasConflicts
         }
         loading={isLoading}
         style={{
