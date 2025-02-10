@@ -9,8 +9,9 @@ import {
   DataList,
   Em,
   Separator,
+  Tooltip,
 } from "@radix-ui/themes";
-import { Cross1Icon } from "@radix-ui/react-icons";
+import { Cross1Icon, QuestionMarkCircledIcon } from "@radix-ui/react-icons";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
@@ -151,6 +152,19 @@ const CourseList = ({ userChoices, showToast, section, setSection }) => {
                           handleSectionInput(e.target.value, index);
                         }}
                       ></TextField.Root>
+                      <Tooltip
+                        delayDuration={150}
+                        content="You can choose if you want a specific section for this course."
+                      >
+                        <IconButton
+                          radius="full"
+                          size="1"
+                          variant="ghost"
+                          onClick={(e) => e.preventDefault()}
+                        >
+                          <QuestionMarkCircledIcon height="20px" width="20px" />
+                        </IconButton>
+                      </Tooltip>
                     </Flex>
                   </Flex>
                 </Card>
