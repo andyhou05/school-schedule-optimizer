@@ -15,7 +15,10 @@ const CourseCell = ({ courseCellInformation, teacherRatingsData }) => {
         <TeacherDialog
           teacher={teacherRatingsData[courseCellInformation.teacherId]}
         >
-          <Button variant="outline" style={{ height: "100%", marginTop: "5%" }}>
+          <Button
+            variant="ghost"
+            style={{ height: "100%", margin: "0", marginTop: "5%" }}
+          >
             <Text weight="medium" style={{ color: "blue" }}>
               <Em>
                 {`${

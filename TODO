@@ -1,6 +1,5 @@
 ESSENTIAL:
 
-- Add text to all tooltips
 - Add text saying request may take minutes
 - save conflicts to session
 - Memoization
