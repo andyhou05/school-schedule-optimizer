@@ -1,7 +1,5 @@
 ESSENTIAL:
 
-- extract data list
-- Add info button on conflict callout
 - Show not found page for 0 schedules
 - Button to go back
 - Add text to all tooltips
@@ -9,8 +7,8 @@ ESSENTIAL:
 
 CODE STRUCTURE:
 
-- Convert Start, End, Duration time on the backend
 - Put each component in its own folder
 - avoid antipatterns, minimize inital load time
 - Remove useless server routes
+- Backend validation
 - Handle errors better
