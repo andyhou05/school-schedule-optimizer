@@ -1,11 +1,12 @@
 const ACTIONS = {
-    animationNext: "animationNext",
-    animationPrevious: "animationPrevious",
-  
-    updatePreferences: "updatePreferences",
-    addCourse: "addCourse",
-    updateSection: "updateSection",
-    deleteCourse: "deleteCourse",
-  };
+  animationNext: "animationNext",
+  animationPrevious: "animationPrevious",
+  animationReset: "animationReset",
 
-  export default ACTIONS
+  updatePreferences: "updatePreferences",
+  addCourse: "addCourse",
+  updateSection: "updateSection",
+  deleteCourse: "deleteCourse",
+};
+
+export default ACTIONS;
