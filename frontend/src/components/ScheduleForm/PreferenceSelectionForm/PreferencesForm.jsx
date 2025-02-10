@@ -26,11 +26,11 @@ import {
 import { DispatchAnimationContext } from "../../Context/AnimationProvider";
 import ACTIONS from "../../Context/Reducer/Actions";
 
-const PreferenceItem = ({ children, text }) => {
+const PreferenceItem = ({ children, text, content }) => {
   return (
     <Box width="100">
       <Flex direction="row" gap="5" height="5vh" align="center">
-        <Tooltip delayDuration={150}>
+        <Tooltip delayDuration={150} content={content}>
           <IconButton
             radius="full"
             size="1"
@@ -69,21 +69,30 @@ const PreferencesForm = ({ animation, generateSchedules }) => {
           <Heading size={"8"} as="h1">
             Preferences
           </Heading>
-          <Tooltip delayDuration={150}>
+          <Tooltip
+            delayDuration={150}
+            content="You can choose any preferences you want your schedule to have. Keep in mind that the more preferences you choose, the less we will be able to completely fulfill them."
+          >
             <InfoButton mt="2" />
           </Tooltip>
         </Flex>
         <Flex height="60vh" direction="column" gap="9" pt="5" ml="7">
-          <PreferenceItem text="Breaks">
+          <PreferenceItem
+            text="Breaks"
+            content="You can choose whether you prefer to have as little breaks a possible, or prefer to have breaks between your courses."
+          >
             <PreferenceRadioCards
               size="3"
               gap="9"
-              items={["No Preferences", "Short Breaks", "Regular Breaks"]}
+              items={["No Preferences", "Less Breaks", "More Breaks"]}
               API_values={["", "short", "regular"]}
               name="breaks"
             ></PreferenceRadioCards>
           </PreferenceItem>
-          <PreferenceItem text="Class Time">
+          <PreferenceItem
+            text="Class Time"
+            content="You can choose whether you prefer to have early classes or later during the day."
+          >
             <PreferenceRadioCards
               size="3"
               gap="9"
@@ -92,7 +101,10 @@ const PreferencesForm = ({ animation, generateSchedules }) => {
               name="time"
             ></PreferenceRadioCards>
           </PreferenceItem>
-          <PreferenceItem text="Day Off">
+          <PreferenceItem
+            text="Day Off"
+            content="You can choose if you would like to have a day off in your schedule. Note that this may not always be possible."
+          >
             <PreferenceRadioCards
               size="2"
               gap="8"
@@ -108,7 +120,10 @@ const PreferencesForm = ({ animation, generateSchedules }) => {
               name="dayOff"
             ></PreferenceRadioCards>
           </PreferenceItem>
-          <PreferenceItem text="Intensive">
+          <PreferenceItem
+            text="Intensive"
+            content="You can choose whether you want to include intensive courses or not. They are offered for gym courses and can include classes during weekends."
+          >
             <Checkbox
               ml="3"
               defaultChecked={userChoices.preferences.intensive.value ?? false}

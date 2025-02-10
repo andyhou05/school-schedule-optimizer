@@ -3,9 +3,10 @@ import { IconButton } from "@radix-ui/themes";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 
 const InfoButton = React.forwardRef(
-  ({ mt = 0, onClick = (e) => e.preventDefault() }, ref) => {
+  ({ mt = 0, onClick = (e) => e.preventDefault(), ...props }, ref) => {
     return (
       <IconButton
+        {...props}
         type="button"
         radius="full"
         color="gray"

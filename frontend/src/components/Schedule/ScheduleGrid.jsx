@@ -124,7 +124,11 @@ const ScheduleGrid = ({ coursesData, teacherRatingsData, scheduleScore }) => {
         </tbody>
       </table>
       <Flex gap="2" align="center" height="5%">
-        <Tooltip delayDuration={150}>
+        <Tooltip
+          delayDuration={150}
+          side="bottom"
+          content="The overall score of this schedule based off your preferences and teacher ratings."
+        >
           <InfoButton />
         </Tooltip>
         <Text size="6">
