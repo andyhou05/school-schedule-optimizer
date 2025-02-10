@@ -1,22 +1,25 @@
-import { DispatchAnimationContext } from "../Context/AnimationProvider";
-import ACTIONS from "../Context/Reducer/Actions";
-import { Button } from "@radix-ui/themes";
+import { IconButton } from "@radix-ui/themes";
 import { useContext } from "react";
 import { useNavigate } from "react-router";
+import { ArrowLeftIcon } from "@radix-ui/react-icons";
 
-const GoBackButton = () => {
+import { DispatchAnimationContext } from "../Context/AnimationProvider";
+import ACTIONS from "../Context/Reducer/Actions";
+
+const GoBackButton = ({ ...props }) => {
   const navigate = useNavigate();
   const dispatchAnimation = useContext(DispatchAnimationContext);
   return (
-    <Button
-      size="4"
+    <IconButton
+      {...props}
+      variant="ghost"
       onClick={() => {
         dispatchAnimation({ type: ACTIONS.animationReset });
         navigate("/");
       }}
     >
-      Go Back
-    </Button>
+      <ArrowLeftIcon width="50" height="50"></ArrowLeftIcon>
+    </IconButton>
   );
 };
 
