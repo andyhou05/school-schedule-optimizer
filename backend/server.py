@@ -213,7 +213,7 @@ def check_conflicts():
 
 # Route to generate schedule
 @app.route("/generate_schedule", methods=["POST"])
-@cache.memoize(timeout=120)
+@cache.memoize(timeout=600)
 def generate_schedules():
     data = request.get_json()
     selected_courses = data.get("courses")

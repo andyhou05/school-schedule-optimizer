@@ -12,7 +12,7 @@ const ScheduleGridList = () => {
   const data = location.state;
 
   useEffect(() => {
-    if (data == null) navigate("/");
+    if (!data) navigate("/");
   }, []);
 
   return (
@@ -21,7 +21,7 @@ const ScheduleGridList = () => {
         style={{ position: "fixed", left: "2%", top: "4%" }}
       ></GoBackButton>
       <Flex direction="column">
-        {data?.schedules.length ? (
+        {data?.schedules?.length ? (
           data.schedules.map((schedule, index) => (
             <ScheduleGrid
               key={index}
