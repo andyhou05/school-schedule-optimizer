@@ -44,7 +44,7 @@ export const groupSpecificCourses = (courses) => {
 };
 
 export const checkConflicts = (conflicts, inputCourses) => {
-  if (!conflicts.pairs) return false;
+  if (!conflicts.pairs || !inputCourses) return false;
 
   const courseSet = new Set(
     inputCourses.map((c) => `${c.id}-${c.sectionValue}`)

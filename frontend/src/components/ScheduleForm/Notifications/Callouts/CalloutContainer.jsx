@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Flex } from "@radix-ui/themes";
 import { motion, AnimatePresence } from "framer-motion";
 
-import CoursesCallout from "./CoursesCallout";
+import CoursesCallout from "./CoursesCallout/CoursesCallout";
 import ConflictsCallout from "./ConflictsCallout/ConflictsCallout";
 import { CoursesDataContext } from "../../../Context/CoursesDataProvider";
 import { UserChoicesContext } from "../../../Context/UserChoicesProvider";

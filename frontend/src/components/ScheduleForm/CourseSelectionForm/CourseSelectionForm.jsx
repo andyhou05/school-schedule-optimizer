@@ -4,7 +4,7 @@ import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
 // Components
 import ScheduleToast from "../Notifications/ScheduleToast";
 import CourseInput from "./CourseInput";
-import CourseSelectionContainer from "./CourseSelectionContainer";
+import CourseSelectionContainer from "./CourseContainer";
 import FormCard from "../../Layout/FormCard";
 import CalloutContainer from "../Notifications/Callouts/CalloutContainer";
 import SubmitButton from "./SubmitButton";
@@ -41,18 +41,24 @@ const CourseSelectionForm = ({ animation }) => {
 
   useEffect(() => {
     // Update validity when the section/course input changes
-    setValidSectionInput(
-      userChoices.courses.every((course) => {
-        return utils.validateSection(coursesData, course);
-      })
-    );
-    setInputHasConflicts(utils.checkConflicts(conflicts, userChoices.courses));
+    if (coursesData?.length) {
+      setValidSectionInput(
+        userChoices.courses.every((course) => {
+          return utils.validateSection(coursesData, course);
+        })
+      );
+      setInputHasConflicts(
+        utils.checkConflicts(conflicts, userChoices.courses)
+      );
+    }
   }, [userChoices.courses]);
 
   useEffect(() => {
     window.sessionStorage.setItem("conflicts", JSON.stringify(conflicts));
     if (conflicts?.pairs?.length > 0) {
-      setInputHasConflicts(true);
+      setInputHasConflicts(
+        utils.checkConflicts(conflicts, userChoices.courses)
+      );
     }
   }, [conflicts]);
 

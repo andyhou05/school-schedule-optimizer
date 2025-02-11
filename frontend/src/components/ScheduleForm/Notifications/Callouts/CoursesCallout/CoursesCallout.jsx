@@ -1,5 +1,5 @@
 import React from "react";
-import CalloutTemplate from "./CalloutTemplate";
+import CalloutTemplate from "../CalloutTemplate";
 
 const CoursesCallout = () => {
   return (
