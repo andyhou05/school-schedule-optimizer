@@ -6,7 +6,7 @@ from scripts.schedule.generator import generate_schedule
 from models import Period
 from models import Teacher
 from models import TeacherRatings
-from config import app, db
+from config import app, db, cache
 
 # CRUD operations for TeacherRatings
 
@@ -213,6 +213,7 @@ def check_conflicts():
 
 # Route to generate schedule
 @app.route("/generate_schedule", methods=["POST"])
+@cache.memoize(timeout=120)
 def generate_schedules():
     data = request.get_json()
     selected_courses = data.get("courses")
