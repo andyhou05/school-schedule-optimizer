@@ -10,6 +10,7 @@ import {
   Separator,
   Tooltip,
   IconButton,
+  Popover,
 } from "@radix-ui/themes";
 import {
   QuestionMarkCircledIcon,
@@ -57,6 +58,13 @@ const PreferencesForm = ({ animation, generateSchedules }) => {
   const userChoices = useContext(UserChoicesContext);
   const animationDispatch = useContext(DispatchAnimationContext);
   const [isLoading, setIsLoading] = useState(false);
+  const [openPopover, setOpenPopover] = useState(false);
+
+  const handleOpenPopover = () => {
+    setTimeout(() => {
+      setOpenPopover(true);
+    }, 10000);
+  };
 
   return (
     <>
@@ -145,6 +153,7 @@ const PreferencesForm = ({ animation, generateSchedules }) => {
           <Button
             size="3"
             style={{ position: "absolute", left: "32px" }}
+            disabled={isLoading}
             onClick={(e) => {
               e.preventDefault();
               animationDispatch({ type: ACTIONS.animationPrevious });
@@ -152,18 +161,23 @@ const PreferencesForm = ({ animation, generateSchedules }) => {
           >
             Go back
           </Button>
-          <Button
-            size="3"
-            style={{ position: "absolute", right: "32px" }}
-            type="submit"
-            loading={isLoading}
-            onClick={(e) => {
-              e.preventDefault();
-              generateSchedules(setIsLoading);
-            }}
-          >
-            Generate Schedules
-          </Button>
+          <Popover.Root open={openPopover}>
+            <Popover.Trigger>
+              <Button
+                size="3"
+                style={{ position: "absolute", right: "32px" }}
+                type="button"
+                loading={isLoading}
+                onClick={() => {
+                  handleOpenPopover();
+                  generateSchedules(setIsLoading);
+                }}
+              >
+                Generate Schedules
+              </Button>
+            </Popover.Trigger>
+            <Popover.Content>This may take a few minutes.</Popover.Content>
+          </Popover.Root>
         </Box>
       </FormCard>
     </>
