@@ -16,10 +16,10 @@ const ScheduleForm = () => {
   // This state is used to render the list items
   const userChoices = useContext(UserChoicesContext);
 
-  // Save component values in session
+  // Save values in session
   useEffect(() => {
     window.sessionStorage.setItem(
-      "SCHEDULE_FORM",
+      "scheduleForm",
       JSON.stringify({
         userChoices: {
           courses: userChoices.courses.map((value) => ({

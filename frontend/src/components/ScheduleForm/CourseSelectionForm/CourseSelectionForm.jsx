@@ -50,6 +50,7 @@ const CourseSelectionForm = ({ animation }) => {
   }, [userChoices.courses]);
 
   useEffect(() => {
+    window.sessionStorage.setItem("conflicts", JSON.stringify(conflicts));
     if (conflicts?.pairs?.length > 0) {
       setInputHasConflicts(true);
     }

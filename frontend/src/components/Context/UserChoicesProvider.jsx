@@ -9,7 +9,7 @@ export const UserChoicesProvider = ({ children }) => {
   // This state is used to render the list items
   const [userChoices, userChoicesDispatch] = useReducer(
     userChoicesReducer,
-    JSON.parse(window.sessionStorage.getItem("SCHEDULE_FORM"))?.userChoices ?? {
+    JSON.parse(window.sessionStorage.getItem("scheduleForm"))?.userChoices ?? {
       courses: [], // { id: "", sectionInput: "", sectionValue: "" }
       preferences: {
         breaks: { input: "1", value: "" },
