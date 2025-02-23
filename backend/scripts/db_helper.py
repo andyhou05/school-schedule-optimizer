@@ -2,6 +2,7 @@ from flask_sqlalchemy.model import Model
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import Session
+from dotenv import load_dotenv
 
 import os
 
@@ -13,10 +14,10 @@ def connect_db() -> Session:
         Session: Session object that can be used to query database.
     """
     # Environment variables
-    password = os.environ["MYSQL_PASSWORD"]
-    host = "localhost:3309"
-    user = os.environ["MOCKER_USER"]
-    db_name = os.environ["MOCKER_DB_NAME"]
+    password = os.getenv("MYSQL_PASSWORD")
+    host = os.getenv("MOCKER_ENDPOINT")
+    user = os.getenv("MOCKER_USER")
+    db_name = os.getenv("MOCKER_DB_NAME")
     
     engine = create_engine(f"mysql+pymysql://{user}:{password}@{host}/{db_name}")
     Session = sessionmaker(bind=engine)
