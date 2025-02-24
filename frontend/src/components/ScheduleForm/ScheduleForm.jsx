@@ -61,13 +61,16 @@ const ScheduleForm = () => {
   const generateSchedules = async (setIsLoading) => {
     try {
       setIsLoading(true);
-      const response = await fetch("http://127.0.0.1:5000/generate_schedule", {
-        method: "POST",
-        body: JSON.stringify(getFormatedUserChoices()),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/generate_schedule`,
+        {
+          method: "POST",
+          body: JSON.stringify(getFormatedUserChoices()),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error, ${response.status}`);
