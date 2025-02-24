@@ -1,5 +1,4 @@
 - Put each component in its own folder
 - avoid antipatterns, minimize inital load time
-- Remove useless server routes
 - Backend validation
 - Handle errors better
