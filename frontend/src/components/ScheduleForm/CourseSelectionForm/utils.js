@@ -12,7 +12,6 @@ export const validateSection = (coursesData, courseInput) => {
 export const fetchCourseData = async () => {
   try {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/courses/W25`);
-    console.log(response);
     if (!response.ok) {
       throw new Error(`Failed to fetch: ${response.statusText}`);
     }
