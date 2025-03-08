@@ -11,10 +11,13 @@ export const validateSection = (coursesData, courseInput) => {
 // Fetch all existing courses for input validation
 export const fetchCourseData = async () => {
   try {
-    const result = await fetch("http://127.0.0.1:5000/courses/W25").then(
-      (response) => response.json()
-    );
-    return result.courses || [];
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/courses/W25`);
+    console.log(response);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch: ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data.courses || [];
   } catch (error) {
     console.error("Error fetching data:", error);
     return [];
@@ -59,13 +62,16 @@ export const checkConflicts = (conflicts, inputCourses) => {
 export const sendConflictsCheck = async (courses, setIsLoading) => {
   try {
     setIsLoading(true);
-    const result = await fetch("http://127.0.0.1:5000/check_conflicts", {
-      method: "POST",
-      body: JSON.stringify(courses),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const result = await fetch(
+      `${import.meta.env.VITE_API_URL}/check_conflicts`,
+      {
+        method: "POST",
+        body: JSON.stringify(courses),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!result.ok) {
       throw new Error(`HTTP error, ${result.status}`);

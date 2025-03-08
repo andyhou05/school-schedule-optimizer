@@ -42,7 +42,7 @@ const SubmitButton = ({ validSectionInput, inputHasConflicts }) => {
         isLoading ||
         inputHasConflicts
       }
-      loading={isLoading}
+      loading={isLoading || !coursesData.length}
       style={{
         transition: "background-color 0.25s ease, color 0.25s ease",
         position: "absolute",
