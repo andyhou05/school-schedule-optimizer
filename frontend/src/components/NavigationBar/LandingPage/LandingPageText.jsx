@@ -22,7 +22,7 @@ export const LandingPageText = () => {
       <Text size="7" mt="9">
         Tired of juggling course registration? Simply enter your classes, set
         your preferences — like breaks, class times, or a free day — and let us
-        generate the perfect schedule for you. We’ll even match you with the
+        generate the best schedule for you. We’ll even match you with the
         best-rated teachers based on student reviews. Plan smarter. Stress less.
         Start now!
       </Text>
