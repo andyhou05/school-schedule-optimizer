@@ -3,6 +3,7 @@ import { Flex, Box, Tabs } from "@radix-ui/themes";
 
 import { LandingPage } from "./LandingPage/LandingPage";
 import FAQ from "./FAQ/FAQ";
+import Contact from "./Contact";
 
 const NavigationBar = () => {
   return (
@@ -21,7 +22,9 @@ const NavigationBar = () => {
         <Tabs.Content value="faq">
           <FAQ />
         </Tabs.Content>
-        <Tabs.Content value="contact"></Tabs.Content>
+        <Tabs.Content value="contact">
+          <Contact />
+        </Tabs.Content>
       </Box>
     </Tabs.Root>
   );
