@@ -135,11 +135,10 @@ td {
 
 .schedule-grid-list-item {
   display: flex;
-  flex-direction: "column";
+  flex-direction: column;
   justify-content: center;
-  align-items: "center";
+  align-items: center;
   height: 100vh;
-  width: fit-content;
   margin-top: 10%;
   margin-bottom: 10%;
 }
