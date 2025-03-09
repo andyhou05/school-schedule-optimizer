@@ -85,6 +85,7 @@ def make_cache_key(*args, **kwargs):
     Generate a cache key based on the POST request payload.
     """
     payload = request.get_json()
+    payload['courses'].sort()
     payload_string = json.dumps(payload, sort_keys=True) # Sort keys to ensure consistency if parameters are not in order
     return hashlib.sha256(payload_string.encode("utf-8")).hexdigest()
 
