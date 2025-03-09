@@ -9,9 +9,10 @@ export const LandingPageText = () => {
       direction="column"
       justify="center"
       width="30vw"
-      height="100vh"
+      height="fit-content"
       ml="9"
       pl="9"
+      mt="7"
     >
       <Flex direction="column" gap="8">
         <LandingPageHeading text={"Courses."} color="#FEC3C7" />

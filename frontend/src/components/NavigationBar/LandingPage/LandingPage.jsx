@@ -2,8 +2,8 @@ import React from "react";
 import { Box, Flex } from "@radix-ui/themes";
 
 import { LandingPageText } from "./LandingPageText";
-import ScheduleGrid from "../Schedule/ScheduleGrid";
 import { sampleCoursesData, sampleTeacherRatingsData } from "./SampleData";
+import ScheduleGrid from "../../Schedule/ScheduleGrid";
 
 export const LandingPage = () => {
   return (

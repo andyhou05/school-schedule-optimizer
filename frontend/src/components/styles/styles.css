@@ -150,6 +150,7 @@ td {
   height: fit-content;
   width: fit-content;
   position: absolute;
+  top: 1%;
   right: 7%;
   bottom: 2%;
 }
