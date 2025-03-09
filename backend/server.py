@@ -85,12 +85,13 @@ def make_cache_key(*args, **kwargs):
     Generate a cache key based on the POST request payload.
     """
     payload = request.get_json()
+    payload['courses'].sort()
     payload_string = json.dumps(payload, sort_keys=True) # Sort keys to ensure consistency if parameters are not in order
     return hashlib.sha256(payload_string.encode("utf-8")).hexdigest()
 
 # Route to generate schedule
 @app.route("/generate_schedule", methods=["POST"])
-@cache.cached(timeout=30, make_cache_key=make_cache_key)
+@cache.cached(timeout=300, make_cache_key=make_cache_key)
 def generate_schedules():
     data = request.get_json()
     selected_courses = data.get("courses")
