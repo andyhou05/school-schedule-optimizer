@@ -90,7 +90,7 @@ def make_cache_key(*args, **kwargs):
 
 # Route to generate schedule
 @app.route("/generate_schedule", methods=["POST"])
-@cache.memoize(timeout=30, key_prefix=make_cache_key)
+@cache.cached(timeout=30, make_cache_key=make_cache_key)
 def generate_schedules():
     data = request.get_json()
     selected_courses = data.get("courses")
