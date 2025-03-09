@@ -19,10 +19,11 @@ export const LandingPageText = () => {
         <LandingPageHeading text={"Schedules."} color="#6BDFDA" />
       </Flex>
       <Text size="7" mt="9">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Saepe fugiat
-        aut ipsum earum asperiores iusto facilis, officiis vel cumque nostrum
-        quisquam sed odit temporibus ea voluptas provident officia accusantium
-        nesciunt!
+        Tired of juggling course registration? Simply enter your classes, set
+        your preferences — like breaks, class times, or a free day — and let us
+        generate the perfect schedule for you. We’ll even match you with the
+        best-rated teachers based on student reviews. Plan smarter. Stress less.
+        Start now!
       </Text>
       <LandingPageButton />
     </Flex>
