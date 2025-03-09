@@ -9,7 +9,7 @@ import FormCard from "../../Layout/FormCard";
 import CalloutContainer from "../Notifications/Callouts/CalloutContainer";
 import SubmitButton from "./SubmitButton";
 
-import useToast from "../../Hooks/useToast";
+import useToast from "../../../hooks/useToast";
 import { CoursesDataContext } from "../../Context/CoursesDataProvider";
 import { SetCoursesDataContext } from "../../Context/CoursesDataProvider";
 import { UserChoicesContext } from "../../Context/UserChoicesProvider";
