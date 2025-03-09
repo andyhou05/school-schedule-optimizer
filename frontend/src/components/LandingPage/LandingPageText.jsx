@@ -1,5 +1,5 @@
 import React from "react";
-import { Flex, Heading } from "@radix-ui/themes";
+import { Flex, Text, Button } from "@radix-ui/themes";
 import { LandingPageHeading } from "./LandingPageHeading";
 
 export const LandingPageText = () => {
@@ -10,6 +10,15 @@ export const LandingPageText = () => {
         <LandingPageHeading text={"Preferences."} color="#9AD7F3" />
         <LandingPageHeading text={"Schedules."} color="#6BDFDA" />
       </Flex>
+      <Text size="7" mt="9">
+        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Saepe fugiat
+        aut ipsum earum asperiores iusto facilis, officiis vel cumque nostrum
+        quisquam sed odit temporibus ea voluptas provident officia accusantium
+        nesciunt!
+      </Text>
+      <Button mt="5" size="4" radius="full">
+        Start
+      </Button>
     </Flex>
   );
 };
