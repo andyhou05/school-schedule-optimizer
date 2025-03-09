@@ -28,6 +28,7 @@ const ScheduleGridList = () => {
               coursesData={schedule.periods}
               teacherRatingsData={data.teacherRatings}
               scheduleScore={schedule.score}
+              className="schedule-grid-list-item"
             ></ScheduleGrid>
           ))
         ) : (

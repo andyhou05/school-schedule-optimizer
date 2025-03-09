@@ -10,7 +10,7 @@ const ScheduleGrid = ({
   coursesData,
   teacherRatingsData,
   scheduleScore,
-  margin = true,
+  className,
 }) => {
   const columnHeaders = [
     "Time",
@@ -69,22 +69,7 @@ const ScheduleGrid = ({
   }, [coursesData]);
 
   return (
-    <div
-      // ignore horrible inline css pls
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: margin ? "center" : "",
-        alignItems: "center",
-        height: margin ? "100vh" : "fit-content",
-        width: "fit-content",
-        marginTop: margin ? "10%" : "",
-        marginBottom: margin ? "10%" : "",
-        position: margin ? "" : "absolute",
-        right: margin ? "" : "32px",
-        bottom: margin ? "" : "16px",
-      }}
-    >
+    <div className={className}>
       <table className="schedule-grid">
         <thead>
           <tr>
