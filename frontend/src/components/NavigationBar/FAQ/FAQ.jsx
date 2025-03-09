@@ -1,12 +1,21 @@
 import React from "react";
-import { Box, Flex, Text, Strong } from "@radix-ui/themes";
+import { Box, Flex, Text, Strong, Link } from "@radix-ui/themes";
 
 const FAQ = () => {
   const questions = [
     {
+      question: "What schools can I use this for?",
+      answer: "As of right now we only support Vanier College courses.",
+    },
+    {
       question: "Where can I see my courses?",
       answer:
         "You will need to login into your Omnivox. From there you will need to go to > Services > Progression Chart.",
+    },
+    {
+      question: "Where can I see the courses offered by the school?",
+      answer: "You can see them ",
+      link: "https://vanierlivecourseschedule.powerappsportals.com/",
     },
     {
       question: "What are course sections?",
@@ -41,6 +50,13 @@ const FAQ = () => {
             <br></br>
             <Box mt="5" mb="9" ml="9" width="70vw">
               <Text size="5">{question.answer}</Text>
+              {question?.link ? (
+                <Link size="5" weight="medium" href={question.link}>
+                  Here
+                </Link>
+              ) : (
+                <></>
+              )}
             </Box>
           </Box>
         );
