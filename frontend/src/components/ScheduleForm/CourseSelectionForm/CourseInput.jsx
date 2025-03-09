@@ -1,6 +1,6 @@
 import React from "react";
 import { useContext, useState } from "react";
-import { Text, TextField, Flex } from "@radix-ui/themes";
+import { Text, TextField, Flex, Link } from "@radix-ui/themes";
 import { CoursesDataContext } from "../../Context/CoursesDataProvider";
 import { UserChoicesContext } from "../../Context/UserChoicesProvider";
 import { DispatchUserChoicesContext } from "../../Context/UserChoicesProvider";
@@ -59,8 +59,18 @@ const CourseInput = ({ setSection, showToast }) => {
   return (
     <Flex width="400px" direction="column" gap="4" m="auto" mt="50px">
       <Text align="center" size="5">
-        Enter Course ID
+        Enter Course ID (
+        <Link
+          size="5"
+          weight="medium"
+          target="_blank"
+          href="https://vanierlivecourseschedule.powerappsportals.com/"
+        >
+          See Courses
+        </Link>
+        )
       </Text>
+
       <TextField.Root
         aria-label="courseInput"
         size="3"

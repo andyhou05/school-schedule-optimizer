@@ -51,7 +51,12 @@ const FAQ = () => {
             <Box mt="5" mb="9" ml="9" width="70vw">
               <Text size="5">{question.answer}</Text>
               {question?.link ? (
-                <Link size="5" weight="medium" href={question.link}>
+                <Link
+                  size="5"
+                  weight="medium"
+                  target="_blank"
+                  href={question.link}
+                >
                   Here
                 </Link>
               ) : (
