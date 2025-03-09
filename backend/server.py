@@ -1,3 +1,6 @@
+import json
+import hashlib
+
 from flask import request, jsonify
 from sqlalchemy import and_
 from sqlalchemy import tuple_
@@ -77,9 +80,17 @@ def check_conflicts():
     
     return jsonify({"conflicts": json_conflicts, "pairs": json_pairs}), 200
 
+def make_cache_key(*args, **kwargs):
+    """
+    Generate a cache key based on the POST request payload.
+    """
+    payload = request.get_json()
+    payload_string = json.dumps(payload, sort_keys=True) # Sort keys to ensure consistency if parameters are not in order
+    return hashlib.sha256(payload_string.encode("utf-8")).hexdigest()
+
 # Route to generate schedule
 @app.route("/generate_schedule", methods=["POST"])
-@cache.memoize(timeout=600)
+@cache.memoize(timeout=30, key_prefix=make_cache_key)
 def generate_schedules():
     data = request.get_json()
     selected_courses = data.get("courses")
