@@ -6,7 +6,12 @@ import CourseCell from "./CourseCell";
 import InfoButton from "../ScheduleForm/InfoButton/InfoButton";
 import "../styles/styles.css";
 
-const ScheduleGrid = ({ coursesData, teacherRatingsData, scheduleScore }) => {
+const ScheduleGrid = ({
+  coursesData,
+  teacherRatingsData,
+  scheduleScore,
+  margin = true,
+}) => {
   const columnHeaders = [
     "Time",
     "Monday",
@@ -65,14 +70,19 @@ const ScheduleGrid = ({ coursesData, teacherRatingsData, scheduleScore }) => {
 
   return (
     <div
+      // ignore horrible inline css pls
       style={{
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
+        justifyContent: margin ? "center" : "",
         alignItems: "center",
-        height: "100vh",
-        marginTop: "10%",
-        marginBottom: "10%",
+        height: margin ? "100vh" : "fit-content",
+        width: "fit-content",
+        marginTop: margin ? "10%" : "",
+        marginBottom: margin ? "10%" : "",
+        position: margin ? "" : "absolute",
+        right: margin ? "" : "32px",
+        bottom: margin ? "" : "16px",
       }}
     >
       <table className="schedule-grid">

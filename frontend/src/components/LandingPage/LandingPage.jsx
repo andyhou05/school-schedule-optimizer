@@ -13,6 +13,7 @@ export const LandingPage = () => {
         coursesData={sampleCoursesData}
         teacherRatingsData={sampleTeacherRatingsData}
         scheduleScore={98.67}
+        margin={false}
       ></ScheduleGrid>
     </Flex>
   );

@@ -4,7 +4,14 @@ import { LandingPageHeading } from "./LandingPageHeading";
 
 export const LandingPageText = () => {
   return (
-    <Flex direction="column">
+    <Flex
+      direction="column"
+      justify="center"
+      width="30vw"
+      height="100vh"
+      ml="9"
+      pl="9"
+    >
       <Flex direction="column" gap="8">
         <LandingPageHeading text={"Courses."} color="#FEC3C7" />
         <LandingPageHeading text={"Preferences."} color="#9AD7F3" />
@@ -16,7 +23,7 @@ export const LandingPageText = () => {
         quisquam sed odit temporibus ea voluptas provident officia accusantium
         nesciunt!
       </Text>
-      <Button mt="5" size="4" radius="full">
+      <Button mt="7" size="4" radius="full" style={{ width: "50%" }}>
         Start
       </Button>
     </Flex>
