@@ -1,6 +1,7 @@
 import React from "react";
 import { Flex, Text, Button } from "@radix-ui/themes";
-import { LandingPageHeading } from "./LandingPageHeading";
+import LandingPageHeading from "./LandingPageHeading";
+import LandingPageButton from "./LandingPageButton";
 
 export const LandingPageText = () => {
   return (
@@ -23,9 +24,7 @@ export const LandingPageText = () => {
         quisquam sed odit temporibus ea voluptas provident officia accusantium
         nesciunt!
       </Text>
-      <Button mt="7" size="4" radius="full" style={{ width: "50%" }}>
-        Start
-      </Button>
+      <LandingPageButton />
     </Flex>
   );
 };
