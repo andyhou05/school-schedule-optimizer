@@ -184,7 +184,7 @@ td {
 }
 
 .navigation-bar-page-content {
-  height: 100vh;
+  height: fit-content;
 }
 
 /* ============================= */
