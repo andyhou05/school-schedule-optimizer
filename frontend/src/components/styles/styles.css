@@ -1,4 +1,43 @@
+/* ============================= */
+/*            Imports           */
+/* ============================= */
+
 @import "../../../node_modules/@radix-ui/themes/styles.css";
+
+/* ============================= */
+/*          Keyframes           */
+/* ============================= */
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-200%);
+  }
+  to {
+    tranform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(var(--radix-toast-swipe-end-y));
+  }
+  to {
+    transform: translateY(-200%);
+  }
+}
+
+@keyframes hide {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* ============================= */
+/*          Toast Styles        */
+/* ============================= */
 
 .ToastViewport {
   position: fixed;
@@ -6,9 +45,8 @@
   top: 20px;
   left: 50%;
   list-style: none;
-  transform: translateX(
-    -50%
-  ); /* Offset by half the width to ensure centering */
+  transform: translateX(-50%);
+  /* Offset by half the width to ensure centering */
 }
 
 .ToastRoot {
@@ -40,44 +78,20 @@
   animation: slideUp 200ms ease-out;
 }
 
-@keyframes slideDown {
-  from {
-    transform: translateY(-200%);
-  }
-  to {
-    tranform: translateY(0);
-  }
-}
-
-@keyframes slideUp {
-  from {
-    transform: translateY(var(--radix-toast-swipe-end-y));
-  }
-
-  to {
-    transform: translateY(-200%);
-  }
-}
-
-@keyframes hide {
-  from {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0;
-  }
-}
-
 .ToastIcon {
   bottom: 50%;
-  transform: translateY(50%); /* Offset by half the width to ensure centering */
+  transform: translateY(50%);
+  /* Offset by half the width to ensure centering */
   padding-left: 1%;
 }
 
 .ToastText {
   padding-left: 1%;
 }
+
+/* ============================= */
+/*       Animation Classes      */
+/* ============================= */
 
 .card-up {
   transform: translateY(-100vh);
@@ -87,11 +101,27 @@
   transform: translateY(1vh);
 }
 
+/* ============================= */
+/*       Schedule Grid Table    */
+/* ============================= */
+
 .schedule-grid {
   border: 1px solid #f4f4f309;
   width: 800px;
   border-collapse: collapse;
   table-layout: fixed;
+}
+
+.schedule-grid th:first-child,
+.schedule-grid td:first-child {
+  width: 7%;
+  /* Fixed width for the first column */
+}
+
+.schedule-grid th:not(:first-child),
+.schedule-grid td:not(:first-child) {
+  width: calc((100% - 7%) / 7);
+  /* Remaining columns will equally divide the rest of the space */
 }
 
 th {
@@ -121,17 +151,9 @@ td {
   background-color: #dddddd;
 }
 
-.schedule-grid th:first-child,
-.schedule-grid td:first-child {
-  width: 7%; /* Fixed width for the first column */
-}
-
-.schedule-grid th:not(:first-child),
-.schedule-grid td:not(:first-child) {
-  width: calc(
-    (100% - 7%) / 7
-  ); /* Remaining columns will equally divide the rest of the space */
-}
+/* ============================= */
+/*        Layout Components     */
+/* ============================= */
 
 .schedule-grid-list-item {
   display: flex;
@@ -154,3 +176,21 @@ td {
   right: 7%;
   bottom: 2%;
 }
+
+/* ============================= */
+/*        Navigation Bar        */
+/* ============================= */
+
+.navigation-bar-tabs {
+  width: fit-content;
+  margin-left: 10%;
+  padding-top: 1%;
+}
+
+.navigation-bar-page-content {
+  height: 100vh;
+}
+
+/* ============================= */
+/*         Landing Page         */
+/* ============================= */
