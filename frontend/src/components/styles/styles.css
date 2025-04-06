@@ -124,37 +124,6 @@
   /* Remaining columns will equally divide the rest of the space */
 }
 
-th {
-  border: 1px solid #b0b4ba;
-  color: black;
-  background-color: white;
-}
-
-td {
-  border: 1px solid #b0b4ba;
-  text-align: center;
-}
-
-.time-cell {
-  font-size: 75%;
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: white;
-  color: black;
-}
-
-.course-cell {
-  color: black;
-  background-color: white;
-}
-
-.empty-cell {
-  background-color: #dddddd;
-}
-
-/* ============================= */
-/*        Layout Components     */
-/* ============================= */
-
 .schedule-grid-list-item {
   display: flex;
   flex-direction: column;
@@ -172,9 +141,36 @@ td {
   height: fit-content;
   width: fit-content;
   position: absolute;
-  top: 1%;
+  top: 0%;
   right: 7%;
   bottom: 2%;
+}
+
+th {
+  border: 1px solid #b0b4ba;
+  color: black;
+  background-color: white;
+}
+
+td {
+  border: 1px solid #b0b4ba;
+  text-align: center;
+}
+
+.time-cell {
+  font-size: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: white;
+  color: black;
+}
+
+.course-cell {
+  color: black;
+  background-color: white;
+}
+
+.empty-cell {
+  background-color: #dddddd;
 }
 
 /* ============================= */
@@ -194,3 +190,7 @@ td {
 /* ============================= */
 /*         Landing Page         */
 /* ============================= */
+
+.landing-page-text {
+  font-size: 20px;
+}

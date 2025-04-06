@@ -2,6 +2,7 @@ import React from "react";
 import { Flex, Text, Button } from "@radix-ui/themes";
 import LandingPageHeading from "./LandingPageHeading";
 import LandingPageButton from "./LandingPageButton";
+import "../../styles/styles.css";
 
 export const LandingPageText = () => {
   return (
@@ -19,7 +20,7 @@ export const LandingPageText = () => {
         <LandingPageHeading text={"Preferences."} color="#9AD7F3" />
         <LandingPageHeading text={"Schedules."} color="#6BDFDA" />
       </Flex>
-      <Text size="7" mt="9">
+      <Text className="landing-page-text" mt="9">
         Tired of juggling course registration? Simply enter your classes, set
         your preferences — like breaks, class times, or a free day — and let us
         generate the best schedule for you. We’ll even match you with the

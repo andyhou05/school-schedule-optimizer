@@ -9,7 +9,7 @@ import "../styles/styles.css";
 const NavigationBar = () => {
   return (
     <Tabs.Root defaultValue="home">
-      <Box className="navigation-bar-tabs">
+      <Box className="navigation-bar-tabs" width="fit-content">
         <Tabs.List>
           <Tabs.Trigger value="home">Home</Tabs.Trigger>
           <Tabs.Trigger value="faq">FAQ</Tabs.Trigger>

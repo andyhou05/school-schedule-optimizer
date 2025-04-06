@@ -118,7 +118,7 @@ const ScheduleGrid = ({
           )}
         </tbody>
       </table>
-      <Flex gap="2" align="center" height="5%">
+      <Flex gap="2" align="center">
         <Tooltip
           delayDuration={150}
           side="bottom"

@@ -6,12 +6,10 @@ const CourseCell = ({ courseCellInformation, teacherRatingsData }) => {
   return (
     <td className="course-cell" rowSpan={courseCellInformation.duration}>
       <Flex direction="column">
-        <Text size="2" weight="medium">
+        <Text size="1" weight="medium">
           <Em>{courseCellInformation.name}</Em>
         </Text>
-        <Text
-          style={{ fontSize: "10px" }}
-        >{`${courseCellInformation.courseId} sec. ${courseCellInformation.section}`}</Text>
+        {/* Add the following as a clickable {`${courseCellInformation.courseId} sec. ${courseCellInformation.section}`}*/}
         <TeacherDialog
           teacher={teacherRatingsData[courseCellInformation.teacherId]}
         >
@@ -19,7 +17,7 @@ const CourseCell = ({ courseCellInformation, teacherRatingsData }) => {
             variant="ghost"
             style={{ height: "100%", margin: "0", marginTop: "5%" }}
           >
-            <Text weight="medium" style={{ color: "blue" }}>
+            <Text size="1" weight="medium" style={{ color: "blue" }}>
               <Em>
                 {`${
                   teacherRatingsData[courseCellInformation.teacherId].name

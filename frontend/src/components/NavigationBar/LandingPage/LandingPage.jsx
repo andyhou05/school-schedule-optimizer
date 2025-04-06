@@ -4,6 +4,7 @@ import { Box, Flex } from "@radix-ui/themes";
 import { LandingPageText } from "./LandingPageText";
 import { sampleCoursesData, sampleTeacherRatingsData } from "./SampleData";
 import ScheduleGrid from "../../Schedule/ScheduleGrid";
+import "../../styles/styles.css";
 
 export const LandingPage = () => {
   return (
