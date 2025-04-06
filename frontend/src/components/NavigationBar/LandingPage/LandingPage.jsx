@@ -8,13 +8,12 @@ import "../../styles/styles.css";
 
 export const LandingPage = () => {
   return (
-    <Flex direction="row">
+    <Flex className="landing-page-layout" direction="row" gap="9">
       <LandingPageText />
       <ScheduleGrid
         coursesData={sampleCoursesData}
         teacherRatingsData={sampleTeacherRatingsData}
         scheduleScore={98.67}
-        className="schedule-grid-landing-page"
       ></ScheduleGrid>
     </Flex>
   );

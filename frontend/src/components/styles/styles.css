@@ -134,18 +134,6 @@
   margin-bottom: 10%;
 }
 
-.schedule-grid-landing-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: fit-content;
-  width: fit-content;
-  position: absolute;
-  top: 0%;
-  right: 7%;
-  bottom: 2%;
-}
-
 th {
   border: 1px solid #b0b4ba;
   color: black;
@@ -177,12 +165,6 @@ td {
 /*        Navigation Bar        */
 /* ============================= */
 
-.navigation-bar-tabs {
-  width: fit-content;
-  margin-left: 10%;
-  padding-top: 1%;
-}
-
 .navigation-bar-page-content {
   height: fit-content;
 }
@@ -191,6 +173,6 @@ td {
 /*         Landing Page         */
 /* ============================= */
 
-.landing-page-text {
-  font-size: 20px;
+.landing-page-layout {
+  direction: row;
 }

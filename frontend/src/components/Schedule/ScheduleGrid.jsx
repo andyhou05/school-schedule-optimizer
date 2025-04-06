@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Flex, Em, Tooltip, Link, Text, IconButton } from "@radix-ui/themes";
-import { InfoCircledIcon } from "@radix-ui/react-icons";
 
 import CourseCell from "./CourseCell";
 import InfoButton from "../ScheduleForm/InfoButton/InfoButton";
@@ -118,7 +117,7 @@ const ScheduleGrid = ({
           )}
         </tbody>
       </table>
-      <Flex gap="2" align="center">
+      <Flex gap="2" align="center" justify="center">
         <Tooltip
           delayDuration={150}
           side="bottom"
