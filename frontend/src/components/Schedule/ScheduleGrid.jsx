@@ -52,7 +52,14 @@ const ScheduleGrid = ({
     );
 
   return (
-    <div className={className}>
+    <Flex
+      direction="column"
+      justify="center"
+      align="center"
+      gap="2"
+      mt="9"
+      mb="9"
+    >
       <table className="schedule-grid">
         <thead>
           <tr>
@@ -66,8 +73,7 @@ const ScheduleGrid = ({
           {times.map((time, row) =>
             times[row + 1] ? (
               <tr key={row}>
-                {/* Row headers (time cell) */}
-
+                {/* Row headers (time slot) */}
                 <td key={`${row}-0`} className="time-cell">
                   {time}
                   <br></br>
@@ -116,7 +122,7 @@ const ScheduleGrid = ({
           <Em>{scheduleScore.toFixed(2)}%</Em>
         </Text>
       </Flex>
-    </div>
+    </Flex>
   );
 };
 export default ScheduleGrid;

@@ -124,16 +124,6 @@
   /* Remaining columns will equally divide the rest of the space */
 }
 
-.schedule-grid-list-item {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin-top: 10%;
-  margin-bottom: 10%;
-}
-
 th {
   border: 1px solid #b0b4ba;
   color: black;
