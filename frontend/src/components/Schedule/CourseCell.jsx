@@ -4,7 +4,10 @@ import "../styles/styles.css";
 
 const CourseCell = ({ courseCellInformation, teacherRatingsData }) => {
   return (
-    <td className="course-cell" rowSpan={courseCellInformation.duration}>
+    <td
+      className="course-cell"
+      rowSpan={courseCellInformation.endTime - courseCellInformation.startTime}
+    >
       <Flex direction="column">
         <Text size="1" weight="medium">
           <Em>{courseCellInformation.name}</Em>
